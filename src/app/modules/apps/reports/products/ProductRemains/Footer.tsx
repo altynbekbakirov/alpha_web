@@ -31,7 +31,7 @@ const Footer: React.FC<IFooter> = ({
             onChange={(e) => setPageSize(Number(e.target.value))}
             className='form-select'
           >
-            {[25, 50, 100, rowCount].map((pageSize) => {
+            {[50, 100, 200, rowCount].map((pageSize) => {
               return (
                 <option value={pageSize} key={pageSize}>
                   {pageSize === rowCount ? intl.formatMessage({id: 'PAGE_SIZE_ALL'}) : pageSize}

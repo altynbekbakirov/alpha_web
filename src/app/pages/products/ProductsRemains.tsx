@@ -32,10 +32,6 @@ const ProductsRemains: React.FC = () => {
     fetchProducts()
   }, [])
 
-  // useEffect(() => {
-  //   setItems(Products)
-  // }, [])
-
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.PRODUCTS_REMAINS'})}</PageTitle>
@@ -80,7 +76,7 @@ const ProductsContainer = ({items}: {items: any}) => {
       columns,
       data,
       //@ts-expect-error
-      initialState: {pageSize: 25},
+      initialState: {pageSize: 50},
     },
     useGlobalFilter,
     useSortBy,
@@ -102,6 +98,7 @@ const ProductsContainer = ({items}: {items: any}) => {
             <thead>
               {headerGroups.map((headerGroup, index) => (
                 <tr
+                style={{backgroundColor: '#F3F6F9'}}
                   key={index}
                   {...headerGroup.getHeaderGroupProps}
                   className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'

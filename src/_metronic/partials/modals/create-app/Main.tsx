@@ -95,7 +95,7 @@ const Main: FC = () => {
   const [values, setValues] = useState<IValue>({
     company: 1,
     period: 1,
-    warehouse: 0,
+    warehouse: 1,
   })
 
   useEffect(() => {
@@ -130,25 +130,39 @@ const Main: FC = () => {
     }
   }, [companies])
 
+  useEffect(() => {
+    localStorage.setItem('defaultParams', JSON.stringify(values))
+  }, [values])
+
   function changeCompany(e: React.ChangeEvent<HTMLSelectElement>) {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}`
 
-    async function fetchPeriods() {
-      const response = await axios.get(REQUEST_URL + '/' + parseInt(e.target.value))
-      setPeriods(response.data)
-    }
-    fetchPeriods()
+    async function fetchData() {
+      const responsePeriod = await axios.get(REQUEST_URL + '/' + parseInt(e.target.value))
+      setPeriods(responsePeriod.data)
+      let periodList: IPeriod[] = responsePeriod.data
 
-    setValues({
-      ...values,
-      company: parseInt(e.target.value),
-      period: periods[periods.length - 1].nr,
-    })
+      const responseWare = await axios.get(REQUEST_URL + '/' + parseInt(e.target.value) + '/ware')
+      setWares(responseWare.data)
+      let wareList: IWare[] = responseWare.data
+
+      setValues({
+        ...values,
+        company: parseInt(e.target.value),
+        period: periodList[periodList.length - 1].nr,
+        warehouse: wareList[wareList.length - 1].id,
+      })
+    }
+    fetchData()
   }
 
   async function changePeriod(e: React.ChangeEvent<HTMLSelectElement>) {
     setValues({...values, period: parseInt(e.target.value)})
+  }
+
+  async function changeWare(e: React.ChangeEvent<HTMLSelectElement>) {
+    setValues({...values, warehouse: parseInt(e.target.value)})
   }
 
   const loadStepper = () => {
@@ -897,6 +911,7 @@ const Main: FC = () => {
           </div>
         </div>
       </div>
+
       <div className='modal fade' id='kt_modal_1'>
         <div className='modal-dialog'>
           <div className='modal-content'>
@@ -970,10 +985,11 @@ const Main: FC = () => {
                   data-placeholder='Select option'
                   data-allow-clear='true'
                   data-hide-search='true'
-                  defaultValue='1'
+                  value={values.warehouse}
+                  onChange={(e) => changeWare(e)}
                 >
                   {wares.map((ware) => (
-                    <option value={ware.id} key={ware.id}>{`(${ware.nr}) (${ware.name})`}</option>
+                    <option value={ware.nr} key={ware.id}>{`(${ware.id}) (${ware.name})`}</option>
                   ))}
                 </select>
               </div>
