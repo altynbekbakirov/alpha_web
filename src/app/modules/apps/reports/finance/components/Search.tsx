@@ -1,7 +1,7 @@
 import React from 'react'
 import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {ISearch} from '../models/remains_model'
+import { ISearch } from '../models/finance_model' 
 
 const ProductsSearchComponent: React.FC<ISearch> = ({value, change}) => {
   const intl = useIntl()

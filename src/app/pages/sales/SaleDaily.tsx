@@ -1,20 +1,22 @@
-import React, {FC} from 'react'
+import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 
-const SaleDaily: FC = () => {
+const SaleDaily: React.FC = () => {
   const intl = useIntl()
-
+  
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SALE_DAILY'})}</PageTitle>
-      <ProductsContainer />
+      <ItemsContainer/>
     </>
   )
 }
 
-const ProductsContainer: FC = () => {
-  return <div>Sale Daily page</div>
+const ItemsContainer = () => {
+  return (
+    <div>Sale Daily report</div>
+  )
 }
 
 export default SaleDaily

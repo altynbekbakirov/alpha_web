@@ -1,8 +1,8 @@
-import { ISearch } from "../models/remains_model"
+import { ISearch } from "../models/sale_model" 
 import { ProductsSearchComponent } from "./Search"
 import { ProductsToolBar } from "./ToolBar"
 
-const ProductsHeader: React.FC<ISearch> = ({value, change}) => {
+const SalesHeader: React.FC<ISearch> = ({value, change}) => {
   return (
     <div className='card-header border-0 pt-6'>
       <ProductsSearchComponent value={value} change={change} />
@@ -17,4 +17,4 @@ const ProductsHeader: React.FC<ISearch> = ({value, change}) => {
   )
 }
 
-export {ProductsHeader}
+export {SalesHeader}

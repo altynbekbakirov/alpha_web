@@ -4,7 +4,7 @@ import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {ChartsWidget2, ChartsWidget4} from '../../../_metronic/partials/widgets'
 
-const DashboardPage: FC = () => (
+const DashboardPage: React.FC = () => (
   <>
     {/* begin::Row */}
     <div className='row g-5 g-xl-8'>

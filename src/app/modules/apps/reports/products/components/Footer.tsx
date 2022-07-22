@@ -1,6 +1,6 @@
 import React from 'react'
 import {useIntl} from 'react-intl'
-import {IFooter} from '../models/remains_model'
+import { IFooter } from '../models/products_model'  
 
 const Footer: React.FC<IFooter> = ({
   previous,

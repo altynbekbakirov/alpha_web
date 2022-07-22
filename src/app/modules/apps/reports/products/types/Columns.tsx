@@ -1,6 +1,6 @@
 import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
-import {IProductFiche, IProductPrice, IProductRemains} from '../models/remains_model'
+import {IProductFiche, IProductPrice, IProductRemains} from '../models/products_model'
 
 export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = [
   {

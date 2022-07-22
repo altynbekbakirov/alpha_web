@@ -3,11 +3,11 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/products/ProductRemains/Header'
-import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/ProductRemains/Columns'
-import {IProductRemains} from '../../modules/apps/reports/products/models/remains_model'
-import Footer from '../../modules/apps/reports/products/ProductRemains/Footer'
+import {ProductsHeader} from '../../modules/apps/reports/products/components/Header'
+import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
+import {IProductRemains} from '../../modules/apps/reports/products/models/products_model'
 import axios from 'axios'
+import Footer from '../../modules/apps/reports/products/components/Footer'
 
 const ProductsRemains: React.FC = () => {
   const intl = useIntl()
@@ -101,7 +101,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                 style={{backgroundColor: '#F3F6F9'}}
                   key={index}
                   {...headerGroup.getHeaderGroupProps}
-                  className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'
+                  className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-300'
                 >
                   {headerGroup.headers.map((column) => (
                     <th
@@ -123,7 +123,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                       {intl.formatMessage({id: `${column.render('Header')}`})}
                     </th>
                   ))}
-                  <th role='columnheader' className='text-end min-w-100px'>
+                  <th role='columnheader' className='text-end'>
                     {''}
                   </th>
                 </tr>
@@ -137,7 +137,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                     {row.cells.map((cell: any) => {
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
-                    <td role='cell' className='text-end min-w-100px'>
+                    <td role='cell' className='text-center'>
                       <a
                         href='/'
                         className='btn btn-light btn-active-light-primary btn-sm'
