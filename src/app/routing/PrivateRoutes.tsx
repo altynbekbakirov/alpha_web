@@ -72,6 +72,7 @@ const PrivateRoutes = () => {
         <Route path='finance' element={<Navigate to='/finance/customer' />} />
         <Route path='finance/customer' element={<FinanceCustomer />} />
         <Route path='finance/extract' element={<FinanceExtract />} />
+        <Route path='finance/extract/:id' element={<FinanceExtract />} />
         <Route path='finance/debit' element={<FinanceDebit />} />
 
         {/* Safe Deposit */}

@@ -127,10 +127,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                 prepareRow(row)
                 return (
                   <tr {...row.getRowProps()}>
-                    {row.cells.map((cell: any) => {
-                      if (cell.accessor === 'item_trCode') {
-                        console.log('item_trCode')
-                      }
+                    {row.cells.map((cell: any) => {                      
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                   </tr>
