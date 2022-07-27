@@ -75,6 +75,70 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     },
   },
   {
+    Header: 'CLIENT_DEBIT_USD',
+    accessor: 'debitUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-light fw-bolder`}>
+          {' '}
+          {value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT_USD',
+    accessor: 'creditUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-light fw-bolder`}>
+          {' '}
+          {value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_BALANCE_USD',
+    accessor: 'balanceUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div
+          className={`badge ${
+            value > 0 ? 'badge-danger' : value < 0 ? 'badge-info' : 'badge-secondary'
+          } fw-bolder`}
+        >
+          {' '}
+          {value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2,
+          })}
+        </div>
+      )
+    },
+  },
+  {
     Header: 'CLIENT_EMPTY',
     accessor: 'id',
     //@ts-expect-error
@@ -406,7 +470,7 @@ export const FINANCE_DEBIT_COLUMNS: ReadonlyArray<Column<IFinanceDebit>> = [
         </div>
       )
     },
-  },
+  },  
   {
     Header: 'CLIENT_DEBIT_USD',
     accessor: 'debitUsd',

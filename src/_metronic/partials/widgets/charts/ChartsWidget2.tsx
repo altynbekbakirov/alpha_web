@@ -1,14 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
+import {useIntl} from 'react-intl'
 
 type Props = {
   className: string
 }
 
+interface ISales {
+  net_total: number[]
+  net_total_usd: number[]
+  dates: string[]
+}
+
 const ChartsWidget2: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
+  const intl = useIntl()
+  const [active, setActive] = useState<number>(1)
+  const [values, setValues] = useState<ISales>({
+    net_total: [75, 44, 55, 57, 56, 61, 58],
+    net_total_usd: [55, 76, 85, 101, 98, 87, 105],
+    dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+  })
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -17,7 +31,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
     const height = parseInt(getCSS(chartRef.current, 'height'))
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height))
+    const chart = new ApexCharts(chartRef.current, getChartOptions(height, values))
     if (chart) {
       chart.render()
     }
@@ -27,40 +41,68 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef])
+  }, [chartRef, values])
+
+  function onChange(num: number) {
+    setActive(num)
+
+    if (num === 1) {
+      setValues({
+        net_total: [75, 44, 55, 57, 56, 61, 58],
+        net_total_usd: [55, 76, 85, 101, 98, 87, 105],
+        dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      })
+    } else {
+      setValues({
+        net_total: [65, 85, 65, 45, 54, 85, 85, 65, 95, 45],
+        net_total_usd: [55, 76, 85, 101, 98, 87, 105, 65, 95, 45],
+        dates: [
+          '01.07.2022',
+          '02.07.2022',
+          '03.07.2022',
+          '04.07.2022',
+          '05.07.2022',
+          '06.07.2022',
+          '07.07.2022',
+          '08.07.2022',
+          '09.07.2022',
+          '10.07.2022',
+        ],
+      })
+    }
+  }
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>Recent Orders</span>
-
-          <span className='text-muted fw-bold fs-7'>More than 500 new orders</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {intl.formatMessage({id: 'DASHBOARD_SALES'})}
+          </span>
+          <span className='text-muted fw-bold fs-7'>
+            {intl.formatMessage({id: 'DASHBOARD_SALES_DESCRIPTION'})}
+          </span>
         </h3>
 
         {/* begin::Toolbar */}
         <div className='card-toolbar' data-kt-buttons='true'>
           <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1'
-            id='kt_charts_widget_2_year_btn'
+            onClick={() => onChange(1)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              active === 1 ? 'active' : ''
+            }`}
           >
-            Year
+            {intl.formatMessage({id: 'DASHBOARD_SALES_YEAR'})}
           </a>
 
           <a
-            onClick={() => console.log('Hello world')}
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1'
-            id='kt_charts_widget_2_month_btn'
+            onClick={() => onChange(2)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              active === 2 ? 'active' : ''
+            }`}
           >
-            Month
-          </a>
-
-          <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary px-4'
-            id='kt_charts_widget_2_week_btn'
-          >
-            Week
+            {intl.formatMessage({id: 'DASHBOARD_SALES_WEEK'})}
           </a>
         </div>
         {/* end::Toolbar */}
@@ -70,7 +112,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body'>
         {/* begin::Chart */}
-        <div ref={chartRef} id='kt_charts_widget_2_chart' style={{height: '350px'}}></div>
+        <div role='tabpanel' ref={chartRef} id='kt_charts_widget_1' style={{height: '350px'}}></div>
         {/* end::Chart */}
       </div>
       {/* end::Body */}
@@ -80,7 +122,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget2}
 
-function getChartOptions(height: number): ApexOptions {
+function getChartOptions(height: number, values: ISales): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-700')
   const borderColor = getCSSVariableValue('--bs-gray-300')
   const baseColor = getCSSVariableValue('--bs-warning')
@@ -90,16 +132,12 @@ function getChartOptions(height: number): ApexOptions {
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [75, 44, 55, 57, 56, 61, 58],
+        name: 'Net Total',
+        data: values.net_total,
       },
       {
-        name: 'Revenue',
-        data: [55, 76, 85, 101, 98, 87, 105],
-      },
-      {
-        name: 'Expense',
-        data: [30, 15, 20, 30, 25, 15, 35],
+        name: 'Net Total Usd',
+        data: values.net_total_usd,
       },
     ],
     chart: {
@@ -129,7 +167,7 @@ function getChartOptions(height: number): ApexOptions {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: values.dates,
       axisBorder: {
         show: false,
       },

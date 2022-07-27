@@ -102,7 +102,7 @@ function getChartOptions(height: number): ApexOptions {
     },
     plotOptions: {
       bar: {
-        horizontal: false,
+        horizontal: true,
         columnWidth: '30%',
         borderRadius: 5,
       },

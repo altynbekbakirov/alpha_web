@@ -80,6 +80,14 @@ export interface ISaleTable {
   ret_total_usd: number
 }
 
+export interface ISaleDaily {
+  date: string
+  netTotal: number
+  reportNet: number
+  netReturn: number
+  reportReturn: number
+}
+
 export interface ISaleDetail {
   code: string
   name: string

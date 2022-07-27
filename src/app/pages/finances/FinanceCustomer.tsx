@@ -15,7 +15,7 @@ const FinanceCustomer: React.FC = () => {
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/accounts`
+    const REQUEST_URL = `${BASE_URL}/accounts/debit`
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
         firmno: 1,

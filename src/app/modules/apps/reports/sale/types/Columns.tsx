@@ -2,6 +2,7 @@ import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
 import {
   ISaleClient,
+  ISaleDaily,
   ISaleDetail,
   ISaleFiche,
   ISaleManager,
@@ -960,6 +961,72 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
   {
     Header: 'PRODUCT_RETURN_TOTAL_USD',
     accessor: 'ret_total_usd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    },
+  },
+]
+
+export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [  
+  {
+    Header: 'DATE',
+    accessor: 'date',    
+  },
+  {
+    Header: 'PRODUCT_SALE_TOTAL',
+    accessor: 'netTotal',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    },
+  },
+  {
+    Header: 'PRODUCT_SALE_TOTAL_USD',
+    accessor: 'reportNet',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    },
+  },
+  {
+    Header: 'PRODUCT_RETURN_TOTAL',
+    accessor: 'netReturn',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+    },
+  },
+  {
+    Header: 'PRODUCT_RETURN_TOTAL_USD',
+    accessor: 'reportReturn',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,

@@ -7,6 +7,9 @@ export interface IFinanceCustomer {
   debit: number
   credit: number
   balance: number
+  debitUsd: number
+  creditUsd: number
+  balanceUsd: number
 }
 
 export interface IFinanceExtract {
@@ -23,6 +26,7 @@ export interface IFinanceExtract {
 }
 
 export interface IFinanceDebit {
+  id: number
   code: string
   name: string
   address: string

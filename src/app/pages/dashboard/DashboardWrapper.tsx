@@ -1,19 +1,52 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {FC} from 'react'
+import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ChartsWidget2, ChartsWidget4} from '../../../_metronic/partials/widgets'
+import {ChartsWidget1, ChartsWidget2, ChartsWidget3, TablesWidget7, TablesWidget8} from '../../../_metronic/partials/widgets'
+import { ChartsWidget9 } from '../../../_metronic/partials/widgets/charts/ChartsWidget9'
 
 const DashboardPage: React.FC = () => (
   <>
     {/* begin::Row */}
     <div className='row g-5 g-xl-8'>
-      <div className='col-xl-7'>
+      <div className='col-xl-8'>
         <ChartsWidget2 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
-      <div className='col-xl-5'>
-        <ChartsWidget4 className='card-xl-stretch mb-5 mb-xl-8' />
+      <div className='col-xl-4'>
+        <ChartsWidget9 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
+    </div>
+    {/* end::Row */}
+
+    {/* begin::Row */}
+    <div className='row g-5 g-xl-8'>
+      {/* begin::Col */}
+      <div className='col-xl-6'>
+        <ChartsWidget1 className='card-xl-stretch mb-xl-8' />
+      </div>
+      {/* end::Col */}
+
+      {/* begin::Col */}
+      <div className='col-xl-6'>
+        <ChartsWidget3 className='card-xl-stretch mb-5 mb-xl-8' />
+      </div>
+      {/* end::Col */}
+    </div>
+    {/* end::Row */}
+
+    {/* begin::Row */}
+    <div className='row g-5 g-xl-8'>
+      {/* begin::Col */}
+      <div className='col-xl-6'>
+        <TablesWidget7 className='card-xl-stretch mb-xl-8' />
+      </div>
+      {/* end::Col */}
+
+      {/* begin::Col */}
+      <div className='col-xl-6'>
+        <TablesWidget8 className='card-xl-stretch mb-5 mb-xl-8' />
+      </div>
+      {/* end::Col */}
     </div>
     {/* end::Row */}
 
@@ -127,8 +160,9 @@ const DashboardPage: React.FC = () => (
   </>
 )
 
-const DashboardWrapper: FC = () => {
+const DashboardWrapper: React.FC = () => {
   const intl = useIntl()
+
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.DASHBOARD'})}</PageTitle>
