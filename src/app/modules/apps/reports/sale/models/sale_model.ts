@@ -70,7 +70,7 @@ export interface ISaleManager {
 }
 
 export interface ISaleTable {
-  date: number
+  date: string
   total: number
   expenses: number
   discounts: number
@@ -82,10 +82,10 @@ export interface ISaleTable {
 
 export interface ISaleDaily {
   date: string
-  netTotal: number
-  reportNet: number
-  netReturn: number
-  reportReturn: number
+  net: number
+  net_usd: number
+  ret_total: number
+  ret_total_usd: number
 }
 
 export interface ISaleDetail {

@@ -3,26 +3,103 @@ import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
 import {useIntl} from 'react-intl'
+import {ISaleDaily, ISaleTable} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import axios from 'axios'
 
 type Props = {
   className: string
 }
 
-interface ISales {
-  net_total: number[]
-  net_total_usd: number[]
-  dates: string[]
+interface ISale {
+  date_: string[]
+  net: number[]
+  net_usd: number[]
 }
 
 const ChartsWidget2: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const intl = useIntl()
   const [active, setActive] = useState<number>(1)
-  const [values, setValues] = useState<ISales>({
-    net_total: [75, 44, 55, 57, 56, 61, 58],
-    net_total_usd: [55, 76, 85, 101, 98, 87, 105],
-    dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+  const [months, setMonths] = useState<ISaleTable[] | ISaleDaily[]>([])
+  const [dailys, setDailys] = useState<ISaleTable[] | ISaleDaily[]>([])
+  const [sales, setSales] = useState<ISale>({
+    date_: ['1', '2'],
+    net: [250, 200],
+    net_usd: [50, 100],
   })
+
+  const net_title = intl.formatMessage({id: 'TOTAL_SUM'})
+  const net_usd_title = intl.formatMessage({id: 'TOTAL_SUM_USD'})
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/sales/table`
+
+    async function fetchMonthSales() {
+      const response = await axios.post<ISaleTable[]>(REQUEST_URL, {
+        firmno: 1,
+        periodno: 3,
+        begdate: '01.01.2022',
+        enddate: '31.12.2022',
+        sourceindex: 0,
+      })
+      setMonths(response.data)
+    }
+    fetchMonthSales()
+  }, [])
+
+  useEffect(() => {
+    setSales({
+      date_: months.map((value) => {
+        switch (value.date) {
+          case '1':
+            return intl.formatMessage({id: 'JANUARY_FULL'})
+          case '2':
+            return intl.formatMessage({id: 'FEBRUARY_FULL'})
+          case '3':
+            return intl.formatMessage({id: 'MARCH_FULL'})
+          case '4':
+            return intl.formatMessage({id: 'APRIL_FULL'})
+          case '5':
+            return intl.formatMessage({id: 'MAY_FULL'})
+          case '6':
+            return intl.formatMessage({id: 'JUNE_FULL'})
+          case '7':
+            return intl.formatMessage({id: 'JULY_FULL'})
+          case '8':
+            return intl.formatMessage({id: 'AUGUST_FULL'})
+          case '9':
+            return intl.formatMessage({id: 'SEPTEMBER_FULL'})
+          case '10':
+            return intl.formatMessage({id: 'OCTOBER_FULL'})
+          case '11':
+            return intl.formatMessage({id: 'NOVEMBER_FULL'})
+          case '12':
+            return intl.formatMessage({id: 'DECEMBER_FULL'})
+          default:
+            return ''
+        }
+      }),
+      net: months.map((value) => Math.round(value.net)),
+      net_usd: months.map((value) => Math.round(value.net_usd)),
+    })
+  }, [months, intl])
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/sales/daily`
+    async function fetchProducts() {
+      const response = await axios.post<ISaleDaily[]>(REQUEST_URL, {
+        firmno: 1,
+        periodno: 3,
+        begdate: '01.01.2022',
+        enddate: '31.12.2022',
+        sourceindex: 0,
+      })
+      setDailys(response.data)
+    }
+    fetchProducts()
+  }, [])
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -31,7 +108,10 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
     const height = parseInt(getCSS(chartRef.current, 'height'))
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height, values))
+    const chart = new ApexCharts(
+      chartRef.current,
+      getChartOptions(height, net_title, net_usd_title, sales)
+    )
     if (chart) {
       chart.render()
     }
@@ -41,33 +121,68 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef, values])
+  }, [chartRef, net_title, net_usd_title, sales])
 
   function onChange(num: number) {
     setActive(num)
 
     if (num === 1) {
-      setValues({
-        net_total: [75, 44, 55, 57, 56, 61, 58],
-        net_total_usd: [55, 76, 85, 101, 98, 87, 105],
-        dates: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      setSales({
+        date_: months.map((value) => {
+          switch (value.date) {
+            case '1':
+              return intl.formatMessage({id: 'JANUARY'})
+            case '2':
+              return intl.formatMessage({id: 'FEBRUARY'})
+            case '3':
+              return intl.formatMessage({id: 'MARCH'})
+            case '4':
+              return intl.formatMessage({id: 'APRIL'})
+            case '5':
+              return intl.formatMessage({id: 'MAY'})
+            case '6':
+              return intl.formatMessage({id: 'JUNE'})
+            case '7':
+              return intl.formatMessage({id: 'JULY'})
+            case '8':
+              return intl.formatMessage({id: 'AUGUST'})
+            case '9':
+              return intl.formatMessage({id: 'SEPTEMBER'})
+            case '10':
+              return intl.formatMessage({id: 'OCTOBER'})
+            case '11':
+              return intl.formatMessage({id: 'NOVEMBER'})
+            case '12':
+              return intl.formatMessage({id: 'DECEMBER'})
+            default:
+              return ''
+          }
+        }),
+        net: months.map((value) => Math.round(value.net)),
+        net_usd: months.map((value) => Math.round(value.net_usd)),
       })
     } else {
-      setValues({
-        net_total: [65, 85, 65, 45, 54, 85, 85, 65, 95, 45],
-        net_total_usd: [55, 76, 85, 101, 98, 87, 105, 65, 95, 45],
-        dates: [
-          '01.07.2022',
-          '02.07.2022',
-          '03.07.2022',
-          '04.07.2022',
-          '05.07.2022',
-          '06.07.2022',
-          '07.07.2022',
-          '08.07.2022',
-          '09.07.2022',
-          '10.07.2022',
-        ],
+      setSales({
+        date_: dailys
+          .map((value) => {
+            var weekday = new Array(7)
+            weekday[0] = intl.formatMessage({id: 'Sunday'})
+            weekday[1] = intl.formatMessage({id: 'Monday'})
+            weekday[2] = intl.formatMessage({id: 'Tuesday'})
+            weekday[3] = intl.formatMessage({id: 'Wednesday'})
+            weekday[4] = intl.formatMessage({id: 'Thursday'})
+            weekday[5] = intl.formatMessage({id: 'Friday'})
+            weekday[6] = intl.formatMessage({id: 'Saturday'})
+            let d = new Date(value.date)
+            return weekday[d.getDay()]
+          })
+          .slice(0, 7)
+          .reverse(),
+        net: dailys
+          .map((value) => Math.round(value.net))
+          .slice(0, 7)
+          .reverse(),
+        net_usd: dailys.map((value) => Math.round(value.net_usd)).slice(0, 7),
       })
     }
   }
@@ -122,7 +237,12 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget2}
 
-function getChartOptions(height: number, values: ISales): ApexOptions {
+function getChartOptions(
+  height: number,
+  net_title: string,
+  net_usd_title: string,
+  sales: ISale
+): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-700')
   const borderColor = getCSSVariableValue('--bs-gray-300')
   const baseColor = getCSSVariableValue('--bs-warning')
@@ -132,12 +252,12 @@ function getChartOptions(height: number, values: ISales): ApexOptions {
   return {
     series: [
       {
-        name: 'Net Total',
-        data: values.net_total,
+        name: net_title,
+        data: sales.net,
       },
       {
-        name: 'Net Total Usd',
-        data: values.net_total_usd,
+        name: net_usd_title,
+        data: sales.net_usd,
       },
     ],
     chart: {
@@ -167,7 +287,7 @@ function getChartOptions(height: number, values: ISales): ApexOptions {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: values.dates,
+      categories: sales.date_,
       axisBorder: {
         show: false,
       },
@@ -219,7 +339,10 @@ function getChartOptions(height: number, values: ISales): ApexOptions {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' thousands'
+          return val.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
         },
       },
     },

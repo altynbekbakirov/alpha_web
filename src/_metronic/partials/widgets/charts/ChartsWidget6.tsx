@@ -2,12 +2,14 @@
 import React, {useEffect, useRef} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
+import { useIntl } from 'react-intl'
 
 type Props = {
   className: string
 }
 
 const ChartsWidget6: React.FC<Props> = ({className}) => {
+  const intl = useIntl();
   const chartRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
@@ -34,9 +36,9 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>Recent Orders</span>
+          <span className='card-label fw-bolder fs-3 mb-1'> {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS'})}</span>
 
-          <span className='text-muted fw-bold fs-7'>More than 500+ new orders</span>
+          <span className='text-muted fw-bold fs-7'> {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS_DESCRIPTION'})}</span>
         </h3>
 
         {/* begin::Toolbar */}
