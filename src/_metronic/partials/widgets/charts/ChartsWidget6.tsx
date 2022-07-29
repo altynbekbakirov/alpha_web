@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useEffect, useRef} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
-import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
+import {getCSSVariableValue} from '../../../assets/ts/_utils'
 import { useIntl } from 'react-intl'
 
 type Props = {
@@ -17,9 +17,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
       return
     }
 
-    const height = parseInt(getCSS(chartRef.current, 'height'))
-
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height))
+    const chart = new ApexCharts(chartRef.current, getChartOptions())
     if (chart) {
       chart.render()
     }
@@ -74,7 +72,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget6}
 
-function getChartOptions(height: number): ApexOptions {
+function getChartOptions(): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 

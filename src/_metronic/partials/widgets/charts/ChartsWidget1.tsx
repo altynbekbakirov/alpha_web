@@ -4,8 +4,8 @@ import ApexCharts, {ApexOptions} from 'apexcharts'
 import {KTSVG} from '../../../helpers'
 import {Dropdown1} from '../../content/dropdown/Dropdown1'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
-import { useIntl } from 'react-intl'
-import { ISaleTotal } from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {useIntl} from 'react-intl'
+import {ISaleTotal} from '../../../../app/modules/apps/reports/sale/models/sale_model'
 import axios from 'axios'
 
 type Props = {
@@ -15,9 +15,11 @@ type Props = {
 const ChartsWidget1: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const intl = useIntl()
+  const [aktive, setAktive] = useState(1)
   const [values, setValues] = useState<ISaleTotal[]>([])
 
   const sale_count = intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})
+  const sale_total = intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'})
   const sale_total_usd = intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'})
 
   useEffect(() => {
@@ -32,19 +34,39 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
         enddate: '31.12.2022',
         sourceindex: 0,
       })
-      setValues(response.data)      
+      setValues(response.data)
     }
     fetchMonthSales()
   }, [])
 
-  function compare( a: ISaleTotal, b: ISaleTotal ) {
-    if ( a.saleTotal > b.saleTotal ){
-      return -1;
+  function compareAmount(a: ISaleTotal, b: ISaleTotal) {
+    if (a.saleCount > b.saleCount) {
+      return -1
     }
-    if ( a.saleTotal < b.saleTotal ){
-      return 1;
+    if (a.saleCount < b.saleCount) {
+      return 1
     }
-    return 0;
+    return 0
+  }
+
+  function compareTotal(a: ISaleTotal, b: ISaleTotal) {
+    if (a.saleTotal > b.saleTotal) {
+      return -1
+    }
+    if (a.saleTotal < b.saleTotal) {
+      return 1
+    }
+    return 0
+  }
+
+  function compareTotalUsd(a: ISaleTotal, b: ISaleTotal) {
+    if (a.saleTotalUsd > b.saleTotalUsd) {
+      return -1
+    }
+    if (a.saleTotalUsd < b.saleTotalUsd) {
+      return 1
+    }
+    return 0
   }
 
   useEffect(() => {
@@ -52,11 +74,18 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
       return
     }
 
-    values.sort(compare);
+    aktive === 1
+      ? values.sort(compareAmount)
+      : aktive === 2
+      ? values.sort(compareTotal)
+      : values.sort(compareTotalUsd)
 
     const height = parseInt(getCSS(chartRef.current, 'height'))
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height, values, sale_count, sale_total_usd))
+    const chart = new ApexCharts(
+      chartRef.current,
+      getChartOptions(height, values, sale_count, sale_total, sale_total_usd, aktive)
+    )
     if (chart) {
       chart.render()
     }
@@ -66,7 +95,7 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef, values, sale_count, sale_total_usd])
+  }, [chartRef, values, sale_count, sale_total, sale_total_usd, aktive])
 
   return (
     <div className={`card ${className}`}>
@@ -74,14 +103,44 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
       <div className='card-header border-0 pt-5'>
         {/* begin::Title */}
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>{intl.formatMessage({id: 'DASHBOARD_PRODUCTS_MOST_SALES'})}</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {intl.formatMessage({id: 'DASHBOARD_PRODUCTS_MOST_SALES'})}
+          </span>
 
-          <span className='text-muted fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_PRODUCTS_MOST_SALES_DESCRIPTION'})}</span>
+          <span className='text-muted fw-bold fs-7'>
+            {intl.formatMessage({id: 'DASHBOARD_PRODUCTS_MOST_SALES_DESCRIPTION'})}
+          </span>
         </h3>
         {/* end::Title */}
 
         {/* begin::Toolbar */}
         <div className='card-toolbar'>
+          <a
+            onClick={() => setAktive(1)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              aktive === 1 ? 'active' : ''
+            }`}
+          >
+            {intl.formatMessage({id: 'TOTAL_COUNT_FULL'})}
+          </a>
+
+          <a
+            onClick={() => setAktive(2)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              aktive === 2 ? 'active' : ''
+            }`}
+          >
+            {intl.formatMessage({id: 'TOTAL_SUM'})}
+          </a>
+
+          <a
+            onClick={() => setAktive(3)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              aktive === 3 ? 'active' : ''
+            }`}
+          >
+            {intl.formatMessage({id: 'TOTAL_SUM_USD'})}
+          </a>
           {/* begin::Menu */}
           <button
             type='button'
@@ -112,22 +171,30 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget1}
 
-function getChartOptions(height: number, values: ISaleTotal[], sale_count: string, sale_total_usd : string): ApexOptions {
+function getChartOptions(
+  height: number,
+  values: ISaleTotal[],
+  sale_count: string,
+  sale_total: string,
+  sale_total_usd: string,
+  aktive: number
+): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-700')
   const borderColor = getCSSVariableValue('--bs-gray-200')
   const baseColor = getCSSVariableValue('--bs-danger')
-  const secondaryColor = getCSSVariableValue('--bs-primary') 
+  const secondaryColor = getCSSVariableValue('--bs-primary')
 
   return {
     series: [
       {
-        name: sale_total_usd,
-        data: values.map(value => value.saleTotalUsd).slice(0, 10),
+        name: aktive === 1 ? sale_count : aktive === 2 ? sale_total : sale_total_usd,
+        data:
+          aktive === 1
+            ? values.map((value) => value.saleCount).slice(0, 10)
+            : aktive === 2
+            ? values.map((value) => value.saleTotal).slice(0, 10)
+            : values.map((value) => value.saleTotalUsd).slice(0, 10),
       },
-      {
-        name: sale_count,
-        data: values.map(value => value.saleCount).slice(0, 10),
-      },      
     ],
     chart: {
       fontFamily: 'inherit',
@@ -148,7 +215,14 @@ function getChartOptions(height: number, values: ISaleTotal[], sale_count: strin
       show: false,
     },
     dataLabels: {
-      enabled: false,
+      enabled: true,
+      formatter: function (value) {
+        return value.toLocaleString(undefined, {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        })
+      },
+      distributed: true,
     },
     stroke: {
       show: true,
@@ -156,7 +230,7 @@ function getChartOptions(height: number, values: ISaleTotal[], sale_count: strin
       colors: ['transparent'],
     },
     xaxis: {
-      categories: values.map(value => value.name).slice(0, 10),
+      categories: values.map((value) => value.name).slice(0, 10),
       axisBorder: {
         show: false,
       },

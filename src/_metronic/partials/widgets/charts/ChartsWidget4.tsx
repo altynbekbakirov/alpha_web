@@ -1,23 +1,36 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
+import axios from 'axios'
+import {IFinanceDebit} from '../../../../app/modules/apps/reports/finance/models/finance_model'
+import {useIntl} from 'react-intl'
 
 type Props = {
   className: string
 }
 
 const ChartsWidget4: React.FC<Props> = ({className}) => {
+  const intl = useIntl()
   const chartRef = useRef<HTMLDivElement | null>(null)
+  const [accounts, setAccounts] = useState<IFinanceDebit[]>([])
+  const [aktif, setAktif] = useState(1)
+  const debit_title = intl.formatMessage({id: 'CLIENT_DEBIT'})
+  const credit_title = intl.formatMessage({id: 'CLIENT_CREDIT'})
+  const balance_title = intl.formatMessage({id: 'CLIENT_BALANCE'})
 
   useEffect(() => {
     if (!chartRef.current) {
       return
     }
 
-    const height = parseInt(getCSS(chartRef.current, 'height'))
+    aktif === 1 ? accounts.sort(compareCom) : accounts.sort(compareUsd)
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height))
+    const height = parseInt(getCSS(chartRef.current, 'height'))
+    const chart = new ApexCharts(
+      chartRef.current,
+      getChartOptions(height, accounts, debit_title, credit_title, balance_title, aktif)
+    )
     if (chart) {
       chart.render()
     }
@@ -27,39 +40,77 @@ const ChartsWidget4: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef])
+  }, [chartRef, accounts, debit_title, credit_title, balance_title, aktif])
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/accounts/debit`
+
+    async function fetchBalances() {
+      const response = await axios.post<IFinanceDebit[]>(REQUEST_URL, {
+        firmno: 1,
+        periodno: 3,
+        begdate: '01.01.2022',
+        enddate: '31.12.2022',
+        sourceindex: 0,
+      })
+      setAccounts(response.data)
+    }
+    fetchBalances()
+  }, [])
+
+  function compareCom(a: IFinanceDebit, b: IFinanceDebit) {
+    if (a.balance > b.balance) {
+      return -1
+    }
+    if (a.balance < b.balance) {
+      return 1
+    }
+    return 0
+  }
+
+  function compareUsd(a: IFinanceDebit, b: IFinanceDebit) {
+    if (a.balanceUsd > b.balanceUsd) {
+      return -1
+    }
+    if (a.balanceUsd < b.balanceUsd) {
+      return 1
+    }
+    return 0
+  }
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>Recent Customers</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS'})}
+          </span>
 
-          <span className='text-muted fw-bold fs-7'>More than 500 new customers</span>
+          <span className='text-muted fw-bold fs-7'>
+            {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS_DESCRIPTION'})}
+          </span>
         </h3>
 
         {/* begin::Toolbar */}
         <div className='card-toolbar' data-kt-buttons='true'>
           <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1'
-            id='kt_charts_widget_4_year_btn'
+            onClick={() => setAktif(1)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              aktif === 1 ? 'active' : ''
+            }`}
           >
-            Year
+            {intl.formatMessage({id: 'CURRENCY_COM'})}
           </a>
 
           <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1'
-            id='kt_charts_widget_4_month_btn'
+            onClick={() => setAktif(2)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              aktif === 2 ? 'active' : ''
+            }`}
           >
-            Month
-          </a>
-
-          <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary px-4'
-            id='kt_charts_widget_4_week_btn'
-          >
-            Week
+            {intl.formatMessage({id: 'CURRENCY_USD'})}
           </a>
         </div>
         {/* end::Toolbar */}
@@ -79,7 +130,14 @@ const ChartsWidget4: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget4}
 
-function getChartOptions(height: number): ApexOptions {
+function getChartOptions(
+  height: number,
+  accounts: IFinanceDebit[],
+  debit_title: string,
+  credit_title: string,
+  balance_title: string,
+  aktif: number
+): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
 
@@ -87,22 +145,36 @@ function getChartOptions(height: number): ApexOptions {
   const baseLightColor = getCSSVariableValue('--bs-light-success')
   const secondaryColor = getCSSVariableValue('--bs-warning')
   const secondaryLightColor = getCSSVariableValue('--bs-light-warning')
+  const thirdColor = getCSSVariableValue('--bs-primary')
 
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [60, 50, 80, 40, 100, 60],
+        name: debit_title,
+        data:
+          aktif === 1
+            ? accounts.map((account) => Math.round(account.debit)).slice(0, 10)
+            : accounts.map((account) => Math.round(account.debitUsd)).slice(0, 10),
       },
       {
-        name: 'Revenue',
-        data: [70, 60, 110, 40, 50, 70],
+        name: credit_title,
+        data:
+          aktif === 1
+            ? accounts.map((account) => Math.round(account.credit)).slice(0, 10)
+            : accounts.map((account) => Math.round(account.creditUsd)).slice(0, 10),
+      },
+      {
+        name: balance_title,
+        data:
+          aktif === 1
+            ? accounts.map((account) => Math.round(account.balance)).slice(0, 10)
+            : accounts.map((account) => Math.round(account.balanceUsd)).slice(0, 10),
       },
     ],
     chart: {
       fontFamily: 'inherit',
       type: 'area',
-      height: 350,
+      height: height,
       toolbar: {
         show: false,
       },
@@ -122,7 +194,7 @@ function getChartOptions(height: number): ApexOptions {
       curve: 'smooth',
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: accounts.map((account) => account.name).slice(0, 10),
       axisBorder: {
         show: false,
       },
@@ -130,6 +202,10 @@ function getChartOptions(height: number): ApexOptions {
         show: false,
       },
       labels: {
+        rotate: -90,
+        rotateAlways: true,        
+        minHeight: 60,
+        maxHeight: 140,
         style: {
           colors: labelColor,
           fontSize: '12px',
@@ -187,11 +263,14 @@ function getChartOptions(height: number): ApexOptions {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' thousands'
+          return val.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+          })
         },
       },
     },
-    colors: [baseColor, secondaryColor],
+    colors: [baseColor, secondaryColor, thirdColor],
     grid: {
       borderColor: borderColor,
       strokeDashArray: 4,

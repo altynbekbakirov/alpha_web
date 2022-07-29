@@ -88,7 +88,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/daily`
-    async function fetchProducts() {
+    async function fetchDaily() {
       const response = await axios.post<ISaleDaily[]>(REQUEST_URL, {
         firmno: 1,
         periodno: 3,
@@ -98,7 +98,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
       })
       setDailys(response.data)
     }
-    fetchProducts()
+    fetchDaily()
   }, [])
 
   useEffect(() => {
@@ -182,7 +182,10 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
           .map((value) => Math.round(value.net))
           .slice(0, 7)
           .reverse(),
-        net_usd: dailys.map((value) => Math.round(value.net_usd)).slice(0, 7),
+        net_usd: dailys
+          .map((value) => Math.round(value.net_usd))
+          .slice(0, 7)
+          .reverse(),
       })
     }
   }

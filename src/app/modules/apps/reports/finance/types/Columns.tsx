@@ -28,8 +28,6 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       })
@@ -43,8 +41,6 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
       })
@@ -65,8 +61,6 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
         >
           {' '}
           {value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 0,
           })}

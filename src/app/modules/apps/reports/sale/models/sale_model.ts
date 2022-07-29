@@ -4,6 +4,8 @@ export interface ISaleFiche {
   date: string
   clientCode: string | null
   clientName: string | null
+  managerCode: string | null
+  managerName: string | null
   gross: number
   discounts: number
   expenses: number
