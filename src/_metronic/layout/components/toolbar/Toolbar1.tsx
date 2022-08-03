@@ -32,10 +32,10 @@ const Toolbar1: FC = () => {
               id='kt_modal_primary_button'
             >
               <KTSVG
-                path='/media/icons/duotune/general/gen031.svg'
+                path='/media/icons/duotune/general/gen055.svg'
                 className='svg-icon-5 svg-icon-gray-500 me-1'
               />
-              {intl.formatMessage({id: 'FILTER'})}
+              {intl.formatMessage({id: 'PARAMETHERS'})}
             </a>           
 
             {/* end::Menu */}
@@ -44,7 +44,7 @@ const Toolbar1: FC = () => {
 
           {/* begin::Button */}
 
-          <a
+          {/* <a
             href='#'
             className='btn btn-sm btn-primary'
             data-bs-toggle='modal'
@@ -56,7 +56,7 @@ const Toolbar1: FC = () => {
                 className='svg-icon-5 svg-icon-gray-500 me-1'
               />
             Create
-          </a>
+          </a> */}
           {/* end::Button */}
         </div>
         {/* end::Actions */}

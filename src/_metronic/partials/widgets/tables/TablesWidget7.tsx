@@ -71,7 +71,7 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
                         {intl.formatMessage({id: 'CLIENT_NAME'})}
                       </span>
                     </th>
-                    <th className='p-0 min-w-140px text-center'>
+                    <th className='p-0 min-w-120px text-center'>
                       <span className='text-muted mt-1 fw-bold fs-7'>
                         {intl.formatMessage({id: 'PRODUCT_DISCOUNTS'})}
                       </span>

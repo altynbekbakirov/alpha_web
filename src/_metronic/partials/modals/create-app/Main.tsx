@@ -92,10 +92,11 @@ const Main: FC = () => {
   const [companies, setCompanies] = useState<ICompany[]>([])
   const [periods, setPeriods] = useState<IPeriod[]>([])
   const [wares, setWares] = useState<IWare[]>([])
-  const [values, setValues] = useState<IValue>({
+  const loadedValues = loadValues();
+  const [values, setValues] = useState<IValue>(loadedValues !== null ? loadedValues : {
     company: 1,
     period: 1,
-    warehouse: 1,
+    warehouse: 0,
   })
 
   useEffect(() => {
@@ -106,9 +107,9 @@ const Main: FC = () => {
       const response = await axios.get<ICompany[]>(REQUEST_URL)
       setCompanies(response.data)
     }
-
     fetchCompanies()
   }, [])
+
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -130,9 +131,16 @@ const Main: FC = () => {
     }
   }, [companies])
 
-  useEffect(() => {
-    localStorage.setItem('defaultParams', JSON.stringify(values))
-  }, [values])
+
+  function loadValues() {
+    return JSON.parse(localStorage.getItem('defaultParams') || '');
+    }
+
+
+  function saveValues() {
+    localStorage.setItem('defaultParams', JSON.stringify(values))  
+  }
+
 
   function changeCompany(e: React.ChangeEvent<HTMLSelectElement>) {
     const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -150,12 +158,13 @@ const Main: FC = () => {
       setValues({
         ...values,
         company: parseInt(e.target.value),
-        period: periodList[periodList.length - 1].nr,
-        warehouse: wareList[wareList.length - 1].id,
+        period: periodList.filter((period) => period.active === 1)[0].nr,
+        warehouse: wareList[wareList.length - 1].nr,
       })
     }
     fetchData()
   }
+  
 
   async function changePeriod(e: React.ChangeEvent<HTMLSelectElement>) {
     setValues({...values, period: parseInt(e.target.value)})
@@ -989,7 +998,7 @@ const Main: FC = () => {
                   onChange={(e) => changeWare(e)}
                 >
                   {wares.map((ware) => (
-                    <option value={ware.nr} key={ware.id}>{`(${ware.id}) (${ware.name})`}</option>
+                    <option value={ware.nr} key={ware.id}>{`(${ware.nr}) (${ware.name})`}</option>
                   ))}
                 </select>
               </div>
@@ -999,7 +1008,12 @@ const Main: FC = () => {
               <button type='button' className='btn btn-light' data-bs-dismiss='modal'>
                 {intl.formatMessage({id: 'MODAL_CLOSE'})}
               </button>
-              <button type='button' className='btn btn-primary'>
+              <button
+                type='button'
+                className='btn btn-primary'
+                onClick={() => saveValues()}
+                data-bs-dismiss='modal'
+              >
                 {intl.formatMessage({id: 'MODAL_SAVE'})}
               </button>
             </div>

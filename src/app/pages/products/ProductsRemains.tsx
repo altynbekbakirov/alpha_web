@@ -8,6 +8,8 @@ import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/type
 import {IProductRemains} from '../../modules/apps/reports/products/models/products_model'
 import axios from 'axios'
 import Footer from '../../modules/apps/reports/products/components/Footer'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
 
 const ProductsRemains: React.FC = () => {
   const intl = useIntl()
@@ -24,7 +26,7 @@ const ProductsRemains: React.FC = () => {
           periodno: 3,
           begdate: '01.01.2022',
           enddate: '31.12.2022',
-          sourceindex: 0
+          sourceindex: 0,
         },
       })
       setItems(response.data)
@@ -44,6 +46,38 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_REMAINS_COLUMNS, [])
   const data = useMemo(() => items, [items])
+
+  const exportPDF = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault()
+
+    const doc = new jsPDF('l', 'mm', 'a4')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'MENU.PRODUCTS_REMAINS'}),
+        'Name',
+        'Group',
+        'Purchase Price',
+        'Sale Price',
+        'Purchase Count',
+        'Sale Count',
+        'Sale Total',
+        'Onhand',
+        'Sum by Purchase',
+        'Sum by Sale',
+      ],
+    ]
+    const data = items.map((item: IProductRemains) => Object.values(item))
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      didDrawCell: (data) => {
+        console.log(data.column.index)
+      },
+    })
+    doc.save('report.pdf')
+  }
 
   const {
     getTableProps,
@@ -92,13 +126,13 @@ const ProductsContainer = ({items}: {items: any}) => {
       <KTCardBody>
         <div className='table-responsive'>
           <table
-            className='table table-hover border table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'
+            id='productRemains'
+            className='table table-hover table-striped table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'
             {...getTableProps()}
           >
             <thead>
               {headerGroups.map((headerGroup, index) => (
                 <tr
-                style={{backgroundColor: '#F3F6F9'}}
                   key={index}
                   {...headerGroup.getHeaderGroupProps}
                   className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-300'
@@ -166,8 +200,8 @@ const ProductsContainer = ({items}: {items: any}) => {
                         data-kt-menu='true'
                       >
                         <div className='menu-item px-3'>
-                          <a href='/' className='menu-link px-3'>
-                          {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
+                          <a href='/' className='menu-link px-3' onClick={(e) => exportPDF(e)}>
+                            {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
                           </a>
                         </div>
                         <div className='menu-item px-3'>

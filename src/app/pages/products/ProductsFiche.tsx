@@ -92,7 +92,7 @@ const ProductsContainer = ({items}: {items: any}) => {
       <KTCardBody>
         <div className='table-responsive'>
           <table
-            className='table table-hover border table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'
+            className='table table-hover table-striped table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'
             {...getTableProps()}
           >
             <thead>

@@ -88,7 +88,7 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
       {/* begin::Body */}
       <div className='card-body'>
         {/* begin::Chart */}
-        <div ref={chartRef} id='kt_charts_widget_1_chart' />
+        <div ref={chartRef} id='kt_charts_widget_1_chart'  style={{height: '350px'}} />
         {/* end::Chart */}
       </div>
       {/* end::Body */}
@@ -103,6 +103,7 @@ function getChartOptions(values : ISaleManager[]): ApexOptions {
     series: values.map(value => Math.round(value.itemTotal)),
     chart: {
       width: 380,
+      height: 360,
       type: 'pie',
     },
     labels: values.map(value => value.clientName),

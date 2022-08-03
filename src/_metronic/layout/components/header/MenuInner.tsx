@@ -37,11 +37,6 @@ export function MenuInner() {
             hasBullet={true}
           />
           <MenuItem
-            to='/products/inventory'
-            title={intl.formatMessage({id: 'MENU.PRODUCTS_INVENTORY'})}
-            hasBullet={true}
-          />
-          <MenuItem
             to='/products/price'
             title={intl.formatMessage({id: 'MENU.PRODUCTS_PRICE'})}
             hasBullet={true}
@@ -142,11 +137,6 @@ export function MenuInner() {
           <MenuItem
             to='/finance/customer'
             title={intl.formatMessage({id: 'MENU.FINANCE_CUSTOMER'})}
-            hasBullet={true}
-          />
-          <MenuItem
-            to='/finance/extract'
-            title={intl.formatMessage({id: 'MENU.FINANCE_EXTRACT'})}
             hasBullet={true}
           />
           <MenuItem

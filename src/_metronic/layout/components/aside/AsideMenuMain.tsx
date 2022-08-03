@@ -39,11 +39,6 @@ export function AsideMenuMain() {
           hasBullet={true}
         />
         <AsideMenuItem
-          to='/products/inventory'
-          title={intl.formatMessage({id: 'MENU.PRODUCTS_INVENTORY'})}
-          hasBullet={true}
-        />
-        <AsideMenuItem
           to='/products/fiche'
           title={intl.formatMessage({id: 'MENU.PRODUCTS_FICHE'})}
           hasBullet={true}
@@ -148,11 +143,6 @@ export function AsideMenuMain() {
         <AsideMenuItem
           to='/finance/extract'
           title={intl.formatMessage({id: 'MENU.FINANCE_EXTRACT'})}
-          hasBullet={true}
-        />
-        <AsideMenuItem
-          to='/finance/debit'
-          title={intl.formatMessage({id: 'MENU.FINANCE_DEBIT'})}
           hasBullet={true}
         />
       </AsideMenuItemWithSub>

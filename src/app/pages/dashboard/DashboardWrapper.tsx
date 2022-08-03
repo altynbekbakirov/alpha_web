@@ -2,7 +2,7 @@
 import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ChartsWidget1, ChartsWidget2, ChartsWidget4, TablesWidget7, TablesWidget8} from '../../../_metronic/partials/widgets'
+import {ChartsWidget1, ChartsWidget2, ChartsWidget4, TablesWidget7} from '../../../_metronic/partials/widgets'
 import { ChartsWidget9 } from '../../../_metronic/partials/widgets/charts/ChartsWidget9'
 
 const DashboardPage: React.FC = () => (
@@ -24,9 +24,6 @@ const DashboardPage: React.FC = () => (
       <div className='col-xl-6'>
         <ChartsWidget1 className='card-xl-stretch mb-xl-8' />
       </div>
-      {/* end::Col */}
-
-      {/* begin::Col */}
       <div className='col-xl-6'>
         <ChartsWidget4 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
@@ -40,17 +37,14 @@ const DashboardPage: React.FC = () => (
       <div className='col-xl-6'>
         <TablesWidget7 className='card-xl-stretch mb-xl-8' />
       </div>
-      {/* end::Col */}
-
-      {/* begin::Col */}
-      <div className='col-xl-6'>
+      {/* <div className='col-xl-6'>
         <TablesWidget8 className='card-xl-stretch mb-5 mb-xl-8' />
-      </div>
+      </div> */}
       {/* end::Col */}
     </div>
     {/* end::Row */}
 
-    <div className='row g-5 g-xl-8'>
+    {/* <div className='row g-5 g-xl-8'>
       <div className='col-xl-4'>
         <div className='card card-flush h-md-100'>
           <div className='card-header flex-nowrap pt-5'>
@@ -156,7 +150,7 @@ const DashboardPage: React.FC = () => (
           </div>
         </div>
       </div>
-    </div>
+    </div> */}
   </>
 )
 
