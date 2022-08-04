@@ -40,7 +40,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -55,7 +55,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -84,7 +84,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -115,7 +115,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -130,7 +130,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -362,7 +362,7 @@ export const PRODUCTS_PRICE_COLUMNS: ReadonlyArray<Column<IProductPrice>> = [
     },
   },
   {
-    Header: 'PRODUCT_GROUP',
+    Header: 'PRODUCT_UNIT',
     accessor: 'item_unit',
   },
   {
@@ -376,7 +376,7 @@ export const PRODUCTS_PRICE_COLUMNS: ReadonlyArray<Column<IProductPrice>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 1,
       })
     },
   },

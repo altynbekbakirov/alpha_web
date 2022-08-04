@@ -1,15 +1,21 @@
-import { ISearch } from "../models/products_model"
-import { ProductsSearchComponent } from "./Search"
-import { ProductsToolBar } from "./ToolBar"
+import {ProductsSearchComponent} from './Search'
+import {ToolBar} from './ToolBar'
 
-const ProductsHeader: React.FC<ISearch> = ({value, change}) => {
+interface IProps {
+  value: string
+  change: (e: any) => string
+  exportPDF: () => void
+  exportCSV: () => void
+}
+
+const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV}) => {
   return (
     <div className='card-header border-0 pt-6'>
       <ProductsSearchComponent value={value} change={change} />
       {/* begin::Card toolbar */}
       <div className='card-toolbar'>
         {/* begin::Group actions */}
-        <ProductsToolBar />
+        <ToolBar exportPDF={exportPDF} exportCSV={exportCSV}/>
         {/* end::Group actions */}
       </div>
       {/* end::Card toolbar */}
@@ -17,4 +23,4 @@ const ProductsHeader: React.FC<ISearch> = ({value, change}) => {
   )
 }
 
-export {ProductsHeader}
+export {Header}

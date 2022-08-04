@@ -3,11 +3,14 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/products/components/Header'
+import {Header} from '../../modules/apps/reports/products/components/Header'
 import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
 import {IProductRemains} from '../../modules/apps/reports/products/models/products_model'
 import Footer from '../../modules/apps/reports/products/components/Footer'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
 const ProductsRemains:  React.FC = () => {
   const intl = useIntl()
@@ -44,6 +47,79 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_REMAINS_COLUMNS, [])
   const data = useMemo(() => items, [items])
+
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'PRODUCT_CODE'}),
+        intl.formatMessage({id: 'PRODUCT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROUP'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_PRICE'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_PRICE'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_ON_HAND'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_SUM'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_SUM'}),
+      ],
+    ]
+    
+    const data = items.map((item: IProductRemains) => Object.values(item))
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Products.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+      id: 'PRODUCT_NAME',
+    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_PRICE',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_PRICE'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_COUNT',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL_USD',
+    })};${intl.formatMessage({id: 'PRODUCT_ON_HAND'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_SUM',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_SUM'})}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        if (typeof items[i][item] === 'number') {
+          str += `${Math.round(items[i][item])};`
+        } else {
+          str += `${items[i][item]};`
+        }
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Products.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   const {
     getTableProps,
@@ -88,7 +164,7 @@ const ProductsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <ProductsHeader value={globalFilter} change={setGlobalFilter} />
+      <Header value={globalFilter} change={setGlobalFilter} exportPDF={exportPDF} exportCSV={exportCSV} />
       <KTCardBody>
         <div className='table-responsive'>
           <table

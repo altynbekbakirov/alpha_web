@@ -3,11 +3,14 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/products/components/Header'
+import {Header} from '../../modules/apps/reports/products/components/Header'
 import {PRODUCTS_FICHE_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
 import {IProductFiche} from '../../modules/apps/reports/products/models/products_model'
 import Footer from '../../modules/apps/reports/products/components/Footer'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
 const ProductsFiche: React.FC = () => {
   const intl = useIntl()
@@ -24,7 +27,7 @@ const ProductsFiche: React.FC = () => {
           periodno: 3,
           begdate: '01.01.2022',
           enddate: '31.12.2022',
-          sourceindex: 0
+          sourceindex: 0,
         },
       })
       setItems(response.data)
@@ -44,6 +47,170 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_FICHE_COLUMNS, [])
   const data = useMemo(() => items, [items])
+
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'TR_CODE'}),
+        intl.formatMessage({id: 'FICHE_NO'}),
+        intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'CLIENT_CODE'}),
+        intl.formatMessage({id: 'CLIENT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROSS'}),
+        intl.formatMessage({id: 'PRODUCT_DISCOUNTS'}),
+        intl.formatMessage({id: 'PRODUCT_EXPENSES'}),
+        intl.formatMessage({id: 'PRODUCT_NET'}),
+      ],
+    ]
+
+    const data = items.map((item: IProductFiche) => Object.values(item))
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Fiche.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'TR_CODE'})};${intl.formatMessage({
+      id: 'FICHE_NO',
+    })};${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
+      id: 'CLIENT_CODE',
+    })};${intl.formatMessage({id: 'CLIENT_NAME'})};${intl.formatMessage({
+      id: 'PRODUCT_GROSS',
+    })};${intl.formatMessage({id: 'PRODUCT_DISCOUNTS'})};${intl.formatMessage({
+      id: 'PRODUCT_EXPENSES',
+    })};${intl.formatMessage({id: 'PRODUCT_NET'})}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        switch (items[i]['item_trCode']) {
+          case 1:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE',
+            })}`
+            break
+          case 2:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_RETURN',
+            })}`
+            break
+          case 3:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+            })}`
+            break
+          case 4:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+            })}`
+            break
+          case 5:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+            })}`
+            break
+          case 6:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE_RETURN',
+            })}`
+            break
+          case 7:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_SALE',
+            })}`
+            break
+          case 8:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE',
+            })}`
+            break
+          case 9:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT',
+            })}`
+            break
+          case 10:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+            })}`
+            break
+          case 11:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_SCRAPT',
+            })}`
+            break
+          case 12:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_USAGE',
+            })}`
+            break
+          case 13:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+            })}`
+            break
+          case 14:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING',
+            })}`
+            break
+          case 25:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WAREHOUSE',
+            })}`
+            break
+          case 26:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PRODUCER',
+            })}`
+            break
+          case 50:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_EXCESS',
+            })}`
+            break
+          case 51:
+            items[i]['item_trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_DEFICIT',
+            })}`
+            break
+        }
+
+        items[i]['item_ficheNo'] = items[i]['item_ficheNo'] + "\t";
+
+        if (typeof items[i][item] === 'number') {
+          str += `${Math.round(items[i][item])};`
+        } else {
+          str += `${items[i][item]};`
+        }
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Fiche.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
 
   const {
     getTableProps,
@@ -88,7 +255,12 @@ const ProductsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <ProductsHeader value={globalFilter} change={setGlobalFilter} />
+      <Header
+        value={globalFilter}
+        change={setGlobalFilter}
+        exportPDF={exportPDF}
+        exportCSV={exportCSV}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table
@@ -135,8 +307,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
                       if (cell.accessor === 'item_trCode') {
-                        console.log('item_trCode');
-                        
+                        console.log('item_trCode')
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
@@ -170,7 +341,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                       >
                         <div className='menu-item px-3'>
                           <a href='/' className='menu-link px-3'>
-                          {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
+                            {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
                           </a>
                         </div>
                         <div className='menu-item px-3'>
