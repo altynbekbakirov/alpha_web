@@ -1,5 +1,5 @@
 export interface IPurchaseFiche {
-  trCode: number;
+  trCode: number | string;
   ficheNo: string;
   date: string;
   clientCode: string | null;

@@ -3,7 +3,7 @@ import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import { ISearch } from '../models/finance_model' 
 
-const ProductsSearchComponent: React.FC<ISearch> = ({value, change}) => {
+const SearchComponent: React.FC<ISearch> = ({value, change}) => {
   const intl = useIntl()
 
   return (
@@ -27,4 +27,4 @@ const ProductsSearchComponent: React.FC<ISearch> = ({value, change}) => {
   )
 }
 
-export {ProductsSearchComponent}
+export {SearchComponent}

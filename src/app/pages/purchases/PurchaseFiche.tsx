@@ -3,11 +3,14 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/purchases/components/Header'
+import {Header} from '../../modules/apps/reports/purchases/components/Header'
 import {PURCHASES_FICHE_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns'
 import {IPurchaseFiche} from '../../modules/apps/reports/purchases/models/purchases_model'
 import Footer from '../../modules/apps/reports/purchases/components/Footer'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
 const PurchaseFiche: React.FC = () => {
   const intl = useIntl()
@@ -81,12 +84,279 @@ const ItemsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'TR_CODE'}),
+        intl.formatMessage({id: 'FICHE_NO'}),
+        intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'CLIENT_CODE'}),
+        intl.formatMessage({id: 'CLIENT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROSS'}),
+        intl.formatMessage({id: 'PRODUCT_DISCOUNTS'}),
+        intl.formatMessage({id: 'PRODUCT_EXPENSES'}),
+        intl.formatMessage({id: 'PRODUCT_NET'}),
+        intl.formatMessage({id: 'PRODUCT_NET_USD'}),
+      ],
+    ]
+
+    const data = items.map((item: IPurchaseFiche) => {
+      switch (item.trCode) {
+        case 1:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE',
+          })}`
+          break
+        case 2:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_RETURN',
+          })}`
+          break
+        case 3:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+          })}`
+          break
+        case 4:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+          })}`
+          break
+        case 5:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+          })}`
+          break
+        case 6:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE_RETURN',
+          })}`
+          break
+        case 7:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_SALE',
+          })}`
+          break
+        case 8:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE',
+          })}`
+          break
+        case 9:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT',
+          })}`
+          break
+        case 10:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+          })}`
+          break
+        case 11:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_SCRAPT',
+          })}`
+          break
+        case 12:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_USAGE',
+          })}`
+          break
+        case 13:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+          })}`
+          break
+        case 14:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_OPENNING',
+          })}`
+          break
+        case 25:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WAREHOUSE',
+          })}`
+          break
+        case 26:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PRODUCER',
+          })}`
+          break
+        case 50:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_EXCESS',
+          })}`
+          break
+        case 51:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_DEFICIT',
+          })}`
+          break
+      }
+      return Object.values(item)
+    })
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Fiches.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'TR_CODE'})};${intl.formatMessage({
+      id: 'FICHE_NO',
+    })};${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
+      id: 'CLIENT_CODE',
+    })};${intl.formatMessage({id: 'CLIENT_NAME'})};${intl.formatMessage({
+      id: 'PRODUCT_GROSS',
+    })};${intl.formatMessage({id: 'PRODUCT_DISCOUNTS'})};${intl.formatMessage({
+      id: 'PRODUCT_EXPENSES',
+    })};${intl.formatMessage({id: 'PRODUCT_NET'})};${intl.formatMessage({
+      id: 'PRODUCT_NET_USD',
+    })}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        switch (items[i]['trCode']) {
+          case 1:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE',
+            })}`
+            break
+          case 2:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_RETURN',
+            })}`
+            break
+          case 3:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+            })}`
+            break
+          case 4:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+            })}`
+            break
+          case 5:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+            })}`
+            break
+          case 6:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE_RETURN',
+            })}`
+            break
+          case 7:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_SALE',
+            })}`
+            break
+          case 8:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE',
+            })}`
+            break
+          case 9:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT',
+            })}`
+            break
+          case 10:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+            })}`
+            break
+          case 11:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_SCRAPT',
+            })}`
+            break
+          case 12:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_USAGE',
+            })}`
+            break
+          case 13:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+            })}`
+            break
+          case 14:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING',
+            })}`
+            break
+          case 25:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WAREHOUSE',
+            })}`
+            break
+          case 26:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PRODUCER',
+            })}`
+            break
+          case 50:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_EXCESS',
+            })}`
+            break
+          case 51:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_DEFICIT',
+            })}`
+            break
+        }
+
+        items[i]['ficheNo'] = items[i]['ficheNo'] + '\t';
+        items[i]['gross'] = Math.round(items[i]['gross'])
+        items[i]['discounts'] = Math.round(items[i]['discounts'])
+        items[i]['expenses'] = Math.round(items[i]['expenses'])
+        items[i]['net'] = Math.round(items[i]['net'])
+        items[i]['netUsd'] = Math.round(items[i]['netUsd'])
+
+        str += `${items[i][item]};`
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Fiches.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
   return (
     <KTCard>
-      <ProductsHeader value={globalFilter} change={setGlobalFilter} />
+      <Header
+        value={globalFilter}
+        change={setGlobalFilter}
+        exportPDF={exportPDF}
+        exportCSV={exportCSV}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table

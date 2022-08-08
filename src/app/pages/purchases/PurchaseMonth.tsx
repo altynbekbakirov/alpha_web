@@ -3,15 +3,18 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/purchases/components/Header'
+import {Header} from '../../modules/apps/reports/purchases/components/Header'
 import {PURCHASES_MONTH_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns'
-import {IPurchaseFiche} from '../../modules/apps/reports/purchases/models/purchases_model'
+import {IPurchaseMonth} from '../../modules/apps/reports/purchases/models/purchases_model'
 import Footer from '../../modules/apps/reports/purchases/components/Footer'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
 const PurchaseMonth: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IPurchaseFiche[]>([])
+  const [items, setItems] = useState<IPurchaseMonth[]>([])
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -81,24 +84,121 @@ const ItemsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'PRODUCT_CODE'}),
+        intl.formatMessage({id: 'PRODUCT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROUP'}),
+        intl.formatMessage({id: 'JANUARY'}),
+        intl.formatMessage({id: 'FEBRUARY'}),
+        intl.formatMessage({id: 'MARCH'}),
+        intl.formatMessage({id: 'APRIL'}),
+        intl.formatMessage({id: 'MAY'}),
+        intl.formatMessage({id: 'JUNE'}),
+        intl.formatMessage({id: 'JULY'}),
+        intl.formatMessage({id: 'AUGUST'}),
+        intl.formatMessage({id: 'SEPTEMBER'}),
+        intl.formatMessage({id: 'OCTOBER'}),
+        intl.formatMessage({id: 'NOVEMBER'}),
+        intl.formatMessage({id: 'DECEMBER'}),
+        intl.formatMessage({id: 'TOTAL_NUMBER'}),
+        intl.formatMessage({id: 'TOTAL_SUM'}),
+        intl.formatMessage({id: 'TOTAL_SUM_USD'}),
+      ],
+    ]
+
+    const data = items.map((item: IPurchaseMonth) => {
+      item.totalSum = Math.round(item.totalSum)
+      item.totalUsd = Math.round(item.totalUsd)
+      return Object.values(item)
+    })
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Months.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+      id: 'PRODUCT_NAME',
+    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
+      id: 'JANUARY',
+    })};${intl.formatMessage({id: 'FEBRUARY'})};${intl.formatMessage({
+      id: 'MARCH',
+    })};${intl.formatMessage({id: 'APRIL'})};${intl.formatMessage({
+      id: 'MAY',
+    })};${intl.formatMessage({id: 'JUNE'})};${intl.formatMessage({
+      id: 'JULY',
+    })};${intl.formatMessage({
+      id: 'AUGUST',
+    })};${intl.formatMessage({id: 'SEPTEMBER'})};${intl.formatMessage({
+      id: 'OCTOBER',
+    })};${intl.formatMessage({id: 'NOVEMBER'})};${intl.formatMessage({
+      id: 'DECEMBER',
+    })};${intl.formatMessage({id: 'TOTAL_NUMBER'})};${intl.formatMessage({
+      id: 'TOTAL_SUM',
+    })};${intl.formatMessage({id: 'TOTAL_SUM_USD'})}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        items[i]['code'] = items[i]['code'] + "\t";
+        items[i]['totalSum'] = Math.round(items[i]['totalSum'])
+        items[i]['totalUsd'] = Math.round(items[i]['totalUsd'])
+
+        str += `${items[i][item]};`
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Months.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
   return (
     <KTCard>
-      <ProductsHeader value={globalFilter} change={setGlobalFilter} />
+      <Header
+        value={globalFilter}
+        change={setGlobalFilter}
+        exportPDF={exportPDF}
+        exportCSV={exportCSV}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table
             className='table table-hover border table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'
-            {...getTableProps()}            
+            {...getTableProps()}
           >
             <thead>
               {headerGroups.map((headerGroup, index) => (
                 <tr
                   key={index}
                   {...headerGroup.getHeaderGroupProps}
-                  className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'                  
+                  className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'
                 >
                   {headerGroup.headers.map((column) => (
                     <th

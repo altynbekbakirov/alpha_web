@@ -12,6 +12,19 @@ export interface IFinanceCustomer {
   balanceUsd: number
 }
 
+export interface IFinanceCustomer1 {
+  code: string
+  name: string
+  address: string
+  phone: string | null
+  debit: number
+  credit: number
+  balance: number
+  debitUsd: number
+  creditUsd: number
+  balanceUsd: number
+}
+
 export interface IFinanceExtract {
   code: string
   name: string

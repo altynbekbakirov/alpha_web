@@ -3,11 +3,14 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ProductsHeader} from '../../modules/apps/reports/purchases/components/Header'
-import { PURCHASES_TOTAL_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns' 
+import {Header} from '../../modules/apps/reports/purchases/components/Header'
+import {PURCHASES_TOTAL_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns'
 import {IPurchaseTotal} from '../../modules/apps/reports/purchases/models/purchases_model'
 import Footer from '../../modules/apps/reports/purchases/components/Footer'
 import axios from 'axios'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
 const PurchaseTotal: React.FC = () => {
   const intl = useIntl()
@@ -33,7 +36,7 @@ const PurchaseTotal: React.FC = () => {
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.PURCHASE_TOTAL'})}</PageTitle>
-      <ItemsContainer items={items}/>
+      <ItemsContainer items={items} />
     </>
   )
 }
@@ -81,12 +84,92 @@ const ItemsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'PRODUCT_CODE'}),
+        intl.formatMessage({id: 'PRODUCT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROUP'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'}),
+      ],
+    ]
+
+    const data = items.map((item: IPurchaseTotal) => {
+      item.purchaseTotal = Math.round(item.purchaseTotal)
+      item.saleTotal = Math.round(item.saleTotal)
+      item.saleTotalUsd = Math.round(item.saleTotalUsd)
+      return Object.values(item)
+    })
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Totals.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+      id: 'PRODUCT_NAME',
+    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_COUNT',
+    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_TOTAL_USD',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'})}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        items[i]['code'] = items[i]['code'] + '\t'
+        items[i]['purchaseTotal'] = Math.round(items[i]['purchaseTotal'])
+        items[i]['purchaseTotalUsd'] = Math.round(items[i]['purchaseTotalUsd'])
+        items[i]['saleTotal'] = Math.round(items[i]['saleTotal'])
+        items[i]['saleTotalUsd'] = Math.round(items[i]['saleTotalUsd'])
+        str += `${items[i][item]};`
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Totals.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
   return (
     <KTCard>
-      <ProductsHeader value={globalFilter} change={setGlobalFilter} />
+      <Header
+        value={globalFilter}
+        change={setGlobalFilter}
+        exportPDF={exportPDF}
+        exportCSV={exportCSV}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table

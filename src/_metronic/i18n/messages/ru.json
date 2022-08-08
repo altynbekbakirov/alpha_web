@@ -134,6 +134,8 @@
   "DASHBOARD_CUSTOMERS_DESCRIPTION": "Клиенты с самыми большими долгами",
   "DASHBOARD_LATEST_SALES": "Последние продажи",
   "DASHBOARD_LATEST_SALES_DESCRIPTION": "Самые последние продажи",
+  "DASHBOARD_PURCHASES" : "Закупки",
+  "DASHBOARD_LATEST_PURCHASES_DESCRIPTION": "Самые последние закупки",
   "CURRENCY_COM": "Сом", 
   "CURRENCY_USD": "Usd", 
   "DATE": "Дата",

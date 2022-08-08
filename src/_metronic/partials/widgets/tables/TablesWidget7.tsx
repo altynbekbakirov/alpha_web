@@ -12,7 +12,7 @@ type Props = {
 
 const TablesWidget7: React.FC<Props> = ({className}) => {
   const [fiches, setFiches] = useState<ISaleFiche[]>([])
-  const intl = useIntl()  
+  const intl = useIntl()
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -36,8 +36,12 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>{intl.formatMessage({id: 'DASHBOARD_LATEST_SALES'})}</span>
-          <span className='text-muted mt-1 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_LATEST_SALES_DESCRIPTION'})}</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {intl.formatMessage({id: 'DASHBOARD_SALES'})}
+          </span>
+          <span className='text-muted mt-1 fw-bold fs-7'>
+            {intl.formatMessage({id: 'DASHBOARD_LATEST_SALES_DESCRIPTION'})}
+          </span>
         </h3>
         <div className='card-toolbar'>
           <button
@@ -117,25 +121,25 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
                               </span>
                             ) : fiche.clientCode?.startsWith('300') ? (
                               <span className='symbol-label bg-light-primary'>
-                              <KTSVG
-                                path='/media/icons/duotune/coding/cod007.svg'
-                                className='svg-icon-2x svg-icon-primary'
-                              />
-                            </span> 
+                                <KTSVG
+                                  path='/media/icons/duotune/coding/cod007.svg'
+                                  className='svg-icon-2x svg-icon-primary'
+                                />
+                              </span>
                             ) : fiche.clientCode?.startsWith('600') ? (
                               <span className='symbol-label bg-light-danger'>
-                              <KTSVG
-                                path='/media/icons/duotune/coding/cod006.svg'
-                                className='svg-icon-2x svg-icon-danger'
-                              />
-                            </span> 
+                                <KTSVG
+                                  path='/media/icons/duotune/coding/cod006.svg'
+                                  className='svg-icon-2x svg-icon-danger'
+                                />
+                              </span>
                             ) : (
                               <span className='symbol-label bg-light-secondary'>
-                              <KTSVG
-                                path='/media/icons/duotune/coding/cod008.svg'
-                                className='svg-icon-2x svg-icon-secondary'
-                              />
-                            </span> 
+                                <KTSVG
+                                  path='/media/icons/duotune/coding/cod008.svg'
+                                  className='svg-icon-2x svg-icon-secondary'
+                                />
+                              </span>
                             )}
                           </div>
                         </td>
@@ -145,7 +149,7 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
                           </span>
 
                           <span className='text-muted fw-bold d-block fs-7'>
-                            {fiche.managerName}
+                            <strong>{fiche.managerName}</strong> ({fiche.date})
                           </span>
                         </td>
                         <td className='text-center'>{fiche.discounts}</td>

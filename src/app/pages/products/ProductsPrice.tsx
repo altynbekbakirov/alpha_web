@@ -21,11 +21,9 @@ const ProductsPrice: React.FC = () => {
     const REQUEST_URL = `${BASE_URL}/products/price`
 
     async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, null, {
-        params: {
-          firmno: 1,
-          periodno: 3,
-        },
+      const response = await axios.post(REQUEST_URL, {
+        firmno: 1,
+        periodno: 3,
       })
       setItems(response.data)
     }

@@ -21,14 +21,12 @@ const ProductsFiche: React.FC = () => {
     const REQUEST_URL = `${BASE_URL}/products/fiche`
 
     async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, null, {
-        params: {
-          firmno: 1,
-          periodno: 3,
-          begdate: '01.01.2022',
-          enddate: '31.12.2022',
-          sourceindex: 0,
-        },
+      const response = await axios.post(REQUEST_URL, {
+        firmno: 1,
+        periodno: 3,
+        begdate: '01.01.2022',
+        enddate: '31.12.2022',
+        sourceindex: 0,
       })
       setItems(response.data)
     }
@@ -67,7 +65,102 @@ const ProductsContainer = ({items}: {items: any}) => {
       ],
     ]
 
-    const data = items.map((item: IProductFiche) => Object.values(item))
+    const data = items.map((item: IProductFiche) => {
+      switch (item.item_trCode) {
+        case 1:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE',
+          })}`
+          break
+        case 2:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_RETURN',
+          })}`
+          break
+        case 3:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+          })}`
+          break
+        case 4:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+          })}`
+          break
+        case 5:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+          })}`
+          break
+        case 6:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE_RETURN',
+          })}`
+          break
+        case 7:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_SALE',
+          })}`
+          break
+        case 8:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE',
+          })}`
+          break
+        case 9:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT',
+          })}`
+          break
+        case 10:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+          })}`
+          break
+        case 11:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_SCRAPT',
+          })}`
+          break
+        case 12:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_USAGE',
+          })}`
+          break
+        case 13:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+          })}`
+          break
+        case 14:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_OPENNING',
+          })}`
+          break
+        case 25:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WAREHOUSE',
+          })}`
+          break
+        case 26:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PRODUCER',
+          })}`
+          break
+        case 50:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_EXCESS',
+          })}`
+          break
+        case 51:
+          item.item_trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_DEFICIT',
+          })}`
+          break
+      }
+
+      return Object.values(item)
+    })
 
     autoTable(doc, {
       head: head,
@@ -192,7 +285,7 @@ const ProductsContainer = ({items}: {items: any}) => {
             break
         }
 
-        items[i]['item_ficheNo'] = items[i]['item_ficheNo'] + "\t";
+        items[i]['item_ficheNo'] = items[i]['item_ficheNo'] + '\t'
 
         if (typeof items[i][item] === 'number') {
           str += `${Math.round(items[i][item])};`
