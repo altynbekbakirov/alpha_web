@@ -1,5 +1,4 @@
 export interface IProductRemains {
-  item_id: number
   item_code: string
   item_name: string
   item_group: string

@@ -1,18 +1,4 @@
 export interface IFinanceCustomer {
-  id: number
-  code: string
-  name: string
-  address: string
-  phone: string | null
-  debit: number
-  credit: number
-  balance: number
-  debitUsd: number
-  creditUsd: number
-  balanceUsd: number
-}
-
-export interface IFinanceCustomer1 {
   code: string
   name: string
   address: string
@@ -29,7 +15,7 @@ export interface IFinanceExtract {
   code: string
   name: string
   date: string
-  trcode: number
+  trcode: number | string
   ficheno: string
   description: string
   debit: number
@@ -39,7 +25,6 @@ export interface IFinanceExtract {
 }
 
 export interface IFinanceDebit {
-  id: number
   code: string
   name: string
   address: string

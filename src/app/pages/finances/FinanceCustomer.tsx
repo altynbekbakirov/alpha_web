@@ -3,7 +3,7 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import axios from 'axios'
-import {IFinanceCustomer, IFinanceCustomer1} from '../../modules/apps/reports/finance/models/finance_model'
+import {IFinanceCustomer} from '../../modules/apps/reports/finance/models/finance_model'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {FINANCE_CUSTOMER_COLUMNS} from '../../modules/apps/reports/finance/types/Columns'
 import {Header} from '../../modules/apps/reports/finance/components/Header'
@@ -15,7 +15,6 @@ import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 const FinanceCustomer: React.FC = () => {
   const intl = useIntl()
   const [items, setItems] = useState<IFinanceCustomer[]>([])
-  const [items1, setItems1] = useState<IFinanceCustomer1[]>([])
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
@@ -29,7 +28,6 @@ const FinanceCustomer: React.FC = () => {
         sourceindex: 0,
       })
       setItems(response.data)
-      setItems1(response.data)
     }
     fetchProducts()
   }, [])
@@ -37,12 +35,12 @@ const FinanceCustomer: React.FC = () => {
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.FINANCE_CUSTOMER'})}</PageTitle>
-      <ItemsContainer items={items} items1={items1}/>
+      <ItemsContainer items={items} />
     </>
   )
 }
 
-const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
+const ItemsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => FINANCE_CUSTOMER_COLUMNS, [])
   const data = useMemo(() => items, [items])
@@ -101,11 +99,18 @@ const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
         intl.formatMessage({id: 'CLIENT_BALANCE'}),
         intl.formatMessage({id: 'CLIENT_DEBIT_USD'}),
         intl.formatMessage({id: 'CLIENT_CREDIT_USD'}),
-        intl.formatMessage({id: 'CLIENT_BALANCE_USD'}),        
+        intl.formatMessage({id: 'CLIENT_BALANCE_USD'}),
       ],
     ]
 
-    const data = items1.map((item: IFinanceCustomer1) => {
+    const data = items.map((item: IFinanceCustomer) => {
+      item.phone = item.phone + '\t'
+      item.debit = Math.round(item.debit)
+      item.debitUsd = Math.round(item.debitUsd)
+      item.credit = Math.round(item.credit)
+      item.creditUsd = Math.round(item.creditUsd)
+      item.balance = Math.round(item.balance)
+      item.balanceUsd = Math.round(item.balanceUsd)
       return Object.values(item)
     })
 
@@ -126,7 +131,7 @@ const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_EMPTY'})};${intl.formatMessage({
+    let str = `${intl.formatMessage({
       id: 'CLIENT_CODE',
     })};${intl.formatMessage({id: 'CLIENT_NAME'})};${intl.formatMessage({
       id: 'CLIENT_ADDRESS',
@@ -139,14 +144,15 @@ const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
     })};${intl.formatMessage({id: 'CLIENT_BALANCE_USD'})}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
-    for (let i = 0; i < items1.length; i++) {
+    for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        items[i]['phone'] = items[i]['phone'] + '\t'
+        items[i]['debit'] = Math.round(items[i]['debit'])
+        items[i]['credit'] = Math.round(items[i]['credit'])
+        items[i]['balance'] = Math.round(items[i]['balance'])
+        items[i]['debitUsd'] = Math.round(items[i]['debitUsd'])
+        items[i]['creditUsd'] = Math.round(items[i]['creditUsd'])
+        items[i]['balanceUsd'] = Math.round(items[i]['balanceUsd'])
 
         str += `${items[i][item]};`
       }
@@ -161,7 +167,7 @@ const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
     link.click()
     document.body.removeChild(link)
   }
-
+  
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
@@ -211,12 +217,51 @@ const ItemsContainer = ({items, items1}: {items: any, items1 : any}) => {
             </thead>
             <tbody {...getTableBodyProps} className='text-gray-600 fw-bold'>
               {page.map((row: any) => {
+                let currentCode
                 prepareRow(row)
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
+                      if (cell.render('Cell').props.column.Header === 'CLIENT_CODE') {
+                        currentCode = cell.render('Cell').props.cell.value
+                      }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
+                    <td>
+                      <a
+                        href='/'
+                        className='btn btn-secondary btn-active-light-primary btn-sm'
+                        data-kt-menu-trigger='click'
+                        data-kt-menu-placement='bottom-end'
+                      >
+                        {intl.formatMessage({id: 'ACTIONS'})}
+                        <span className='svg-icon svg-icon-5 m-0'>
+                          <svg
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='mh-50px'
+                          >
+                            <path
+                              d='M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z'
+                              fill='currentColor'
+                            ></path>
+                          </svg>
+                        </span>
+                      </a>
+                      <div
+                        className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4'
+                        data-kt-menu='true'
+                      >
+                        <div className='menu-item px-3'>
+                          <a href={`/finance/extract/${currentCode}`} className='menu-link px-3'>
+                            {intl.formatMessage({id: 'CLIENT_EXTRACT'})}
+                          </a>
+                        </div>
+                      </div>
+                    </td>
                   </tr>
                 )
               })}

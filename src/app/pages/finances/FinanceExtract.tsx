@@ -94,19 +94,106 @@ const ItemsContainer = ({items}: {items: any}) => {
       [
         intl.formatMessage({id: 'CLIENT_CODE'}),
         intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+        intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'CLIENT_OPERATION_TYPE'}),
+        intl.formatMessage({id: 'CLIENT_FICHE_NO'}),
+        intl.formatMessage({id: 'CLIENT_DESCRIPTION'}),
+        intl.formatMessage({id: 'CLIENT_DEBIT_PLUS'}),
+        intl.formatMessage({id: 'CLIENT_DEBIT_MINUS'}),
+        intl.formatMessage({id: 'CLIENT_BALANCE'}),
+        intl.formatMessage({id: 'CLIENT_OPENNING_SLIP'}),
       ],
     ]
 
     const data = items.map((item: IFinanceExtract) => {
+      switch (item.trcode) {
+        case 1:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_CASH_COLLECTION',
+          })
+          break
+        case 2:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_CASH_PAYMENT',
+          })
+          break
+        case 3:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_DEBIT_NOTE',
+          })
+          break
+        case 4:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_CREDIT_NOTE',
+          })
+          break
+        case 5:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_PERMITTANCE_SLIP',
+          })
+          break
+        case 6:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+          })
+          break
+        case 12:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_SPECIAL_SLIP',
+          })
+          break
+        case 14:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_OPENNING_SLIP',
+          })
+          break
+        case 31:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_PURCHASE_INVOICE',
+          })
+          break
+        case 32:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_RETAIL_RETURN_INVOICE',
+          })
+          break
+        case 33:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_TRADESMAN_INVOICE_RECEIVED',
+          })
+          break
+        case 36:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_CUSTOMER_RETURN',
+          })
+          break
+        case 37:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_RETAIL_SALE',
+          })
+          break
+        case 38:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_WHOLESALE',
+          })
+          break
+        case 39:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_TRADESMAN_INVOICE_ISSUED',
+          })
+          break
+        default:
+          item.trcode = intl.formatMessage({
+            id: 'CLIENT_OPERATION_OTHER',
+          })
+          break
+      }
+
+      item.description = item.description + '\t'
+      item.debit = Math.round(item.debit)
+      item.credit = Math.round(item.credit)
+      item.balance = Math.round(item.balance)
+      item.balanceBefore = Math.round(item.balanceBefore)
       return Object.values(item)
     })
 
@@ -115,7 +202,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Accounts.pdf')
+    doc.save('AccountExtract.pdf')
   }
 
   function exportCSV() {
@@ -129,25 +216,102 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
       id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+    })};${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
+      id: 'CLIENT_OPERATION_TYPE',
+    })};${intl.formatMessage({id: 'CLIENT_FICHE_NO'})};${intl.formatMessage({
+      id: 'CLIENT_DESCRIPTION',
+    })};${intl.formatMessage({id: 'CLIENT_DEBIT_PLUS'})};${intl.formatMessage({
+      id: 'CLIENT_DEBIT_MINUS',
+    })};${intl.formatMessage({id: 'CLIENT_BALANCE'})};${intl.formatMessage({
+      id: 'CLIENT_OPENNING_SLIP',
+    })}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        switch (items[i]['trcode']) {
+          case 1:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_COLLECTION',
+            })
+            break
+          case 2:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_PAYMENT',
+            })
+            break
+          case 3:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_DEBIT_NOTE',
+            })
+            break
+          case 4:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_CREDIT_NOTE',
+            })
+            break
+          case 5:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_PERMITTANCE_SLIP',
+            })
+            break
+          case 6:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })
+            break
+          case 12:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_SPECIAL_SLIP',
+            })
+            break
+          case 14:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_OPENNING_SLIP',
+            })
+            break
+          case 31:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_PURCHASE_INVOICE',
+            })
+            break
+          case 32:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_RETAIL_RETURN_INVOICE',
+            })
+            break
+          case 33:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_TRADESMAN_INVOICE_RECEIVED',
+            })
+            break
+          case 36:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_CUSTOMER_RETURN',
+            })
+            break
+          case 37:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_RETAIL_SALE',
+            })
+            break
+          case 38:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_WHOLESALE',
+            })
+            break
+          case 39:
+            items[i]['trcode'] = intl.formatMessage({
+              id: 'CLIENT_TRADESMAN_INVOICE_ISSUED',
+            })
+            break
+        }
+
+        items[i]['description'] = items[i]['description'] + '\t'
+        items[i]['debit'] = Math.round(items[i]['debit'])
+        items[i]['credit'] = Math.round(items[i]['credit'])
+        items[i]['balance'] = Math.round(items[i]['balance'])
+        items[i]['balanceBefore'] = Math.round(items[i]['balanceBefore'])
 
         str += `${items[i][item]};`
       }
@@ -157,7 +321,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Accounts.csv'
+    link.download = 'AccountExtract.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
