@@ -35,6 +35,19 @@ export interface IProductPrice {
   item_price: number
 }
 
+export interface IProductTransaction {
+  date: string
+  ficheNo: string
+  trCode: number
+  clientCode: string | null
+  clientName: string | null
+  count: number
+  price: number
+  priceUsd: number
+  total: number
+  totalUsd: number
+}
+
 export interface IFooter {
   previous: () => void
   next: () => void

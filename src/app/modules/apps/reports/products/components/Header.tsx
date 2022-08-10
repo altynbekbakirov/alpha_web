@@ -7,9 +7,12 @@ interface IProps {
   change: (e: any) => string
   exportPDF: () => void
   exportCSV: () => void
+  show: boolean
+  setShow : () => void
+  item: string
 }
 
-const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV}) => {    
+const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, setShow, item}) => {    
   return (
     <>
       <div className='card-header border-0 pt-6'>
@@ -22,7 +25,7 @@ const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV}) => {
         </div>
         {/* end::Card toolbar */}
       </div>
-      <MaterialTransactions />
+      <MaterialTransactions show={show} setShow={setShow} item={item}/>
     </>
   )
 }

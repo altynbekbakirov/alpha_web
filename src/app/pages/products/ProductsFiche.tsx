@@ -45,6 +45,7 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_FICHE_COLUMNS, [])
   const data = useMemo(() => items, [items])
+  const [show, setShow] = useState(false);
 
   function exportPDF() {
     const doc = new jsPDF('l', 'mm', 'a4')
@@ -343,6 +344,10 @@ const ProductsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
+  function changeMaterialModalVisibility() {
+    setShow(!show);
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
@@ -353,6 +358,9 @@ const ProductsContainer = ({items}: {items: any}) => {
         change={setGlobalFilter}
         exportPDF={exportPDF}
         exportCSV={exportCSV}
+        show={show}
+        setShow={changeMaterialModalVisibility}
+        item={'sometext'}
       />
       <KTCardBody>
         <div className='table-responsive'>

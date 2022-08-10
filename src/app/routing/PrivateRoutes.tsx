@@ -6,7 +6,6 @@ import {DashboardWrapper} from '../pages/dashboard/DashboardWrapper'
 import {getCSSVariableValue} from '../../_metronic/assets/ts/_utils'
 import ProductsFiche from '../pages/products/ProductsFiche'
 import ProductsRemains from '../pages/products/ProductsRemains'
-import ProductsInventory from '../pages/products/ProductsInventory'
 import ProductsPrice from '../pages/products/ProductsPrice'
 import PurchaseFiche from '../pages/purchases/PurchaseFiche'
 import PurchaseClient from '../pages/purchases/PurchaseClient'
@@ -47,7 +46,6 @@ const PrivateRoutes = () => {
         <Route path='products' element={<Navigate to='/products/remains' />} />
         <Route path='products/remains' element={<ProductsRemains />} />
         <Route path='products/fiche' element={<ProductsFiche />} />
-        <Route path='products/inventory' element={<ProductsInventory />} />
         <Route path='products/price' element={<ProductsPrice />} />
 
         {/* Purchases */}
