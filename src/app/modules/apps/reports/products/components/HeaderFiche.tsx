@@ -1,5 +1,4 @@
-import MaterialPrices from '../../../../../../_metronic/partials/modals/products/MaterialPrices'
-import MaterialTransactions from '../../../../../../_metronic/partials/modals/products/MaterialTransactions'
+import FicheContents from '../../../../../../_metronic/partials/modals/products/FicheContents'
 import {ProductsSearchComponent} from './Search'
 import {ToolBar} from './ToolBar'
 
@@ -9,13 +8,11 @@ interface IProps {
   exportPDF: () => void
   exportCSV: () => void
   show: boolean
-  setShow : () => void
+  setShow: () => void
   item: string
-  showPrice: boolean
-  setShowPrice: () => void
 }
 
-const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, setShow, item, showPrice, setShowPrice}) => {    
+const HeaderFiche: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, setShow, item}) => {    
   return (
     <>
       <div className='card-header border-0 pt-6'>
@@ -28,10 +25,9 @@ const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, se
         </div>
         {/* end::Card toolbar */}
       </div>
-      <MaterialTransactions show={show} setShow={setShow} item={item}/>
-      <MaterialPrices showPrice={showPrice} setShowPrice={setShowPrice} item={item} />
+      <FicheContents show={show} setShow={setShow} item={item} />
     </>
   )
 }
 
-export {Header}
+export {HeaderFiche}

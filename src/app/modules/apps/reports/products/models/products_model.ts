@@ -13,16 +13,23 @@ export interface IProductRemains {
 }
 
 export interface IProductFiche {
-  item_trCode: number | string
-  item_ficheNo: string
-  item_date: string
-  item_clientCode: string | null
-  item_clientName: string | null
-  item_gross: number
-  item_discounts: number
-  item_expenses: number
-  item_net: number
-  item_type: number
+  ficheNo: string
+  date: string
+  trCode: number | string
+  net: number | string
+  netTotal: number | string
+  reportRate: number | string
+}
+
+export interface IFiche {
+  code: string
+  name: string
+  count: number
+  price: number
+  priceUsd: number
+  total: number
+  totalUsd: number
+  definition: string
 }
 
 export interface IProductPrice {
@@ -33,6 +40,18 @@ export interface IProductPrice {
   item_onHand: number
   item_unit: string
   item_price: number
+}
+
+export interface IProductPrices {
+  code: string
+  name: string
+  definition: string
+  ptype: number | string
+  price: number
+  currency: string
+  begdate: string
+  enddate: string
+  active: number
 }
 
 export interface IProductTransaction {

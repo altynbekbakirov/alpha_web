@@ -46,6 +46,7 @@ const ProductsContainer = ({items}: {items: any}) => {
   const columns = useMemo(() => PRODUCTS_REMAINS_COLUMNS, [])
   const data = useMemo(() => items, [items])
   const [show, setShow] = React.useState(false)
+  const [showPrice, setShowPrice] = React.useState(false)
   const [item, setItem] = useState('');
 
   function exportPDF() {
@@ -172,11 +173,7 @@ const ProductsContainer = ({items}: {items: any}) => {
     useSortBy,
     usePagination
   )
-
-  function changeMaterialModalVisibility() {
-    setShow(!show)
-  }
-
+  
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
@@ -188,8 +185,10 @@ const ProductsContainer = ({items}: {items: any}) => {
         exportPDF={exportPDF}
         exportCSV={exportCSV}
         show={show}
-        setShow={changeMaterialModalVisibility}
+        setShow={() => setShow(!show)}
         item={item}
+        showPrice={showPrice}
+        setShowPrice={() => setShowPrice(!showPrice)}
       />
       <KTCardBody>
         <div className='table-responsive'>
@@ -244,7 +243,8 @@ const ProductsContainer = ({items}: {items: any}) => {
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                     <td>
-                      <button
+                    <a
+                        href='/'
                         className='btn btn-light btn-active-light-primary btn-sm'
                         data-kt-menu-trigger='click'
                         data-kt-menu-placement='bottom-end'
@@ -265,7 +265,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                             ></path>
                           </svg>
                         </span>
-                      </button>
+                      </a>
                       <div
                         className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4'
                         data-kt-menu='true'
@@ -276,7 +276,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                             className='menu-link px-3'
                             onClick={(e) => {
                               e.preventDefault()
-                              changeMaterialModalVisibility()
+                              setShow(!show)
                               setItem(currentCode);                              
                             }}
                           >
@@ -287,7 +287,11 @@ const ProductsContainer = ({items}: {items: any}) => {
                           <a
                             href='/'
                             className='menu-link px-3'
-                            data-kt-users-table-filter='delete_row'
+                            onClick={(e) => {
+                              e.preventDefault();
+                              setShowPrice(!showPrice)
+                              setItem(currentCode);   
+                            }}
                           >
                             {intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}
                           </a>

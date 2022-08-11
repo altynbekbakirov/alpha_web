@@ -43,6 +43,7 @@ const ProductsContainer = ({items}: {items: any}) => {
   const columns = useMemo(() => PRODUCTS_PRICE_COLUMNS, [])
   const data = useMemo(() => items, [items])
   const [show, setShow] = useState(false);
+  const [showPrice, setShowPrice] = React.useState(false)
 
   function exportPDF() {
     const doc = new jsPDF('l', 'mm', 'a4')
@@ -154,6 +155,10 @@ const ProductsContainer = ({items}: {items: any}) => {
     setShow(!show);
   }
 
+  function changePriceVisibility() {
+    setShowPrice(!showPrice);
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
@@ -167,6 +172,8 @@ const ProductsContainer = ({items}: {items: any}) => {
         show={show}
         setShow={changeMaterialModalVisibility}
         item={'some'}
+        showPrice={showPrice}
+        setShowPrice={changePriceVisibility}
       />
       <KTCardBody>
         <div className='table-responsive'>

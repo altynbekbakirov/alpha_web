@@ -1,8 +1,10 @@
 import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
 import {
+  IFiche,
   IProductFiche,
   IProductPrice,
+  IProductPrices,
   IProductRemains,
   IProductTransaction,
 } from '../models/products_model'
@@ -143,8 +145,19 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
 
 export const PRODUCTS_FICHE_COLUMNS: ReadonlyArray<Column<IProductFiche>> = [
   {
+    Header: 'FICHE_NO',
+    accessor: 'ficheNo',
+  },
+  {
+    Header: 'DATE',
+    accessor: 'date',
+    Cell: ({value}) => {
+      return <div className='badge badge-light fw-bolder'>{value}</div>
+    },
+  },
+  {
     Header: 'TR_CODE',
-    accessor: 'item_trCode',
+    accessor: 'trCode',
     //@ts-expect-error
     disableGlobalFilter: true,
     Cell: ({value}) => {
@@ -262,71 +275,105 @@ export const PRODUCTS_FICHE_COLUMNS: ReadonlyArray<Column<IProductFiche>> = [
     },
   },
   {
-    Header: 'FICHE_NO',
-    accessor: 'item_ficheNo',
-  },
-  {
-    Header: 'DATE',
-    accessor: 'item_date',
+    Header: 'TOTAL',
+    accessor: 'net',
+    //@ts-expect-error
+    disableGlobalFilter: true,
     Cell: ({value}) => {
-      return <div className='badge badge-light fw-bolder'>{value}</div>
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
-    Header: 'CLIENT_CODE',
-    accessor: 'item_clientCode',
+    Header: 'TOTAL_SUM',
+    accessor: 'netTotal',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
   },
   {
-    Header: 'CLIENT_NAME',
-    accessor: 'item_clientName',
-  },
-  {
-    Header: 'PRODUCT_GROSS',
-    accessor: 'item_gross',
+    Header: 'CURRENCY_RATE',
+    accessor: 'reportRate',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
+]
+
+export const PRODUCTS_FICHE: ReadonlyArray<Column<IFiche>> = [
   {
-    Header: 'PRODUCT_DISCOUNTS',
-    accessor: 'item_discounts',
-    //@ts-expect-error
-    disableGlobalFilter: true,
-    sortType: compareNumericString,
+    Header: 'PRODUCT_CODE',
+    accessor: 'code',
   },
   {
-    Header: 'PRODUCT_EXPENSES',
-    accessor: 'item_expenses',
+    Header: 'PRODUCT_NAME',
+    accessor: 'name',
+  },
+  {
+    Header: 'PRODUCT_COUNT',
+    accessor: 'count',
+  },
+  {
+    Header: 'PRODUCT_PRICE',
+    accessor: 'price',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      return Math.round(value)
     },
   },
   {
-    Header: 'PRODUCT_NET',
-    accessor: 'item_net',
+    Header: 'PRODUCT_PRICE_USD',
+    accessor: 'priceUsd',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      return Math.round(value)
     },
+  },
+  {
+    Header: 'PRODUCT_TOTAL',
+    accessor: 'total',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return Math.round(value)
+    },
+  },
+  {
+    Header: 'PRODUCT_TOTAL_USD',
+    accessor: 'totalUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return Math.round(value)
+    },
+  },
+  {
+    Header: 'PRODUCT_DEFINITION',
+    accessor: 'definition',
   },
 ]
 
@@ -392,8 +439,84 @@ export const PRODUCTS_PRICE_COLUMNS: ReadonlyArray<Column<IProductPrice>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 1,
+        maximumFractionDigits: 2,
       })
+    },
+  },
+]
+
+export const PRODUCTS_PRICES_COLUMNS: ReadonlyArray<Column<IProductPrices>> = [
+  {
+    Header: 'PRODUCT_CODE',
+    accessor: 'code',
+  },
+  {
+    Header: 'PRODUCT_NAME',
+    accessor: 'name',
+  },
+  {
+    Header: 'PRODUCT_DEFINITION',
+    accessor: 'definition',
+  },
+  {
+    Header: 'PRODUCT_PRICE_TYPE',
+    accessor: 'ptype',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      const intl = useIntl()
+      return value === 1 ? (
+        <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
+          id: 'PRODUCT_PRICE_TYPE_PURCHASE',
+        })}`}</div>
+      ) : (
+        <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+          id: 'PRODUCT_PRICE_TYPE_SALE',
+        })}`}</div>
+      )
+    },
+  },
+  {
+    Header: 'PRODUCT_PRICE',
+    accessor: 'price',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'CURRENCY',
+    accessor: 'currency',
+  },
+  {
+    Header: 'BEGDATE',
+    accessor: 'begdate',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+  },
+  {
+    Header: 'ENDDATE',
+    accessor: 'enddate',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+  },
+  {
+    Header: 'ACTIVE',
+    accessor: 'active',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      const intl = useIntl()
+      return value === 0 ? (
+        <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({id: 'YES'})}`}</div>
+      ) : (
+        <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({id: 'NO'})}`}</div>
+      )
     },
   },
 ]
