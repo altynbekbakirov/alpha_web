@@ -427,6 +427,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                           setItem(currentCode)
                           setShow(!show)
                         }}
+                        title={`${intl.formatMessage({id: 'ACTIONS_VIEW_INVOICE'})}`}
                       >
                         <span className='svg-icon svg-icon-2 svg-icon-primary'>
                           <svg

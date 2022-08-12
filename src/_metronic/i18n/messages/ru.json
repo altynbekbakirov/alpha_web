@@ -56,6 +56,7 @@
   "ACTIONS": "Операции",
   "ACTIONS_MATERIAL_TRANSACTIONS": "Движения товара",
   "ACTIONS_VIEW_PRICES": "Посмотреть цены",
+  "ACTIONS_VIEW_INVOICE": "Посмотреть",
   "COMPANY": "Компания",
   "PERIOD": "Финансовый период",
   "WAREHOUSE": "Склад",

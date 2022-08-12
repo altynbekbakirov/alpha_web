@@ -10,7 +10,7 @@ import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-import { HeaderFiche } from '../../modules/apps/reports/products/components/HeaderFiche'
+import { HeaderFiche } from '../../modules/apps/reports/purchases/components/HeaderFiche'
 
 const PurchaseFiche: React.FC = () => {
   const intl = useIntl()
@@ -422,6 +422,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                           setItem(currentCode)
                           setShow(!show)
                         }}
+                        title={`${intl.formatMessage({id: 'ACTIONS_VIEW_INVOICE'})}`}
                       >
                         <span className='svg-icon svg-icon-2 svg-icon-primary'>
                           <svg

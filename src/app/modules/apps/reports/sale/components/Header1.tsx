@@ -1,7 +1,7 @@
 import MaterialPrices from '../../../../../../_metronic/partials/modals/products/MaterialPrices'
 import MaterialTransactions from '../../../../../../_metronic/partials/modals/products/MaterialTransactions'
-import {SearchComponent} from './Search'
-import {ToolBar} from './ToolBar'
+import { ToolBar } from '../../products/components/ToolBar'
+import { SearchComponent } from './Search'
 
 interface IProps {
   value: string
@@ -15,7 +15,7 @@ interface IProps {
   setShowPrice: () => void
 }
 
-const Header: React.FC<IProps> = ({
+const Header1: React.FC<IProps> = ({
   value,
   change,
   exportPDF,
@@ -44,4 +44,4 @@ const Header: React.FC<IProps> = ({
   )
 }
 
-export {Header}
+export {Header1}

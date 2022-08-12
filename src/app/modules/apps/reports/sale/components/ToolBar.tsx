@@ -1,41 +1,40 @@
+import { Dropdown } from 'react-bootstrap'
 import {useIntl} from 'react-intl'
 import { KTSVG } from '../../../../../../_metronic/helpers'
-import {ProductsFilterButton} from './FilterButton'
+import { FilterButton } from './FilterButton'
 
-const ProductsToolBar = () => {
+interface IProps {
+  exportPDF: () => void
+  exportCSV: () => void
+}
+
+const ToolBar: React.FC<IProps> = ({exportCSV, exportPDF}) => {
   const intl = useIntl()
   return (
     <div className='d-flex justify-content-end' data-kt-user-table-toolbar='base'>
-      <ProductsFilterButton />
+      <FilterButton />
 
       {/* begin::Export */}
-      <button
-        type='button'
-        className='btn btn-info me-3'
-        data-kt-menu-export-trigger='click'
-        data-kt-menu-export-placement='bottom-end'
-      >
-        <KTSVG path='/media/icons/duotune/arrows/arr078.svg' className='svg-icon-2' />
-        {intl.formatMessage({id: 'EXPORT'})}
-      </button>
-      {/* end::Export */}
-      <div
-        className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4'
-        data-kt-menu-export='true'
-      >
-        <div className='menu-item px-3'>
-          <a href='/' className='menu-link px-3'>
-            Edit
-          </a>
-        </div>
-        <div className='menu-item px-3'>
-          <a href='/' className='menu-link px-3' data-kt-products-table-filter='delete_row'>
-            Delete
-          </a>
-        </div>
+      <Dropdown>
+        <Dropdown.Toggle
+          className='btn btn-light-primary font-weight-bolder dropdown-toggle'
+          id='dropdown-basic'
+        >
+          <KTSVG path='/media/icons/duotune/general/gen054.svg' className='svg-icon-2' />
+          {intl.formatMessage({id: 'EXPORT'})}
+        </Dropdown.Toggle>
+
+        <Dropdown.Menu>
+          <Dropdown.Item className='navi-link' style={{padding: '10px'}} onClick={exportCSV}>
+            <div className='menu-item px-3'> {intl.formatMessage({id: 'EXPORT_EXCEL'})} </div>
+          </Dropdown.Item>
+          <Dropdown.Item className='navi-link' style={{padding: '10px'}} onClick={exportPDF}>
+            <div className='menu-item px-3'> {intl.formatMessage({id: 'EXPORT_PDF'})} </div>
+          </Dropdown.Item>
+        </Dropdown.Menu>
+      </Dropdown>
       </div>
-    </div>
   )
 }
 
-export {ProductsToolBar}
+export {ToolBar}

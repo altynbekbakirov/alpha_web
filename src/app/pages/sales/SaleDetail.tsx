@@ -1,13 +1,16 @@
 import React, {useState, useMemo, useEffect} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
-import {KTCard, KTCardBody} from '../../../_metronic/helpers'
+import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {SalesHeader} from '../../modules/apps/reports/sale/components/Header'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
 import axios from 'axios'
 import { ISaleDetail } from '../../modules/apps/reports/sale/models/sale_model'
 import { SALE_DETAIL_COLUMNS } from '../../modules/apps/reports/sale/types/Columns'
+import jsPDF from 'jspdf'
+import autoTable from 'jspdf-autotable'
+import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import {Header1} from '../../modules/apps/reports/sale/components/Header1'
 
 const SaleDetail: React.FC = () => {
   const intl = useIntl()
@@ -41,6 +44,9 @@ const ItemsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => SALE_DETAIL_COLUMNS, [])
   const data = useMemo(() => items, [items])
+  const [show, setShow] = React.useState(false)
+  const [showPrice, setShowPrice] = React.useState(false)
+  const [item, setItem] = useState('')
 
   const {
     getTableProps,
@@ -80,12 +86,100 @@ const ItemsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
+  function exportPDF() {
+    const doc = new jsPDF('l', 'mm', 'a4')
+    doc.addFont('Roboto-Regular-normal.ttf', 'Roboto-Regular', 'normal')
+    doc.setFont('Roboto-Regular')
+
+    const head = [
+      [
+        intl.formatMessage({id: 'CLIENT_CODE'}),
+        intl.formatMessage({id: 'CLIENT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_CODE'}),
+        intl.formatMessage({id: 'PRODUCT_NAME'}),
+        intl.formatMessage({id: 'PRODUCT_GROUP'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+      ],
+    ]
+
+    const data = items.map((item: ISaleDetail) => {
+      return Object.values(item)
+    })
+
+    autoTable(doc, {
+      head: head,
+      body: data,
+      styles: {font: 'Roboto-Regular'},
+    })
+    doc.save('Clients.pdf')
+  }
+
+  function exportCSV() {
+    // const data_type = 'data:application/vnd.ms-excel'
+    // const table_div = document.getElementById('productRemains')
+    // const table_html = table_div?.outerHTML.replace(/ /g, '%20')
+    // const a = document.createElement('a')
+    // a.href = data_type + ', ' + table_html
+    // a.download = 'Example_Table_To_Excel.xls'
+    // a.click()
+
+    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
+      id: 'CLIENT_NAME',
+    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+      id: 'PRODUCT_NAME',
+    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_COUNT',
+    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_TOTAL_USD',
+    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
+      id: 'PRODUCT_RETURN_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+
+    //  Add \ tto prevent tables from displaying scientific notation or other formats
+    for (let i = 0; i < items.length; i++) {
+      for (let item in items[i]) {
+        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
+        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
+        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
+        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
+        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
+        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+
+        str += `${items[i][item]};`
+      }
+      str += '\n'
+    }
+
+    let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
+    let link = document.createElement('a')
+    link.href = uri
+    link.download = 'Clients.csv'
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
   return (
     <KTCard>
-      <SalesHeader value={globalFilter} change={setGlobalFilter} />
+      <Header1
+        value={globalFilter}
+        change={setGlobalFilter}
+        exportPDF={exportPDF}
+        exportCSV={exportCSV}
+        show={show}
+        setShow={() => setShow(!show)}
+        item={item}
+        showPrice={showPrice}
+        setShowPrice={() => setShowPrice(!showPrice)}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table
@@ -127,57 +221,48 @@ const ItemsContainer = ({items}: {items: any}) => {
             </thead>
             <tbody {...getTableBodyProps} className='text-gray-600 fw-bold'>
               {page.map((row: any) => {
+                let currentCode: string
                 prepareRow(row)
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.accessor === 'item_trCode') {
-                        console.log('item_trCode')
+                      if (cell.render('Cell').props.column.Header === 'PRODUCT_CODE') {
+                        currentCode = cell.render('Cell').props.cell.value
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                     <td role='cell' className='text-end min-w-100px'>
-                      <a
-                        href='/'
-                        className='btn btn-secondary btn-active-light-primary btn-sm'
-                        data-kt-menu-trigger='click'
-                        data-kt-menu-placement='bottom-end'
-                      >
-                        {intl.formatMessage({id: 'ACTIONS'})}
-                        <span className='svg-icon svg-icon-5 m-0'>
-                          <svg
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                            className='mh-50px'
-                          >
-                            <path
-                              d='M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z'
-                              fill='currentColor'
-                            ></path>
-                          </svg>
-                        </span>
-                      </a>
-                      <div
-                        className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4'
-                        data-kt-menu='true'
-                      >
-                        <div className='menu-item px-3'>
-                          <a href='/' className='menu-link px-3'>
-                            {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
-                          </a>
-                        </div>
-                        <div className='menu-item px-3'>
-                          <a
-                            href='/'
-                            className='menu-link px-3'
-                            data-kt-users-table-filter='delete_row'
-                          >
-                            {intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}
-                          </a>
-                        </div>
+                    <div className='d-flex justify-content-end flex-shrink-0'>
+                        <a
+                          href='/'
+                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm me-1'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setShow(!show)
+                            setItem(currentCode)
+                          }}
+                          title={`${intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}`}
+                        >
+                          <KTSVG
+                            path='/media/icons/duotune/general/gen019.svg'
+                            className='svg-icon-3'
+                          />
+                        </a>
+                        <a
+                          href='/'
+                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setShowPrice(!showPrice)
+                            setItem(currentCode)
+                          }}
+                          title={`${intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}`}
+                        >
+                          <KTSVG
+                            path='/media/icons/duotune/finance/fin010.svg'
+                            className='svg-icon-3'
+                          />
+                        </a>
                       </div>
                     </td>
                   </tr>

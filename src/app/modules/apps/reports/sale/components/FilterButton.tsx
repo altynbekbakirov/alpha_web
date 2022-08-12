@@ -1,7 +1,7 @@
 import { useIntl } from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 
-const ProductsFilterButton = () => {
+const FilterButton = () => {
   const intl = useIntl();
   
   return (
@@ -100,4 +100,4 @@ const ProductsFilterButton = () => {
   )
 }
 
-export {ProductsFilterButton}
+export {FilterButton}

@@ -1,7 +1,7 @@
 import React, {useState, useMemo, useEffect} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
-import {KTCard, KTCardBody} from '../../../_metronic/helpers'
+import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {Header} from '../../modules/apps/reports/products/components/Header'
 import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
@@ -47,7 +47,7 @@ const ProductsContainer = ({items}: {items: any}) => {
   const data = useMemo(() => items, [items])
   const [show, setShow] = React.useState(false)
   const [showPrice, setShowPrice] = React.useState(false)
-  const [item, setItem] = useState('');
+  const [item, setItem] = useState('')
 
   function exportPDF() {
     const doc = new jsPDF('l', 'mm', 'a4')
@@ -173,7 +173,7 @@ const ProductsContainer = ({items}: {items: any}) => {
     useSortBy,
     usePagination
   )
-  
+
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
@@ -232,7 +232,7 @@ const ProductsContainer = ({items}: {items: any}) => {
             </thead>
             <tbody {...getTableBodyProps} className='text-gray-600 fw-bold'>
               {page.map((row: any) => {
-                let currentCode: string;
+                let currentCode: string
                 prepareRow(row)
                 return (
                   <tr {...row.getRowProps()}>
@@ -243,59 +243,37 @@ const ProductsContainer = ({items}: {items: any}) => {
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                     <td>
-                    <a
-                        href='/'
-                        className='btn btn-light btn-active-light-primary btn-sm'
-                        data-kt-menu-trigger='click'
-                        data-kt-menu-placement='bottom-end'
-                      >
-                        {intl.formatMessage({id: 'ACTIONS'})}
-                        <span className='svg-icon svg-icon-5 m-0'>
-                          <svg
-                            width='24'
-                            height='24'
-                            viewBox='0 0 24 24'
-                            fill='none'
-                            xmlns='http://www.w3.org/2000/svg'
-                            className='mh-50px'
-                          >
-                            <path
-                              d='M11.4343 12.7344L7.25 8.55005C6.83579 8.13583 6.16421 8.13584 5.75 8.55005C5.33579 8.96426 5.33579 9.63583 5.75 10.05L11.2929 15.5929C11.6834 15.9835 12.3166 15.9835 12.7071 15.5929L18.25 10.05C18.6642 9.63584 18.6642 8.96426 18.25 8.55005C17.8358 8.13584 17.1642 8.13584 16.75 8.55005L12.5657 12.7344C12.2533 13.0468 11.7467 13.0468 11.4343 12.7344Z'
-                              fill='currentColor'
-                            ></path>
-                          </svg>
-                        </span>
-                      </a>
-                      <div
-                        className='menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-150px py-4'
-                        data-kt-menu='true'
-                      >
-                        <div className='menu-item px-3'>
-                          <a
-                            href='/'
-                            className='menu-link px-3'
-                            onClick={(e) => {
-                              e.preventDefault()
-                              setShow(!show)
-                              setItem(currentCode);                              
-                            }}
-                          >
-                            {intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}
-                          </a>
-                        </div>
-                        <div className='menu-item px-3'>
-                          <a
-                            href='/'
-                            className='menu-link px-3'
-                            onClick={(e) => {
-                              e.preventDefault();
-                              setShowPrice(!showPrice)
-                              setItem(currentCode);   
-                            }}
-                          >
-                            {intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}
-                          </a>
-                        </div>
+                      <div className='d-flex justify-content-end flex-shrink-0'>
+                        <a
+                          href='/'
+                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm me-1'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setShow(!show)
+                            setItem(currentCode)
+                          }}
+                          title={`${intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}`}
+                        >
+                          <KTSVG
+                            path='/media/icons/duotune/general/gen019.svg'
+                            className='svg-icon-3'
+                          />
+                        </a>
+                        <a
+                          href='/'
+                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setShowPrice(!showPrice)
+                            setItem(currentCode)
+                          }}
+                          title={`${intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}`}
+                        >
+                          <KTSVG
+                            path='/media/icons/duotune/finance/fin010.svg'
+                            className='svg-icon-3'
+                          />
+                        </a>
                       </div>
                     </td>
                   </tr>
