@@ -1,10 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import ApexCharts, { ApexOptions } from 'apexcharts'
+import ApexCharts, {ApexOptions} from 'apexcharts'
 import axios from 'axios'
-import React, { useEffect, useRef, useState } from 'react'
-import { useIntl } from 'react-intl'
-import { ISaleTable } from '../../../../app/modules/apps/reports/sale/models/sale_model'
-import { getCSS, getCSSVariableValue } from '../../../assets/ts/_utils'
+import React, {useEffect, useRef, useState} from 'react'
+import {useIntl} from 'react-intl'
+import {ISaleTable} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
 
 type Props = {
   className: string
@@ -14,12 +14,12 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const chartRef2 = useRef<HTMLDivElement | null>(null)
 
-  const intl = useIntl();
+  const intl = useIntl()
   const [items, setItems] = useState<ISaleTable[]>([])
-  
-  const net_title = intl.formatMessage({id: 'TOTAL_SUM'});
-  const net_usd_title = intl.formatMessage({id: 'TOTAL_SUM_USD'});
-  
+
+  const net_title = intl.formatMessage({id: 'TOTAL_SUM'})
+  const net_usd_title = intl.formatMessage({id: 'TOTAL_SUM_USD'})
+
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/table`
@@ -33,56 +33,61 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
         sourceindex: 0,
       })
       setItems(response.data)
-    }    
-    fetchMonthSales(); 
-    
+    }
+    fetchMonthSales()
   }, [])
 
-
   useEffect(() => {
-    const net_usd = items.map(item => Math.round(item.net_usd));
-    const ret_total_usd = items.map(item => Math.round(item.net));
-    const months = items.map(item => {
-      switch(item.date) {
-        case "1":
-        return intl.formatMessage({id: 'JANUARY'})
-        case "2":
-        return intl.formatMessage({id: 'FEBRUARY'})
-        case "3": 
-        return intl.formatMessage({id: 'MARCH'})
-        case "4": 
-        return intl.formatMessage({id: 'APRIL'})
-        case "5":
-        return intl.formatMessage({id: 'MAY'})
-        case "6":
-        return intl.formatMessage({id: 'JUNE'})
-        case "7":
-        return intl.formatMessage({id: 'JULY'})
-        case "8":
-        return intl.formatMessage({id: 'AUGUST'})
-        case "9":
-        return intl.formatMessage({id: 'SEPTEMBER'})
-        case "10":
-        return intl.formatMessage({id: 'OCTOBER'})
-        case "11":
-        return intl.formatMessage({id: 'NOVEMBER'})
-        case "12":
-        return intl.formatMessage({id: 'DECEMBER'})
+    const net_usd = items.map((item) =>
+      Math.round(typeof item.net_usd === 'string' ? parseInt(item.net_usd) : item.net_usd)
+    )
+    const ret_total_usd = items.map((item) =>
+      Math.round(typeof item.net === 'string' ? parseInt(item.net) : item.net)
+    )
+    const months = items.map((item) => {
+      switch (item.date) { 
+        case '1':
+          return intl.formatMessage({id: 'JANUARY'})
+        case '2':
+          return intl.formatMessage({id: 'FEBRUARY'})
+        case '3':
+          return intl.formatMessage({id: 'MARCH'})
+        case '4':
+          return intl.formatMessage({id: 'APRIL'})
+        case '5':
+          return intl.formatMessage({id: 'MAY'})
+        case '6':
+          return intl.formatMessage({id: 'JUNE'})
+        case '7':
+          return intl.formatMessage({id: 'JULY'})
+        case '8':
+          return intl.formatMessage({id: 'AUGUST'})
+        case '9':
+          return intl.formatMessage({id: 'SEPTEMBER'})
+        case '10':
+          return intl.formatMessage({id: 'OCTOBER'})
+        case '11':
+          return intl.formatMessage({id: 'NOVEMBER'})
+        case '12':
+          return intl.formatMessage({id: 'DECEMBER'})
         default:
-          return "";
-      }      
-    });        
+          return ''
+      }
+    })
 
     if (!chartRef.current) {
       return
-    }    
+    }
 
-    const height = parseInt(getCSS(chartRef.current, 'height'))      
+    const height = parseInt(getCSS(chartRef.current, 'height'))
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(height, net_usd, ret_total_usd, net_usd_title, net_title, months))
+    const chart = new ApexCharts(
+      chartRef.current,
+      getChartOptions(height, net_usd, ret_total_usd, net_usd_title, net_title, months)
+    )
     if (chart) {
       chart.render()
-    }    
+    }
 
     return () => {
       if (chart) {
@@ -91,34 +96,36 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
     }
   }, [chartRef, items, net_usd_title, net_title, intl])
 
-  useEffect(() => {    
-    
+  useEffect(() => {
     if (!chartRef2.current) {
       return
     }
-    
-    const height2 = parseInt(getCSS(chartRef2.current, 'height'))   
+
+    const height2 = parseInt(getCSS(chartRef2.current, 'height'))
 
     const chart2 = new ApexCharts(chartRef2.current, getChartOptions2(height2))
     if (chart2) {
       chart2.render()
     }
 
-    return () => {      
+    return () => {
       if (chart2) {
         chart2.destroy()
       }
     }
-
   }, [chartRef2])
-  
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'>{intl.formatMessage({id: 'DASHBOARD_SALES'})}</span>
-          <span className='text-muted mt-1 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_SALES_DESCRIPTION'})}</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {intl.formatMessage({id: 'DASHBOARD_SALES'})}
+          </span>
+          <span className='text-muted mt-1 fw-bold fs-7'>
+            {intl.formatMessage({id: 'DASHBOARD_SALES_DESCRIPTION'})}
+          </span>
         </h3>
         <div className='card-toolbar'>
           <ul className='nav'>
@@ -170,12 +177,19 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
 
 export {TablesWidget14}
 
-function getChartOptions(height: number, net_usd: number[], ret_total_usd: number[], net_usd_title: string, net_title: string, months: string[]): ApexOptions {
+function getChartOptions(
+  height: number,
+  net_usd: number[],
+  ret_total_usd: number[],
+  net_usd_title: string,
+  net_title: string,
+  months: string[]
+): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-700')
   const borderColor = getCSSVariableValue('--bs-gray-300')
   const baseColor = getCSSVariableValue('--bs-warning')
   const secondaryColor = getCSSVariableValue('--bs-success')
-  const thirdColor = getCSSVariableValue('--bs-primary')  
+  const thirdColor = getCSSVariableValue('--bs-primary')
 
   return {
     series: [
@@ -292,7 +306,7 @@ function getChartOptions2(height2: number): ApexOptions {
   const borderColor = getCSSVariableValue('--bs-gray-300')
   const baseColor = getCSSVariableValue('--bs-warning')
   const secondaryColor = getCSSVariableValue('--bs-success')
-  const thirdColor = getCSSVariableValue('--bs-primary')  
+  const thirdColor = getCSSVariableValue('--bs-primary')
 
   return {
     series: [

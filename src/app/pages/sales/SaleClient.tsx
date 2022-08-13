@@ -98,9 +98,9 @@ const ItemsContainer = ({items}: {items: any}) => {
         intl.formatMessage({id: 'PRODUCT_CODE'}),
         intl.formatMessage({id: 'PRODUCT_NAME'}),
         intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
@@ -116,7 +116,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleClient.pdf')
   }
 
   function exportCSV() {
@@ -133,9 +133,9 @@ const ItemsContainer = ({items}: {items: any}) => {
     })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
       id: 'PRODUCT_NAME',
     })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
+      id: 'PRODUCT_SALE_COUNT',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL_USD',
     })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
       id: 'PRODUCT_RETURN_TOTAL',
     })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
@@ -158,7 +158,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleClient.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

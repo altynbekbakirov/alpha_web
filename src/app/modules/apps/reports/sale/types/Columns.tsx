@@ -160,7 +160,7 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -180,7 +180,7 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -194,7 +194,7 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -210,7 +210,7 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -275,7 +275,7 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -290,7 +290,7 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -304,7 +304,7 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -318,7 +318,7 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -333,7 +333,7 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -571,7 +571,7 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
           value < 0 ? (value = -value) : (value = +value)
           return value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })
         },
       },
@@ -587,7 +587,7 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })
         },
       },
@@ -630,7 +630,7 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -645,7 +645,7 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -672,7 +672,7 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -687,7 +687,7 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -724,7 +724,7 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -739,7 +739,7 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -767,7 +767,7 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -783,95 +783,95 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
 ]
 
-export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [  
+export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
   {
     Header: 'MONTH_FULL',
     accessor: 'date',
     //@ts-expect-error
     disableGlobalFilter: true,
     Cell: ({value}) => {
-      const intl = useIntl();
-      switch(value) {
-        case "1":
+      const intl = useIntl()
+      switch (value) {
+        case '1':
           return (
             <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
               id: 'JANUARY_FULL',
             })}`}</div>
           )
-          case "2":
+        case '2':
           return (
             <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
               id: 'FEBRUARY_FULL',
             })}`}</div>
           )
-          case "3":
+        case '3':
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'MARCH_FULL',
             })}`}</div>
           )
-          case "4":
+        case '4':
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'APRIL_FULL',
             })}`}</div>
           )
-          case "5":
+        case '5':
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'MAY_FULL',
             })}`}</div>
           )
-          case "6":
+        case '6':
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'JUNE_FULL',
             })}`}</div>
           )
-          case "7":
+        case '7':
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'JULY_FULL',
             })}`}</div>
           )
-          case "8":
+        case '8':
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'AUGUST_FULL',
             })}`}</div>
           )
-          case "9":
+        case '9':
           return (
             <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
               id: 'SEPTEMBER_FULL',
             })}`}</div>
           )
-          case "10":
+        case '10':
           return (
             <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
               id: 'OCTOBER_FULL',
             })}`}</div>
           )
-          case "11":
+        case '11':
           return (
             <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
               id: 'NOVEMBER_FULL',
             })}`}</div>
           )
-          case "12":
+        case '12':
           return (
             <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
               id: 'DECEMBER_FULL',
             })}`}</div>
           )
       }
-    }
+    },
   },
   {
     Header: 'PRODUCT_SALE_TOTAL',
@@ -882,7 +882,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -896,7 +896,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -910,7 +910,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -924,7 +924,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -940,7 +940,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -954,7 +954,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -970,16 +970,16 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
 ]
 
-export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [  
+export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
   {
     Header: 'DATE',
-    accessor: 'date',    
+    accessor: 'date',
   },
   {
     Header: 'PRODUCT_SALE_TOTAL',
@@ -990,7 +990,7 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1006,7 +1006,7 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1020,7 +1020,7 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1036,12 +1036,11 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
 ]
-
 
 export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
   {
@@ -1080,7 +1079,7 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1094,7 +1093,7 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1121,7 +1120,7 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1135,7 +1134,7 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },
@@ -1149,7 +1148,7 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
       value < 0 ? (value = -value) : (value = +value)
       return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
+        maximumFractionDigits: 2,
       })
     },
   },

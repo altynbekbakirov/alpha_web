@@ -90,21 +90,35 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
+        intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
       ],
     ]
 
     const data = items.map((item: ISaleDaily) => {
+      item.net = item.net.toLocaleString(undefined, {        
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.net_usd = item.net_usd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.ret_total = item.ret_total.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.ret_total_usd = item.ret_total_usd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
       return Object.values(item)
     })
 
@@ -113,7 +127,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleDaily.pdf')
   }
 
   function exportCSV() {
@@ -125,27 +139,19 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
+    let str = `${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'})};${intl.formatMessage({
       id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'})}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        items[i]['net'] = Math.round(items[i]['net'])
+        items[i]['net_usd'] = Math.round(items[i]['net_usd'])
+        items[i]['ret_total'] = Math.round(items[i]['ret_total'])
+        items[i]['ret_total_usd'] = Math.round(items[i]['ret_total_usd'])
 
         str += `${items[i][item]};`
       }
@@ -155,7 +161,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleDaily.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

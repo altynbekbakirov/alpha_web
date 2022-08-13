@@ -187,7 +187,7 @@ function getChartOptions(
   return {
     series: [
       {
-        name: aktive === 1 ? sale_count : aktive === 2 ? sale_total : sale_total_usd,
+        name: aktive === 1 ? sale_count : aktive === 2 ? typeof sale_total : sale_total_usd,
         data:
           aktive === 1
             ? values.map((value) => value.saleCount).slice(0, 10)

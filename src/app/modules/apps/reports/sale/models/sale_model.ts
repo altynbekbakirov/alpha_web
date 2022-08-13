@@ -1,5 +1,5 @@
 export interface ISaleFiche {
-  trCode: number
+  trCode: number | string
   ficheNo: string
   date: string
   clientCode: string | null
@@ -43,9 +43,9 @@ export interface ISaleMonth {
   oct: number
   nov: number
   dec: number
-  totalCount: number
-  totalSum: number
-  totalUsd: number
+  totalCount: number | string
+  totalSum: number | string
+  totalUsd: number | string
 }
 
 export interface ISaleTotal {
@@ -64,30 +64,31 @@ export interface ISaleManager {
   clientCode: string
   clientName: string
   itemAmount: number
-  itemTotal: number
-  itemTotalUsd: number
+  itemTotal: number | string
+  itemTotalUsd: number | string
   itemAmountRet: number
-  itemTotalRet: number
-  itemTotalUsdRet: number
+  itemTotalRet: number | string
+  itemTotalUsdRet: number | string
 }
 
 export interface ISaleTable {
   date: string
-  total: number
-  expenses: number
-  discounts: number
-  net: number
-  net_usd: number
-  ret_total: number
-  ret_total_usd: number
+  total: number | string
+  expenses: number | string
+  discounts: number | string
+  net: number | string
+  net_usd: number | string
+  ret_total: number | string
+  ret_total_usd: number | string
 }
 
 export interface ISaleDaily {
   date: string
-  net: number
-  net_usd: number
-  ret_total: number
-  ret_total_usd: number
+  net: number | string
+  net_usd: number | string
+  ret_total: number | string
+  ret_total_usd: number | string
+  trCode: number
 }
 
 export interface ISaleDetail {

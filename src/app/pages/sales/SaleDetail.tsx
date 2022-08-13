@@ -5,8 +5,8 @@ import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
 import axios from 'axios'
-import { ISaleDetail } from '../../modules/apps/reports/sale/models/sale_model'
-import { SALE_DETAIL_COLUMNS } from '../../modules/apps/reports/sale/types/Columns'
+import {ISaleDetail} from '../../modules/apps/reports/sale/models/sale_model'
+import {SALE_DETAIL_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
@@ -21,11 +21,11 @@ const SaleDetail: React.FC = () => {
     const REQUEST_URL = `${BASE_URL}/sales/detail`
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-          firmno: 1,
-          periodno: 3,
-          begdate: '01.01.2022',
-          enddate: '31.12.2022',
-          sourceindex: 0,
+        firmno: 1,
+        periodno: 3,
+        begdate: '01.01.2022',
+        enddate: '31.12.2022',
+        sourceindex: 0,
       })
       setItems(response.data)
     }
@@ -93,17 +93,17 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
         intl.formatMessage({id: 'PRODUCT_CODE'}),
         intl.formatMessage({id: 'PRODUCT_NAME'}),
         intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_RETURN_COST'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_COST'}),
+        intl.formatMessage({id: 'PRODUCT_PROFIT_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_PROFIT_PERCENT'}),
       ],
     ]
 
@@ -116,7 +116,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleDetail.pdf')
   }
 
   function exportCSV() {
@@ -128,27 +128,27 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+    let str = `${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
       id: 'PRODUCT_NAME',
     })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+      id: 'PRODUCT_RETURN_COUNT',
+    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})};${intl.formatMessage({
+      id: 'PRODUCT_RETURN_COST',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_SALE_COST'})};${intl.formatMessage({
+      id: 'PRODUCT_PROFIT_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_PROFIT_PERCENT'})}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        items[i]['code'] = items[i]['code'] + '\t'
+        items[i]['retTotal'] = Math.round(items[i]['retTotal'])
+        items[i]['retCost'] = Math.round(items[i]['retCost'])
+        items[i]['saleTotal'] = Math.round(items[i]['saleTotal'])
+        items[i]['saleCost'] = Math.round(items[i]['saleCost'])
+        items[i]['profitTotal'] = Math.round(items[i]['profitTotal'])
 
         str += `${items[i][item]};`
       }
@@ -158,7 +158,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleDetail.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -232,7 +232,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                     <td role='cell' className='text-end min-w-100px'>
-                    <div className='d-flex justify-content-end flex-shrink-0'>
+                      <div className='d-flex justify-content-end flex-shrink-0'>
                         <a
                           href='/'
                           className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm me-1'

@@ -100,7 +100,7 @@ export {ChartsWidget9}
 
 function getChartOptions(values : ISaleManager[]): ApexOptions {
   return {
-    series: values.map(value => Math.round(value.itemTotal)),
+    series: values.map(value => Math.round((typeof value.itemTotal  === 'string' ? parseInt(value.itemTotal) : value.itemTotal))),
     chart: {
       width: 380,
       height: 360,

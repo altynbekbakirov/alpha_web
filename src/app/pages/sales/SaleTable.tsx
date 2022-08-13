@@ -90,21 +90,89 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
+        intl.formatMessage({id: 'MONTH_FULL'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
+        intl.formatMessage({id: 'PRODUCT_EXPENSES'}),
+        intl.formatMessage({id: 'PRODUCT_DISCOUNTS'}),
+        intl.formatMessage({id: 'PRODUCT_NET'}),
+        intl.formatMessage({id: 'PRODUCT_NET_USD'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
       ],
     ]
 
     const data = items.map((item: ISaleTable) => {
+      switch (item.date) {
+        case '1':
+          item.date = intl.formatMessage({id: 'JANUARY_FULL'})
+          break
+        case '2':
+          item.date = intl.formatMessage({id: 'FEBRUARY_FULL'})
+          break
+        case '3':
+          item.date = intl.formatMessage({id: 'MARCH_FULL'})
+          break
+        case '4':
+          item.date = intl.formatMessage({id: 'APRIL_FULL'})
+          break
+        case '5':
+          item.date = intl.formatMessage({id: 'MAY_FULL'})
+          break
+        case '6':
+          item.date = intl.formatMessage({id: 'JUNE_FULL'})
+          break
+        case '7':
+          item.date = intl.formatMessage({id: 'JULY_FULL'})
+          break
+        case '8':
+          item.date = intl.formatMessage({id: 'AUGUST_FULL'})
+          break
+        case '9':
+          item.date = intl.formatMessage({id: 'SEPTEMBER_FULL'})
+          break
+        case '10':
+          item.date = intl.formatMessage({id: 'OCTOBER_FULL'})
+          break
+        case '11':
+          item.date = intl.formatMessage({id: 'NOVEMBER_FULL'})
+          break
+        case '12':
+          item.date = intl.formatMessage({id: 'DECEMBER_FULL'})
+          break
+      }
+
+      item.total = item.total.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.discounts = item.discounts.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.expenses = item.expenses.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.net = item.net.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.net_usd = item.net_usd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.ret_total = item.ret_total.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.ret_total_usd = item.ret_total_usd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
       return Object.values(item)
     })
 
@@ -113,7 +181,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleTable.pdf')
   }
 
   function exportCSV() {
@@ -125,27 +193,65 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+    let str = `${intl.formatMessage({id: 'MONTH_FULL'})};${intl.formatMessage({
+      id: 'PRODUCT_SALE_TOTAL',
+    })};${intl.formatMessage({id: 'PRODUCT_EXPENSES'})};${intl.formatMessage({
+      id: 'PRODUCT_DISCOUNTS',
+    })};${intl.formatMessage({id: 'PRODUCT_NET'})};${intl.formatMessage({
+      id: 'PRODUCT_NET_USD',
+    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})};${intl.formatMessage({
+      id: 'PRODUCT_RETURN_TOTAL_USD',
+    })}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        switch (items[i]['date']) {
+          case '1':
+            items[i]['date'] = intl.formatMessage({id: 'JANUARY_FULL'})
+            break
+          case '2':
+            items[i]['date'] = intl.formatMessage({id: 'FEBRUARY_FULL'})
+            break
+          case '3':
+            items[i]['date'] = intl.formatMessage({id: 'MARCH_FULL'})
+            break
+          case '4':
+            items[i]['date'] = intl.formatMessage({id: 'APRIL_FULL'})
+            break
+          case '5':
+            items[i]['date'] = intl.formatMessage({id: 'MAY_FULL'})
+            break
+          case '6':
+            items[i]['date'] = intl.formatMessage({id: 'JUNE_FULL'})
+            break
+          case '7':
+            items[i]['date'] = intl.formatMessage({id: 'JULY_FULL'})
+            break
+          case '8':
+            items[i]['date'] = intl.formatMessage({id: 'AUGUST_FULL'})
+            break
+          case '9':
+            items[i]['date'] = intl.formatMessage({id: 'SEPTEMBER_FULL'})
+            break
+          case '10':
+            items[i]['date'] = intl.formatMessage({id: 'OCTOBER_FULL'})
+            break
+          case '11':
+            items[i]['date'] = intl.formatMessage({id: 'NOVEMBER_FULL'})
+            break
+          case '12':
+            items[i]['date'] = intl.formatMessage({id: 'DECEMBER_FULL'})
+            break
+        }
+
+        items[i]['total'] = Math.round(items[i]['total'])
+        items[i]['expenses'] = Math.round(items[i]['expenses'])
+        items[i]['discounts'] = Math.round(items[i]['discounts'])
+        items[i]['net'] = Math.round(items[i]['net'])
+        items[i]['net_usd'] = Math.round(items[i]['net_usd'])
+        items[i]['ret_total'] = Math.round(items[i]['ret_total'])
+        items[i]['ret_total_usd'] = Math.round(items[i]['ret_total_usd'])
 
         str += `${items[i][item]};`
       }
@@ -155,7 +261,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleTable.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

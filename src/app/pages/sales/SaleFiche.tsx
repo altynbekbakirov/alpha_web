@@ -93,21 +93,112 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
+        intl.formatMessage({id: 'TR_CODE'}),
+        intl.formatMessage({id: 'FICHE_NO'}),
+        intl.formatMessage({id: 'DATE'}),
         intl.formatMessage({id: 'CLIENT_CODE'}),
         intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_GROSS'}),
+        intl.formatMessage({id: 'PRODUCT_DISCOUNTS'}),
+        intl.formatMessage({id: 'PRODUCT_EXPENSES'}),
+        intl.formatMessage({id: 'PRODUCT_NET'}),
+        intl.formatMessage({id: 'PRODUCT_NET_USD'}),
       ],
     ]
 
     const data = items.map((item: ISaleFiche) => {
+      switch (item.trCode) {
+        case 1:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE',
+          })}`
+          break
+        case 2:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_RETURN',
+          })}`
+          break
+        case 3:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+          })}`
+          break
+        case 4:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+          })}`
+          break
+        case 5:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+          })}`
+          break
+        case 6:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE_RETURN',
+          })}`
+          break
+        case 7:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_SALE',
+          })}`
+          break
+        case 8:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE',
+          })}`
+          break
+        case 9:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNMENT',
+          })}`
+          break
+        case 10:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+          })}`
+          break
+        case 11:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_SCRAPT',
+          })}`
+          break
+        case 12:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_USAGE',
+          })}`
+          break
+        case 13:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+          })}`
+          break
+        case 14:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_OPENNING',
+          })}`
+          break
+        case 25:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_WAREHOUSE',
+          })}`
+          break
+        case 26:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_PRODUCER',
+          })}`
+          break
+        case 50:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_EXCESS',
+          })}`
+          break
+        case 51:
+          item.trCode = `${intl.formatMessage({
+            id: 'OPERATION_TYPE_COUNT_DEFICIT',
+          })}`
+          break
+      }
       return Object.values(item)
     })
 
@@ -116,7 +207,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleFiche.pdf')
   }
 
   function exportCSV() {
@@ -128,27 +219,120 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+    let str = `${intl.formatMessage({id: 'TR_CODE'})};${intl.formatMessage({
+      id: 'FICHE_NO',
+    })};${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
+      id: 'CLIENT_CODE',
+    })};${intl.formatMessage({id: 'CLIENT_NAME'})};${intl.formatMessage({
+      id: 'PRODUCT_GROSS',
+    })};${intl.formatMessage({id: 'PRODUCT_DISCOUNTS'})};${intl.formatMessage({
+      id: 'PRODUCT_EXPENSES',
+    })};${intl.formatMessage({id: 'PRODUCT_NET'})};${intl.formatMessage({
+      id: 'PRODUCT_NET_USD',
+    })}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        switch (items[i]['trCode']) {
+          case 1:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE',
+            })}`
+            break
+          case 2:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_RETURN',
+            })}`
+            break
+          case 3:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+            })}`
+            break
+          case 4:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+            })}`
+            break
+          case 5:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+            })}`
+            break
+          case 6:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE_RETURN',
+            })}`
+            break
+          case 7:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_SALE',
+            })}`
+            break
+          case 8:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE',
+            })}`
+            break
+          case 9:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT',
+            })}`
+            break
+          case 10:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+            })}`
+            break
+          case 11:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_SCRAPT',
+            })}`
+            break
+          case 12:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_USAGE',
+            })}`
+            break
+          case 13:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+            })}`
+            break
+          case 14:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING',
+            })}`
+            break
+          case 25:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_WAREHOUSE',
+            })}`
+            break
+          case 26:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_PRODUCER',
+            })}`
+            break
+          case 50:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_EXCESS',
+            })}`
+            break
+          case 51:
+            items[i]['trCode'] = `${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_DEFICIT',
+            })}`
+            break
+          }
+
+        items[i]['ficheNo'] = items[i]['ficheNo'] + '\t';
+        items[i]['gross'] = Math.round(items[i]['gross'])
+        items[i]['discounts'] = Math.round(items[i]['discounts'])
+        items[i]['expenses'] = Math.round(items[i]['expenses'])
+        items[i]['net'] = Math.round(items[i]['net'])
+        items[i]['netUsd'] = Math.round(items[i]['netUsd'])
 
         str += `${items[i][item]};`
       }
@@ -158,7 +342,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleFiche.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

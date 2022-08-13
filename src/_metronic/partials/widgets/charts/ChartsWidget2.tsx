@@ -80,8 +80,12 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
             return ''
         }
       }),
-      net: months.map((value) => Math.round(value.net)),
-      net_usd: months.map((value) => Math.round(value.net_usd)),
+      net: months.map((value) =>
+        Math.round(typeof value.net === 'string' ? parseInt(value.net) : value.net)
+      ),
+      net_usd: months.map((value) =>
+        Math.round(typeof value.net_usd === 'string' ? parseInt(value.net_usd) : value.net_usd)
+      ),
     })
   }, [months, intl])
 
@@ -158,8 +162,12 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
               return ''
           }
         }),
-        net: months.map((value) => Math.round(value.net)),
-        net_usd: months.map((value) => Math.round(value.net_usd)),
+        net: months.map((value) =>
+          Math.round(typeof value.net === 'string' ? parseInt(value.net) : value.net)
+        ),
+        net_usd: months.map((value) =>
+          Math.round(typeof value.net_usd === 'string' ? parseInt(value.net_usd) : value.net_usd)
+        ),
       })
     } else {
       setSales({
@@ -179,11 +187,15 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
           .slice(0, 7)
           .reverse(),
         net: dailys
-          .map((value) => Math.round(value.net))
+          .map((value) =>
+            Math.round(typeof value.net === 'string' ? parseInt(value.net) : value.net)
+          )
           .slice(0, 7)
           .reverse(),
         net_usd: dailys
-          .map((value) => Math.round(value.net_usd))
+          .map((value) =>
+            Math.round(typeof value.net_usd === 'string' ? parseInt(value.net_usd) : value.net_usd)
+          )
           .slice(0, 7)
           .reverse(),
       })

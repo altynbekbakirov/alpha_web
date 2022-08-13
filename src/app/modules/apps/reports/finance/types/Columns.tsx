@@ -27,10 +27,14 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     sortType: compareNumericString,
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      return (
+        <div className={`badge badge-light fw-bolder`}>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </div>
+      )
     },
   },
   {
@@ -40,10 +44,14 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      return (
+        <div className={`badge badge-light fw-bolder`}>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </div>
+      )
     },
   },
   {
@@ -59,10 +67,9 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
             value > 0 ? 'badge-danger' : value < 0 ? 'badge-info' : 'badge-secondary'
           } fw-bolder`}
         >
-          {' '}
           {value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })}
         </div>
       )
@@ -82,7 +89,7 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })}
         </div>
       )
@@ -102,7 +109,7 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })}
         </div>
       )
@@ -125,13 +132,13 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
           {value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
-            minimumFractionDigits: 2,
+            minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })}
         </div>
       )
     },
-  },  
+  },
 ]
 
 export const FINANCE_EXTRACT_COLUMNS: ReadonlyArray<Column<IFinanceExtract>> = [
@@ -417,7 +424,7 @@ export const FINANCE_DEBIT_COLUMNS: ReadonlyArray<Column<IFinanceDebit>> = [
         </div>
       )
     },
-  },  
+  },
   {
     Header: 'CLIENT_DEBIT_USD',
     accessor: 'debitUsd',

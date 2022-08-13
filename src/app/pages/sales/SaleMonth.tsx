@@ -93,17 +93,24 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
         intl.formatMessage({id: 'PRODUCT_CODE'}),
         intl.formatMessage({id: 'PRODUCT_NAME'}),
         intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+        intl.formatMessage({id: 'JANUARY'}),
+        intl.formatMessage({id: 'FEBRUARY'}),
+        intl.formatMessage({id: 'MARCH'}),
+        intl.formatMessage({id: 'APRIL'}),
+        intl.formatMessage({id: 'MAY'}),
+        intl.formatMessage({id: 'JUNE'}),
+        intl.formatMessage({id: 'JULY'}),
+        intl.formatMessage({id: 'AUGUST'}),
+        intl.formatMessage({id: 'SEPTEMBER'}),
+        intl.formatMessage({id: 'OCTOBER'}),
+        intl.formatMessage({id: 'NOVEMBER'}),
+        intl.formatMessage({id: 'DECEMBER'}),
+        intl.formatMessage({id: 'TOTAL_COUNT'}),
+        intl.formatMessage({id: 'TOTAL_SUM'}),
+        intl.formatMessage({id: 'TOTAL_SUM_USD'}),
       ],
     ]
 
@@ -116,7 +123,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Clients.pdf')
+    doc.save('SaleMonth.pdf')
   }
 
   function exportCSV() {
@@ -128,27 +135,31 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
+    let str = `${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
       id: 'PRODUCT_NAME',
     })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+      id: 'JANUARY',
+    })};${intl.formatMessage({id: 'FEBRUARY'})};${intl.formatMessage({
+      id: 'MARCH',
+    })};${intl.formatMessage({id: 'APRIL'})};${intl.formatMessage({
+      id: 'MAY',
+    })};${intl.formatMessage({id: 'JUNE'})};${intl.formatMessage({
+      id: 'JULY',
+    })};${intl.formatMessage({id: 'AUGUST'})};${intl.formatMessage({
+      id: 'SEPTEMBER',
+    })};${intl.formatMessage({id: 'OCTOBER'})};${intl.formatMessage({
+      id: 'NOVEMBER',
+    })};${intl.formatMessage({id: 'DECEMBER'})};${intl.formatMessage({
+      id: 'TOTAL_COUNT',
+    })};${intl.formatMessage({id: 'TOTAL_SUM'})};${intl.formatMessage({id: 'TOTAL_SUM_USD'})}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        items[i]['code'] = items[i]['code'] + '\t'
+        items[i]['totalCount'] = Math.round(items[i]['totalCount'])
+        items[i]['totalSum'] = Math.round(items[i]['totalSum'])
+        items[i]['totalUsd'] = Math.round(items[i]['totalUsd'])
 
         str += `${items[i][item]};`
       }
@@ -158,7 +169,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Clients.csv'
+    link.download = 'SaleMonth.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
