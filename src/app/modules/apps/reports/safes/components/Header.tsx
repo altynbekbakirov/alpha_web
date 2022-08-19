@@ -1,18 +1,20 @@
-import FicheContent from '../../../../../../_metronic/partials/modals/finance/FicheContent'
-import {SearchComponent} from './Search'
-import {ToolBar} from './ToolBar'
+import { SearchComponent } from "./Search"
+import { ToolBar } from "./ToolBar"
+
 
 interface IProps {
   value: string
   change: (e: any) => string
   exportPDF: () => void
   exportCSV: () => void
-  show: boolean
-  setShow: () => void
-  item: string
 }
 
-const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, setShow, item}) => {
+const Header: React.FC<IProps> = ({
+  value,
+  change,
+  exportPDF,
+  exportCSV
+}) => {
   return (
     <>
       <div className='card-header border-0 pt-6'>
@@ -25,7 +27,6 @@ const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, se
         </div>
         {/* end::Card toolbar */}
       </div>
-      <FicheContent show={show} setShow={setShow} item={item} />
     </>
   )
 }

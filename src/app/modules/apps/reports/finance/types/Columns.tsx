@@ -1,6 +1,12 @@
 import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
-import {IFinanceCustomer, IFinanceDebit, IFinanceExtract} from '../models/finance_model'
+import {
+  IFiche,
+  IFinanceCustomer,
+  IFinanceDebit,
+  IFinanceExtract,
+  IFinanceFiche,
+} from '../models/finance_model'
 
 export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> = [
   {
@@ -439,7 +445,7 @@ export const FINANCE_DEBIT_COLUMNS: ReadonlyArray<Column<IFinanceDebit>> = [
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })}
         </div>
       )
@@ -459,7 +465,7 @@ export const FINANCE_DEBIT_COLUMNS: ReadonlyArray<Column<IFinanceDebit>> = [
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
+            maximumFractionDigits: 2,
           })}
         </div>
       )
@@ -482,12 +488,278 @@ export const FINANCE_DEBIT_COLUMNS: ReadonlyArray<Column<IFinanceDebit>> = [
           {value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
-            minimumFractionDigits: 2,
+            minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })}
         </div>
       )
     },
+  },
+]
+
+export const FINANCE_FICHE_COLUMNS: ReadonlyArray<Column<IFinanceFiche>> = [
+  {
+    Header: 'DATE',
+    accessor: 'date',
+  },
+  {
+    Header: 'FICHE_NO',
+    accessor: 'ficheNo',
+  },
+  {
+    Header: 'TR_CODE',
+    accessor: 'trCode',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      const intl = useIntl()
+      switch (value) {
+        case 1:
+          return (
+            <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_CASH_COLLECTION',
+            })}`}</div>
+          )
+        case 2:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_CASH_PAYMENT',
+            })}`}</div>
+          )
+        case 3:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_DEBIT_NOTE',
+            })}`}</div>
+          )
+        case 4:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_CREDIT_NOTE',
+            })}`}</div>
+          )
+        case 5:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_PERMITTANCE_SLIP',
+            })}`}</div>
+          )
+        case 6:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })}`}</div>
+          )
+        case 12:
+          return (
+            <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_SPECIAL_SLIP',
+            })}`}</div>
+          )
+        case 14:
+          return (
+            <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_OPENNING_SLIP',
+            })}`}</div>
+          )
+        case 41:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })}`}</div>
+          )
+        case 42:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })}`}</div>
+          )
+        case 45:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_TRADESMAN_INVOICE_RECEIVED',
+            })}`}</div>
+          )
+        case 46:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_TRADESMAN_INVOICE_RECEIVED',
+            })}`}</div>
+          )
+        case 70:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_CREDIT_CARD',
+            })}`}</div>
+          )
+        case 71:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_CREDIT_CARD',
+            })}`}</div>
+          )
+        default:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_OPERATION_OTHER',
+            })}`}</div>
+          )
+      }
+    },
+  },
+  {
+    Header: 'CLIENT_DEBIT',
+    accessor: 'debit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT',
+    accessor: 'credit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_DEBIT_USD',
+    accessor: 'repDebit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT_USD',
+    accessor: 'repCredit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'PRODUCT_DEFINITION',
+    accessor: 'definition',
+  },
+]
+
+export const FINANCE_FICHE: ReadonlyArray<Column<IFiche>> = [
+  {
+    Header: 'CLIENT_CODE',
+    accessor: 'code',
+  },
+  {
+    Header: 'CLIENT_NAME',
+    accessor: 'name',
+  },
+  {
+    Header: 'CLIENT_DEBIT',
+    accessor: 'debit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT',
+    accessor: 'credit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <>
+          {value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })}
+        </>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_DEBIT_USD',
+    accessor: 'debitUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      if (typeof value === 'number' && value > 0) {
+        return Math.round(value) + "$"; 
+      } else {
+        return ''
+      }      
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT_USD',
+    accessor: 'creditUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      if (typeof value === 'number' && value > 0) {
+        return Math.round(value) + "$"; 
+      } else {
+        return ''
+      }      
+    },
+  },
+  {
+    Header: 'PRODUCT_DEFINITION',
+    accessor: 'definition',
   },
 ]
 

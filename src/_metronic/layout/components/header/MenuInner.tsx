@@ -135,15 +135,15 @@ export function MenuInner() {
           menuTrigger={`{default:'click', lg: 'hover'}`}
         >
           <MenuItem
-            to='/finance/customer'
+            to='/safes/summary'
             title={intl.formatMessage({id: 'MENU.FINANCE_CUSTOMER'})}
             hasBullet={true}
-          />
+          />         
           <MenuItem
-            to='/finance/debit'
-            title={intl.formatMessage({id: 'MENU.FINANCE_DEBIT'})}
-            hasBullet={true}
-          />
+          to='/safes/fiche'
+          title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
+          hasBullet={true}
+        />
         </MenuInnerWithSub>
 
         {/* CASE */}

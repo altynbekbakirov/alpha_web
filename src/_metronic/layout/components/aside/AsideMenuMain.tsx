@@ -42,7 +42,7 @@ export function AsideMenuMain() {
           to='/products/fiche'
           title={intl.formatMessage({id: 'MENU.PRODUCTS_FICHE'})}
           hasBullet={true}
-        />        
+        />
         <AsideMenuItem
           to='/products/price'
           title={intl.formatMessage({id: 'MENU.PRODUCTS_PRICE'})}
@@ -141,26 +141,26 @@ export function AsideMenuMain() {
           hasBullet={true}
         />
         <AsideMenuItem
-          to='/finance/extract'
-          title={intl.formatMessage({id: 'MENU.FINANCE_EXTRACT'})}
+          to='/finance/fiche'
+          title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
           hasBullet={true}
         />
       </AsideMenuItemWithSub>
 
       {/* CASE */}
       <AsideMenuItemWithSub
-        to='/case'
+        to='/safes'
         title={intl.formatMessage({id: 'MENU.SAFE_DEPOSIT'})}
         icon='/media/icons/duotune/ecommerce/ecm007.svg'
         fontIcon='ecommerce-case'
       >
         <AsideMenuItem
-          to='/case/summary'
+          to='/safes/summary'
           title={intl.formatMessage({id: 'MENU.SAFE_ACCOUNT_SUMMARY'})}
           hasBullet={true}
         />
         <AsideMenuItem
-          to='/case/extract'
+          to='/safes/extract'
           title={intl.formatMessage({id: 'MENU.SAFE_EXTRACT'})}
           hasBullet={true}
         />

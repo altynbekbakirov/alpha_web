@@ -1,24 +1,24 @@
-import React, {useState, useMemo, useEffect} from 'react'
-import {useIntl} from 'react-intl'
-import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
-import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import axios from 'axios'
-import {IFinanceCustomer} from '../../modules/apps/reports/finance/models/finance_model'
-import {PageTitle} from '../../../_metronic/layout/core'
-import {FINANCE_CUSTOMER_COLUMNS} from '../../modules/apps/reports/finance/types/Columns'
-import {Header} from '../../modules/apps/reports/finance/components/Header'
-import Footer from '../../modules/apps/reports/finance/components/Footer'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import React, {FC, useEffect, useMemo, useState} from 'react'
+import {useIntl} from 'react-intl'
+import { useNavigate } from 'react-router-dom'
+import {useTable, useGlobalFilter, useSortBy, usePagination} from 'react-table'
+import {KTCard, KTCardBody} from '../../../_metronic/helpers'
+import {PageTitle} from '../../../_metronic/layout/core'
+import Footer from '../../modules/apps/reports/safes/components/Footer'
+import {Header} from '../../modules/apps/reports/safes/components/Header'
+import {ISafe} from '../../modules/apps/reports/safes/models/safes_model'
+import {SAFES_COLUMNS} from '../../modules/apps/reports/safes/types/Columns'
 
-const FinanceCustomer: React.FC = () => {
+const Safes: FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IFinanceCustomer[]>([])
+  const [items, setItems] = useState<ISafe[]>([])
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/accounts/debit`
+    const REQUEST_URL = `${BASE_URL}/safes`
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
         firmno: 1,
@@ -34,7 +34,9 @@ const FinanceCustomer: React.FC = () => {
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.FINANCE_CUSTOMER'})}</PageTitle>
+      <PageTitle breadcrumbs={[]}>
+        {intl.formatMessage({id: 'MENU.SAFE_ACCOUNT_SUMMARY'})}
+      </PageTitle>
       <ItemsContainer items={items} />
     </>
   )
@@ -42,10 +44,9 @@ const FinanceCustomer: React.FC = () => {
 
 const ItemsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
-  const columns = useMemo(() => FINANCE_CUSTOMER_COLUMNS, [])
+  const columns = useMemo(() => SAFES_COLUMNS, [])
   const data = useMemo(() => items, [items])
-  const [show, setShow] = React.useState(false)
-  const [item, setItem] = useState('')
+  const navigate = useNavigate()
 
   const {
     getTableProps,
@@ -92,27 +93,25 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'CLIENT_ADDRESS'}),
-        intl.formatMessage({id: 'CLIENT_PHONE'}),
-        intl.formatMessage({id: 'CLIENT_DEBIT'}),
-        intl.formatMessage({id: 'CLIENT_CREDIT'}),
-        intl.formatMessage({id: 'CLIENT_BALANCE'}),
-        intl.formatMessage({id: 'CLIENT_DEBIT_USD'}),
-        intl.formatMessage({id: 'CLIENT_CREDIT_USD'}),
-        intl.formatMessage({id: 'CLIENT_BALANCE_USD'}),
+        intl.formatMessage({id: 'SAFE_CODE'}),
+        intl.formatMessage({id: 'SAFE_NAME'}),
+        intl.formatMessage({id: 'SAFE_DEFINITION'}),
+        intl.formatMessage({id: 'SAFE_BALANCE'}),
+        intl.formatMessage({id: 'SAFE_BALANCE_USD'}),
       ],
     ]
 
-    const data = items.map((item: IFinanceCustomer) => {
-      item.phone = item.phone + '\t'
-      item.debit = Math.round(item.debit)
-      item.debitUsd = Math.round(item.debitUsd)
-      item.credit = Math.round(item.credit)
-      item.creditUsd = Math.round(item.creditUsd)
-      item.balance = Math.round(item.balance)
-      item.balanceUsd = Math.round(item.balanceUsd)
+    const data = items.map((item: ISafe) => {
+      item.balance = item.balance.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.balanceUsd = item.balanceUsd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
       return Object.values(item)
     })
 
@@ -121,7 +120,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Customers.pdf')
+    doc.save('Safes.pdf')
   }
 
   function exportCSV() {
@@ -134,26 +133,17 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.click()
 
     let str = `${intl.formatMessage({
-      id: 'CLIENT_CODE',
-    })};${intl.formatMessage({id: 'CLIENT_NAME'})};${intl.formatMessage({
-      id: 'CLIENT_ADDRESS',
-    })};${intl.formatMessage({id: 'CLIENT_PHONE'})};${intl.formatMessage({
-      id: 'CLIENT_DEBIT',
-    })};${intl.formatMessage({id: 'CLIENT_CREDIT'})};${intl.formatMessage({
-      id: 'CLIENT_BALANCE',
-    })};${intl.formatMessage({id: 'CLIENT_DEBIT_USD'})};${intl.formatMessage({
-      id: 'CLIENT_CREDIT_USD',
-    })};${intl.formatMessage({id: 'CLIENT_BALANCE_USD'})}\n`
+      id: 'SAFE_CODE',
+    })};${intl.formatMessage({id: 'SAFE_NAME'})};${intl.formatMessage({
+      id: 'SAFE_DEFINITION',
+    })};${intl.formatMessage({id: 'SAFE_BALANCE'})};${intl.formatMessage({
+      id: 'SAFE_BALANCE_USD',
+    })}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['phone'] = items[i]['phone'] + '\t'
-        items[i]['debit'] = Math.round(items[i]['debit'])
-        items[i]['credit'] = Math.round(items[i]['credit'])
         items[i]['balance'] = Math.round(items[i]['balance'])
-        items[i]['debitUsd'] = Math.round(items[i]['debitUsd'])
-        items[i]['creditUsd'] = Math.round(items[i]['creditUsd'])
         items[i]['balanceUsd'] = Math.round(items[i]['balanceUsd'])
 
         str += `${items[i][item]};`
@@ -164,7 +154,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Customers.csv'
+    link.download = 'Safes.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -180,9 +170,6 @@ const ItemsContainer = ({items}: {items: any}) => {
         change={setGlobalFilter}
         exportPDF={exportPDF}
         exportCSV={exportCSV}
-        show={show}
-        setShow={() => setShow(!show)}
-        item={item}
       />
       <KTCardBody>
         <div className='table-responsive'>
@@ -227,7 +214,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.render('Cell').props.column.Header === 'CLIENT_CODE') {
+                      if (cell.render('Cell').props.column.Header === 'SAFE_CODE') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -238,8 +225,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                         className='btn btn-icon btn-secondary btn-sm border-0'
                         onClick={(e) => {
                           e.preventDefault()
-                          setItem(currentCode)
-                          setShow(!show)
+                          navigate(`/safes/extract/${currentCode}`, {replace: true})
                         }}
                         title={`${intl.formatMessage({id: 'ACTIONS_VIEW_INVOICE'})}`}
                       >
@@ -294,4 +280,4 @@ const ItemsContainer = ({items}: {items: any}) => {
   )
 }
 
-export default FinanceCustomer
+export default Safes

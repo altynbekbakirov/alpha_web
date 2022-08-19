@@ -21,8 +21,10 @@ import SaleDetail from '../pages/sales/SaleDetail'
 import SaleDaily from '../pages/sales/SaleDaily'
 import FinanceCustomer from '../pages/finances/FinanceCustomer'
 import FinanceExtract from '../pages/finances/FinanceExtract'
-import FinanceDebit from '../pages/finances/FinanceDebit'
 import ClearNetwork from '../pages/utility/ClearNetwork'
+import FinanceFiche from '../pages/finances/FinanceFiche'
+import Safes from '../pages/safe/Safes'
+import SafesExtract from '../pages/safe/SafesExtract'
 
 const PrivateRoutes = () => {
   const BuilderPageWrapper = lazy(() => import('../pages/layout-builder/BuilderPageWrapper'))
@@ -71,12 +73,13 @@ const PrivateRoutes = () => {
         <Route path='finance/customer' element={<FinanceCustomer />} />
         <Route path='finance/extract' element={<FinanceExtract />} />
         <Route path='finance/extract/:id' element={<FinanceExtract />} />
-        <Route path='finance/debit' element={<FinanceDebit />} />
+        <Route path='finance/fiche' element={<FinanceFiche />} />
 
         {/* Safe Deposit */}
-        <Route path='case' element={<Navigate to='/case/summary' />} />
-        <Route path='case/summary' element={<FinanceCustomer />} />
-        <Route path='case/extract' element={<FinanceExtract />} />
+        <Route path='safes' element={<Navigate to='/safes/summary' />} />
+        <Route path='safes/summary' element={<Safes />} />
+        <Route path='safes/extract' element={<SafesExtract />} />
+        <Route path='safes/extract/:code' element={<SafesExtract />} />
 
         {/* Utility */}
         <Route path='utility' element={<ClearNetwork />} />

@@ -697,10 +697,20 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
   {
     Header: 'CLIENT_CODE',
     accessor: 'clientCode',
+    Cell: ({value}) => {
+      const intl = useIntl();
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS',}) : value
+      return value
+    },
   },
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Cell: ({value}) => {
+      const intl = useIntl();
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS',}) : value
+      return value
+    },
   },
   {
     Header: 'PRODUCT_SALE_COUNT',

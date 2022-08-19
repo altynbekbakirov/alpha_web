@@ -37,6 +37,27 @@ export interface IFinanceDebit {
   balanceUsd: number
 }
 
+export interface IFinanceFiche {
+  date: string
+  ficheNo:string
+  trCode: number | string
+  debit: number | string
+  credit: number | string
+  repDebit: number | string
+  repCredit: number | string
+  definition: string
+}
+
+export interface IFiche {
+  code: string
+  name: string
+  debit: number | string
+  debitUsd: number | string
+  credit: number | string
+  creditUsd: number | string
+  definition: string
+}
+
 export interface IFooter {
   previous: () => void
   next: () => void

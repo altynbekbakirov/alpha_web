@@ -1,24 +1,25 @@
-import React, {useState, useMemo, useEffect} from 'react'
-import {useIntl} from 'react-intl'
-import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
-import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import axios from 'axios'
-import {IFinanceDebit} from '../../modules/apps/reports/finance/models/finance_model'
-import {PageTitle} from '../../../_metronic/layout/core'
-import {FINANCE_DEBIT_COLUMNS} from '../../modules/apps/reports/finance/types/Columns'
-import {Header} from '../../modules/apps/reports/finance/components/Header'
-import Footer from '../../modules/apps/reports/finance/components/Footer'
+import React, {FC, useEffect, useState, useMemo} from 'react'
+import {useIntl} from 'react-intl'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
-import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import {useTable, useGlobalFilter, useSortBy, usePagination} from 'react-table'
+import {PageTitle} from '../../../_metronic/layout/core'
+import { ISafeExtract } from '../../modules/apps/reports/safes/models/safes_model'
+import { SAFES_EXTRACT_COLUMNS } from '../../modules/apps/reports/safes/types/Columns'
+import { KTCard, KTCardBody } from '../../../_metronic/helpers'
+import { Header } from '../../modules/apps/reports/safes/components/Header'
+import Footer from '../../modules/apps/reports/safes/components/Footer'
+import { useParams } from 'react-router-dom'
 
-const FinanceDebit: React.FC = () => {
+const SafesExtract: FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IFinanceDebit[]>([])
+  const [items, setItems] = useState<ISafeExtract[]>([])
+  const {code} = useParams()
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/accounts/debit`
+    const REQUEST_URL = `${BASE_URL}/safes/extract${code && '/' + code}`
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
         firmno: 1,
@@ -30,11 +31,11 @@ const FinanceDebit: React.FC = () => {
       setItems(response.data)
     }
     fetchProducts()
-  }, [])
+  }, [code])
 
   return (
     <>
-      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.FINANCE_DEBIT'})}</PageTitle>
+      <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SAFE_EXTRACT'})}</PageTitle>
       <ItemsContainer items={items} />
     </>
   )
@@ -42,7 +43,7 @@ const FinanceDebit: React.FC = () => {
 
 const ItemsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
-  const columns = useMemo(() => FINANCE_DEBIT_COLUMNS, [])
+  const columns = useMemo(() => SAFES_EXTRACT_COLUMNS, [])
   const data = useMemo(() => items, [items])
 
   const {
@@ -90,21 +91,25 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'CLIENT_CODE'}),
-        intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'}),
-        intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL_USD'}),
+        intl.formatMessage({id: 'SAFE_CODE'}),
+        intl.formatMessage({id: 'SAFE_NAME'}),
+        intl.formatMessage({id: 'SAFE_DEFINITION'}),
+        intl.formatMessage({id: 'SAFE_BALANCE'}),
+        intl.formatMessage({id: 'SAFE_BALANCE_USD'}),
       ],
     ]
 
-    const data = items.map((item: IFinanceDebit) => {
+    const data = items.map((item: ISafeExtract) => {
+      item.net = item.net.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+      item.netUsd = item.netUsd.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
       return Object.values(item)
     })
 
@@ -113,7 +118,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Accounts.pdf')
+    doc.save('Safes.pdf')
   }
 
   function exportCSV() {
@@ -125,27 +130,19 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
-      id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_COUNT',
-    })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
-      id: 'PRODUCT_PURCHASE_TOTAL_USD',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_RETURN_TOTAL',
-    })};${intl.formatMessage({id: 'PRODUCT_RETURN_TOTAL'})}\n`
+    let str = `${intl.formatMessage({
+      id: 'SAFE_CODE',
+    })};${intl.formatMessage({id: 'SAFE_NAME'})};${intl.formatMessage({
+      id: 'SAFE_DEFINITION',
+    })};${intl.formatMessage({id: 'SAFE_BALANCE'})};${intl.formatMessage({
+      id: 'SAFE_BALANCE_USD',
+    })}\n`
 
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['itemCode'] = items[i]['itemCode'] + '\t'
-        items[i]['itemTotal'] = Math.round(items[i]['itemTotal'])
-        items[i]['itemTotalUsd'] = Math.round(items[i]['itemTotalUsd'])
-        items[i]['itemAmountRet'] = Math.round(items[i]['itemAmountRet'])
-        items[i]['itemTotalRet'] = Math.round(items[i]['itemTotalRet'])
-        items[i]['itemTotalUsdRet'] = Math.round(items[i]['itemTotalUsdRet'])
+        items[i]['balance'] = Math.round(items[i]['balance'])
+        items[i]['balanceUsd'] = Math.round(items[i]['balanceUsd'])
 
         str += `${items[i][item]};`
       }
@@ -155,7 +152,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Accounts.csv'
+    link.download = 'Safes.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)
@@ -166,9 +163,12 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header value={globalFilter} change={setGlobalFilter} 
+      <Header
+        value={globalFilter}
+        change={setGlobalFilter}
         exportPDF={exportPDF}
-        exportCSV={exportCSV}/>
+        exportCSV={exportCSV}
+      />
       <KTCardBody>
         <div className='table-responsive'>
           <table
@@ -211,11 +211,44 @@ const ItemsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.accessor === 'item_trCode') {
-                        console.log('item_trCode')
-                      }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
+                    <td>
+                      <a
+                        href='/'
+                        className='btn btn-icon btn-secondary btn-sm border-0'
+                        onClick={(e) => {
+                          e.preventDefault()
+                        }}
+                        title={`${intl.formatMessage({id: 'ACTIONS_VIEW_INVOICE'})}`}
+                      >
+                        <span className='svg-icon svg-icon-2 svg-icon-primary'>
+                          <svg
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='mh-50px'
+                          >
+                            <rect
+                              opacity='0.5'
+                              x='18'
+                              y='13'
+                              width='13'
+                              height='2'
+                              rx='1'
+                              transform='rotate(-180 18 13)'
+                              fill='currentColor'
+                            ></rect>
+                            <path
+                              d='M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z'
+                              fill='currentColor'
+                            ></path>
+                          </svg>
+                        </span>
+                      </a>
+                    </td>
                   </tr>
                 )
               })}
@@ -240,4 +273,4 @@ const ItemsContainer = ({items}: {items: any}) => {
   )
 }
 
-export default FinanceDebit
+export default SafesExtract
