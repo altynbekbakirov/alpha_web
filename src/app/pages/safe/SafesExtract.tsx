@@ -5,12 +5,12 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import {useTable, useGlobalFilter, useSortBy, usePagination} from 'react-table'
 import {PageTitle} from '../../../_metronic/layout/core'
-import { ISafeExtract } from '../../modules/apps/reports/safes/models/safes_model'
-import { SAFES_EXTRACT_COLUMNS } from '../../modules/apps/reports/safes/types/Columns'
-import { KTCard, KTCardBody } from '../../../_metronic/helpers'
-import { Header } from '../../modules/apps/reports/safes/components/Header'
+import {ISafeExtract} from '../../modules/apps/reports/safes/models/safes_model'
+import {SAFES_EXTRACT_COLUMNS} from '../../modules/apps/reports/safes/types/Columns'
+import {KTCard, KTCardBody} from '../../../_metronic/helpers'
+import {Header} from '../../modules/apps/reports/safes/components/Header'
 import Footer from '../../modules/apps/reports/safes/components/Footer'
-import { useParams } from 'react-router-dom'
+import {useParams} from 'react-router-dom'
 
 const SafesExtract: FC = () => {
   const intl = useIntl()
@@ -19,7 +19,7 @@ const SafesExtract: FC = () => {
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/safes/extract${code && '/' + code}`
+    const REQUEST_URL = `${BASE_URL}/safes/extract${code ? '/' + code : ''}`
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
         firmno: 1,
@@ -91,15 +91,180 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
-        intl.formatMessage({id: 'SAFE_CODE'}),
-        intl.formatMessage({id: 'SAFE_NAME'}),
+        intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'FICHE_NO'}),
+        intl.formatMessage({id: 'CLIENT_NAME'}),
         intl.formatMessage({id: 'SAFE_DEFINITION'}),
+        intl.formatMessage({id: 'TR_CODE'}),
         intl.formatMessage({id: 'SAFE_BALANCE'}),
         intl.formatMessage({id: 'SAFE_BALANCE_USD'}),
       ],
     ]
 
     const data = items.map((item: ISafeExtract) => {
+      switch (item.trCode) {
+        case 1:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_CASH_COLLECTION',
+          })
+          break
+        case 2:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_CASH_PAYMENT',
+          })
+          break
+        case 11:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_CASH_COLLECTION_AP',
+          })
+          break
+        case 12:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_CASH_PAYMENT_AP',
+          })
+          break
+        case 21:
+          item.trCode = intl.formatMessage({
+            id: 'SAFE_BANK_DEPOSIT',
+          })
+          break
+        case 22:
+          item.trCode = intl.formatMessage({
+            id: 'SAFE_BANK_WITHDRAWAL',
+          })
+          break
+        case 31:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE',
+          })
+          break
+        case 32:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_RETURN',
+          })
+          break
+        case 33:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+          })
+          break
+        case 34:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_SERVICE_RECEIVED',
+          })
+          break
+        case 35:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_PURCHASE_RETURN',
+          })
+          break
+        case 36:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_RETAIL_SALE',
+          })
+          break
+        case 37:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_WHOLESALE',
+          })
+          break
+        case 38:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_SERVICE_ISSUE',
+          })
+          break
+        case 39:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+          })
+          break
+        case 41:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_ACCOUNT_COLLECTION',
+          })
+          break
+        case 42:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_ACCOUNT_PAYMENT',
+          })
+          break
+        case 51:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_PERSONAL_DEBT',
+          })
+          break
+        case 52:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_PERSONAL_BACK_PAYMENT',
+          })
+          break
+        case 61:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_CHECK_COLLECTION',
+          })
+          break
+        case 62:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_P.NOTE_COLLECTION',
+          })
+          break
+        case 63:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_CHECK_PAYMENT',
+          })
+          break
+        case 64:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_P.NOTE_PAYMENT',
+          })
+          break
+        case 71:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_OPENNING_DEBT',
+          })
+          break
+        case 72:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_OPENNING_CREDIT',
+          })
+          break
+        case 73:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_REMITTANCE_DEBT',
+          })
+          break
+        case 74:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_REMITTANCE_CREDIT',
+          })
+          break
+        case 75:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_EXPENSE_SHEET',
+          })
+          break
+        case 76:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_TRADESMAN_ISSUE',
+          })
+          break
+        case 77:
+          item.trCode = intl.formatMessage({
+            id: 'OPERATION_TYPE_TRADESMAN_RECEIVED',
+          })
+          break
+        case 79:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+          })
+          break
+        case 80:
+          item.trCode = intl.formatMessage({
+            id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+          })
+          break
+      }
+
       item.net = item.net.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
@@ -118,7 +283,7 @@ const ItemsContainer = ({items}: {items: any}) => {
       body: data,
       styles: {font: 'Roboto-Regular'},
     })
-    doc.save('Safes.pdf')
+    doc.save('SafeExtract.pdf')
   }
 
   function exportCSV() {
@@ -131,18 +296,181 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.click()
 
     let str = `${intl.formatMessage({
-      id: 'SAFE_CODE',
-    })};${intl.formatMessage({id: 'SAFE_NAME'})};${intl.formatMessage({
-      id: 'SAFE_DEFINITION',
+      id: 'DATE',
+    })};${intl.formatMessage({id: 'FICHE_NO'})};${intl.formatMessage({
+      id: 'CLIENT_NAME',
+    })};${intl.formatMessage({id: 'SAFE_DEFINITION'})};${intl.formatMessage({
+      id: 'TR_CODE',
     })};${intl.formatMessage({id: 'SAFE_BALANCE'})};${intl.formatMessage({
       id: 'SAFE_BALANCE_USD',
     })}\n`
-
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['balance'] = Math.round(items[i]['balance'])
-        items[i]['balanceUsd'] = Math.round(items[i]['balanceUsd'])
+        switch (items[i]['trCode']) {
+          case 1:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_COLLECTION',
+            })
+            break
+          case 2:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_PAYMENT',
+            })
+            break
+          case 11:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_COLLECTION_AP',
+            })
+            break
+          case 12:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_CASH_PAYMENT_AP',
+            })
+            break
+          case 21:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'SAFE_BANK_DEPOSIT',
+            })
+            break
+          case 22:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'SAFE_BANK_WITHDRAWAL',
+            })
+            break
+          case 31:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE',
+            })
+            break
+          case 32:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_RETURN',
+            })
+            break
+          case 33:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+            })
+            break
+          case 34:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_SERVICE_RECEIVED',
+            })
+            break
+          case 35:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE_RETURN',
+            })
+            break
+          case 36:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_SALE',
+            })
+            break
+          case 37:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE',
+            })
+            break
+          case 38:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_SERVICE_ISSUE',
+            })
+            break
+          case 39:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+            })
+            break
+          case 41:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_ACCOUNT_COLLECTION',
+            })
+            break
+          case 42:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_ACCOUNT_PAYMENT',
+            })
+            break
+          case 51:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_PERSONAL_DEBT',
+            })
+            break
+          case 52:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_PERSONAL_BACK_PAYMENT',
+            })
+            break
+          case 61:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_CHECK_COLLECTION',
+            })
+            break
+          case 62:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_P.NOTE_COLLECTION',
+            })
+            break
+          case 63:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_CHECK_PAYMENT',
+            })
+            break
+          case 64:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_P.NOTE_PAYMENT',
+            })
+            break
+          case 71:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING_DEBT',
+            })
+            break
+          case 72:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING_CREDIT',
+            })
+            break
+          case 73:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_REMITTANCE_DEBT',
+            })
+            break
+          case 74:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_REMITTANCE_CREDIT',
+            })
+            break
+          case 75:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_EXPENSE_SHEET',
+            })
+            break
+          case 76:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_TRADESMAN_ISSUE',
+            })
+            break
+          case 77:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'OPERATION_TYPE_TRADESMAN_RECEIVED',
+            })
+            break
+          case 79:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })
+            break
+          case 80:
+            items[i]['trCode'] = intl.formatMessage({
+              id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
+            })
+            break
+        }
+
+        items[i]['ficheNo'] = items[i]['ficheNo'] + "\t";
 
         str += `${items[i][item]};`
       }
@@ -152,7 +480,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str)
     let link = document.createElement('a')
     link.href = uri
-    link.download = 'Safes.csv'
+    link.download = 'SafeExtract.csv'
     document.body.appendChild(link)
     link.click()
     document.body.removeChild(link)

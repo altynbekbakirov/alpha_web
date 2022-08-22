@@ -11,8 +11,7 @@ export interface ISafeExtract {
   ficheNo: string
   title: string
   definition: string;
-  trCode: number
-  sign: number
+  trCode: number | string  
   net: number | string
   netUsd: number | string
 }

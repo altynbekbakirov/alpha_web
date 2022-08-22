@@ -143,8 +143,6 @@ const ItemsContainer = ({items}: {items: any}) => {
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['balance'] = Math.round(items[i]['balance'])
-        items[i]['balanceUsd'] = Math.round(items[i]['balanceUsd'])
 
         str += `${items[i][item]};`
       }
