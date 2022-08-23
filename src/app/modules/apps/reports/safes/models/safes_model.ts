@@ -12,8 +12,20 @@ export interface ISafeExtract {
   title: string
   definition: string;
   trCode: number | string  
-  net: number | string
-  netUsd: number | string
+  collection: number | string
+  collectionUsd: number | string
+  payment: number | string
+  paymentUsd: number | string
+}
+
+export interface ISafeResume {
+  month: number | string
+  debit: number | string
+  credit: number | string
+  total: number | string
+  debitUsd: number | string
+  creditUsd: number | string
+  totalUsd: number | string
 }
 
 export interface IFooter {

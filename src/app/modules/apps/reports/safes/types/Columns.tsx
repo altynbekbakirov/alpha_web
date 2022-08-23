@@ -1,6 +1,6 @@
-import { useIntl } from 'react-intl'
+import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
-import {ISafe, ISafeExtract} from '../models/safes_model'
+import {ISafe, ISafeExtract, ISafeResume} from '../models/safes_model'
 
 export const SAFES_COLUMNS: ReadonlyArray<Column<ISafe>> = [
   {
@@ -35,6 +35,193 @@ export const SAFES_COLUMNS: ReadonlyArray<Column<ISafe>> = [
   {
     Header: 'SAFE_BALANCE_USD',
     accessor: 'balanceUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+]
+
+export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
+  {
+    Header: 'DATE',
+    accessor: 'month',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      const intl = useIntl()
+      switch (value) {
+        case 0:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'SAFE_RESUME_TRANSFERRED_AMOUNT',
+            })}`}</div>
+          )
+        case 1:
+          return (
+            <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
+              id: 'JANUARY_FULL',
+            })}`}</div>
+          )
+        case 2:
+          return (
+            <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
+              id: 'FEBRUARY_FULL',
+            })}`}</div>
+          )
+        case 3:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'MARCH_FULL',
+            })}`}</div>
+          )
+        case 4:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'APRIL_FULL',
+            })}`}</div>
+          )
+        case 5:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'MAY_FULL',
+            })}`}</div>
+          )
+        case 6:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'JUNE_FULL',
+            })}`}</div>
+          )
+        case 7:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'JULY_FULL',
+            })}`}</div>
+          )
+        case 8:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'AUGUST_FULL',
+            })}`}</div>
+          )
+        case 9:
+          return (
+            <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
+              id: 'SEPTEMBER_FULL',
+            })}`}</div>
+          )
+        case 10:
+          return (
+            <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
+              id: 'OCTOBER_FULL',
+            })}`}</div>
+          )
+        case 11:
+          return (
+            <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
+              id: 'NOVEMBER_FULL',
+            })}`}</div>
+          )
+        case 12:
+          return (
+            <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
+              id: 'DECEMBER_FULL',
+            })}`}</div>
+          )
+        default:
+          return (
+            <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
+              id: 'CLIENT_OTHERS',
+            })}`}</div>
+          )
+      }
+    },
+  },
+  {
+    Header: 'CLIENT_DEBIT',
+    accessor: 'debit', //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT',
+    accessor: 'credit',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'SAFE_RESUME_REMAINING',
+    accessor: 'total',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'CLIENT_DEBIT_USD',
+    accessor: 'debitUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'CLIENT_CREDIT_USD',
+    accessor: 'creditUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      value < 0 ? (value = -value) : (value = +value)
+      return value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
+  },
+  {
+    Header: 'SAFE_RESUME_REMAINING_USD',
+    accessor: 'totalUsd',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
@@ -174,97 +361,97 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
               id: 'OPERATION_TYPE_ACCOUNT_COLLECTION',
             })}`}</div>
           )
-          case 42:
+        case 42:
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_ACCOUNT_PAYMENT',
             })}`}</div>
           )
-          case 51:
+        case 51:
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_PERSONAL_DEBT',
             })}`}</div>
           )
-          case 52:
+        case 52:
           return (
             <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_PERSONAL_BACK_PAYMENT',
             })}`}</div>
           )
-          case 61:
+        case 61:
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_CHECK_COLLECTION',
             })}`}</div>
           )
-          case 62:
+        case 62:
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_P.NOTE_COLLECTION',
             })}`}</div>
           )
-          case 63:
+        case 63:
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_CHECK_PAYMENT',
             })}`}</div>
           )
-          case 64:
+        case 64:
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_P.NOTE_PAYMENT',
             })}`}</div>
           )
-          case 71:
+        case 71:
           return (
             <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_OPENNING_DEBT',
             })}`}</div>
           )
-          case 72:
+        case 72:
           return (
             <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_OPENNING_CREDIT',
             })}`}</div>
           )
-          case 73:
+        case 73:
           return (
             <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_REMITTANCE_DEBT',
             })}`}</div>
           )
-          case 74:
+        case 74:
           return (
             <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_REMITTANCE_CREDIT',
             })}`}</div>
           )
-          case 75:
+        case 75:
           return (
             <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_EXPENSE_SHEET',
             })}`}</div>
           )
-          case 76:
+        case 76:
           return (
             <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_TRADESMAN_ISSUE',
             })}`}</div>
           )
-          case 77:
+        case 77:
           return (
             <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_TRADESMAN_RECEIVED',
             })}`}</div>
           )
-          case 79:
+        case 79:
           return (
             <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
               id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
             })}`}</div>
           )
-          case 80:
+        case 80:
           return (
             <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
               id: 'CLIENT_EXCH_RATE_DIFF_TRANS',
@@ -280,33 +467,67 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
     },
   },
   {
-    Header: 'SAFE_BALANCE',
-    accessor: 'net',
+    Header: 'SAFE_EXTRACT_COLLECTION',
+    accessor: 'collection',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
   {
-    Header: 'SAFE_BALANCE_USD',
-    accessor: 'netUsd',
+    Header: 'SAFE_EXTRACT_COLLECTION_USD',
+    accessor: 'collectionUsd',
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+    },
+  },
+  {
+    Header: 'SAFE_EXTRACT_PAYMENT',
+    accessor: 'payment',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+    },
+  },
+  {
+    Header: 'SAFE_EXTRACT_PAYMENT_USD',
+    accessor: 'paymentUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
 ]

@@ -5,10 +5,10 @@ import React, {FC, useEffect, useMemo, useState} from 'react'
 import {useIntl} from 'react-intl'
 import { useNavigate } from 'react-router-dom'
 import {useTable, useGlobalFilter, useSortBy, usePagination} from 'react-table'
-import {KTCard, KTCardBody} from '../../../_metronic/helpers'
+import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import Footer from '../../modules/apps/reports/safes/components/Footer'
-import {Header} from '../../modules/apps/reports/safes/components/Header'
+import { HeaderResume } from '../../modules/apps/reports/safes/components/HeaderResume'
 import {ISafe} from '../../modules/apps/reports/safes/models/safes_model'
 import {SAFES_COLUMNS} from '../../modules/apps/reports/safes/types/Columns'
 
@@ -47,6 +47,8 @@ const ItemsContainer = ({items}: {items: any}) => {
   const columns = useMemo(() => SAFES_COLUMNS, [])
   const data = useMemo(() => items, [items])
   const navigate = useNavigate()
+  const [show, setShow] = React.useState(false)
+  const [item, setItem] = useState('')
 
   const {
     getTableProps,
@@ -163,11 +165,14 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <HeaderResume
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
         exportCSV={exportCSV}
+        show={show}
+        setShow={() => setShow(!show)}
+        item={item}
       />
       <KTCardBody>
         <div className='table-responsive'>
@@ -218,6 +223,22 @@ const ItemsContainer = ({items}: {items: any}) => {
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
                     })}
                     <td>
+                    <div className='d-flex justify-content-end flex-shrink-0'>
+                    <a
+                          href='/'
+                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm me-1'
+                          onClick={(e) => {
+                            e.preventDefault()
+                            setShow(!show)
+                            setItem(currentCode)
+                          }}
+                          title={`${intl.formatMessage({id: 'SAFE_RESUME'})}`}
+                        >
+                          <KTSVG
+                            path='/media/icons/duotune/general/gen019.svg'
+                            className='svg-icon-3'
+                          />
+                        </a>
                       <a
                         href='/'
                         className='btn btn-icon btn-secondary btn-sm border-0'
@@ -253,6 +274,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                           </svg>
                         </span>
                       </a>
+                      </div>
                     </td>
                   </tr>
                 )

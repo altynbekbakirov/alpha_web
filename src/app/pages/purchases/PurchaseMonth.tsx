@@ -209,7 +209,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                   className='fw-bold fs-6 text-gray-800 border-bottom-2 border-gray-200'
                 >
                   {headerGroup.headers.map((column) => (
-                    <th
+                    <th 
                       {...column.getHeaderProps(
                         //@ts-expect-error
                         column.getSortByToggleProps()

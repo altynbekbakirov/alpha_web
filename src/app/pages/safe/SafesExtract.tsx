@@ -96,8 +96,10 @@ const ItemsContainer = ({items}: {items: any}) => {
         intl.formatMessage({id: 'CLIENT_NAME'}),
         intl.formatMessage({id: 'SAFE_DEFINITION'}),
         intl.formatMessage({id: 'TR_CODE'}),
-        intl.formatMessage({id: 'SAFE_BALANCE'}),
-        intl.formatMessage({id: 'SAFE_BALANCE_USD'}),
+        intl.formatMessage({id: 'SAFE_EXTRACT_COLLECTION'}),
+        intl.formatMessage({id: 'SAFE_EXTRACT_COLLECTION_USD'}),
+        intl.formatMessage({id: 'SAFE_EXTRACT_PAYMENT'}),
+        intl.formatMessage({id: 'SAFE_EXTRACT_PAYMENT_USD'}),
       ],
     ]
 
@@ -265,16 +267,6 @@ const ItemsContainer = ({items}: {items: any}) => {
           break
       }
 
-      item.net = item.net.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.netUsd = item.netUsd.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
       return Object.values(item)
     })
 
@@ -301,8 +293,10 @@ const ItemsContainer = ({items}: {items: any}) => {
       id: 'CLIENT_NAME',
     })};${intl.formatMessage({id: 'SAFE_DEFINITION'})};${intl.formatMessage({
       id: 'TR_CODE',
-    })};${intl.formatMessage({id: 'SAFE_BALANCE'})};${intl.formatMessage({
-      id: 'SAFE_BALANCE_USD',
+    })};${intl.formatMessage({id: 'SAFE_EXTRACT_COLLECTION'})};${intl.formatMessage({
+      id: 'SAFE_EXTRACT_COLLECTION_USD',
+    })};${intl.formatMessage({id: 'SAFE_EXTRACT_PAYMENT'})};${intl.formatMessage({
+      id: 'SAFE_EXTRACT_PAYMENT_USD',
     })}\n`
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
@@ -470,7 +464,7 @@ const ItemsContainer = ({items}: {items: any}) => {
             break
         }
 
-        items[i]['ficheNo'] = items[i]['ficheNo'] + "\t";
+        items[i]['ficheNo'] = items[i]['ficheNo'] + '\t'
 
         str += `${items[i][item]};`
       }

@@ -43,12 +43,14 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
   {
@@ -58,12 +60,14 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
   {
@@ -72,6 +76,9 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value === 0 ? '' : value
+    },
   },
   {
     Header: 'PRODUCT_SALE_COUNT',
@@ -79,6 +86,9 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value === 0 ? '' : value
+    },
   },
   {
     Header: 'PRODUCT_SALE_TOTAL',
@@ -87,12 +97,14 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
   {
@@ -102,7 +114,9 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value > 0 ? (
+      return value === 0 ? (
+        ''
+      ) : value > 0 ? (
         <div className='badge badge-success fw-bolder'>{value}</div>
       ) : value === 0 ? (
         <div className='badge badge-warning fw-bolder'>{value}</div>
@@ -118,12 +132,14 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
   {
@@ -133,12 +149,14 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value === 0
+        ? ''
+        : value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
     },
   },
 ]

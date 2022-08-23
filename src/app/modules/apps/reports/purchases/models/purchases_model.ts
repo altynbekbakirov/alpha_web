@@ -4,11 +4,11 @@ export interface IPurchaseFiche {
   date: string
   clientCode: string | null
   clientName: string | null
-  gross: number
-  discounts: number
-  expenses: number
-  net: number
-  netUsd: number
+  gross: number | string
+  discounts: number | string
+  expenses: number | string
+  net: number | string
+  netUsd: number | string
 }
 
 export interface IFiche {
@@ -17,10 +17,10 @@ export interface IFiche {
   date: string
   count: number
   unit: string
-  price: number
-  priceUsd: number
-  total: number
-  totalUsd: number
+  price: number | string
+  priceUsd: number | string
+  total: number | string
+  totalUsd: number | string
 }
 
 export interface IPurchaseClient {
