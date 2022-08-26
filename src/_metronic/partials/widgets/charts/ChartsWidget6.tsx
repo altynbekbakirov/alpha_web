@@ -171,7 +171,7 @@ function getChartOptions(
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
   const baseColor = getCSSVariableValue('--bs-primary')
-  const baseLightColor = getCSSVariableValue('--bs-light-primary')
+  // const baseLightColor = getCSSVariableValue('--bs-light-primary')
   const secondaryColor = getCSSVariableValue('--bs-info')
   const color2Light = getCSSVariableValue('--bs-light-success')
 
