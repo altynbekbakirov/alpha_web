@@ -9,25 +9,55 @@ type Props = {
   className: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const TablesWidget8: React.FC<Props> = ({className}) => {
   const [fiches, setFiches] = useState<IPurchaseFiche[]>([])
   const intl = useIntl()
 
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/purchases`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchMonthSales()
+      })
 
     async function fetchMonthSales() {
       const response = await axios.post<IPurchaseFiche[]>(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setFiches(response.data)
     }
-    fetchMonthSales()
   }, [])
   
   return (

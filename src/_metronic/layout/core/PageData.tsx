@@ -27,6 +27,7 @@ const PageDataProvider: React.FC = ({children}) => {
   const [pageTitle, setPageTitle] = useState<string>('')
   const [pageDescription, setPageDescription] = useState<string>('')
   const [pageBreadcrumbs, setPageBreadcrumbs] = useState<Array<PageLink>>([])
+
   const value: PageDataContextModel = {
     pageTitle,
     setPageTitle,

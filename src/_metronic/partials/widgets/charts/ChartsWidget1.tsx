@@ -12,11 +12,26 @@ type Props = {
   className: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const ChartsWidget1: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const intl = useIntl()
   const [aktive, setAktive] = useState(1)
   const [values, setValues] = useState<ISaleTotal[]>([])
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
 
   const sale_count = intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})
   const sale_total = intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'})
@@ -25,18 +40,33 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/total`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchMonthSales()
+      })
 
     async function fetchMonthSales() {
       const response = await axios.post<ISaleTotal[]>(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setValues(response.data)
     }
-    fetchMonthSales()
   }, [])
 
   function compareAmount(a: ISaleTotal, b: ISaleTotal) {

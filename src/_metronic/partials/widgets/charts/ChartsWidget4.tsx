@@ -10,6 +10,14 @@ type Props = {
   className: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const ChartsWidget4: React.FC<Props> = ({className}) => {
   const intl = useIntl()
   const chartRef = useRef<HTMLDivElement | null>(null)
@@ -18,6 +26,13 @@ const ChartsWidget4: React.FC<Props> = ({className}) => {
   const debit_title = intl.formatMessage({id: 'CLIENT_DEBIT'})
   const credit_title = intl.formatMessage({id: 'CLIENT_CREDIT'})
   const balance_title = intl.formatMessage({id: 'CLIENT_BALANCE'})
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -45,18 +60,33 @@ const ChartsWidget4: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/accounts/debit`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchBalances()
+      })
 
     async function fetchBalances() {
       const response = await axios.post<IFinanceDebit[]>(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setAccounts(response.data)
     }
-    fetchBalances()
   }, [])
 
   function compareCom(a: IFinanceDebit, b: IFinanceDebit) {

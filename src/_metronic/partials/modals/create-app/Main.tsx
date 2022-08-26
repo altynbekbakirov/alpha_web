@@ -60,6 +60,8 @@ interface IValue {
   company: number
   period: number
   warehouse: number
+  begdate: string
+  enddate: string
 }
 
 const createAppSchema = [
@@ -98,8 +100,10 @@ const Main: FC = () => {
       ? loadedValues
       : {
           company: 1,
-          period: 1,
+          period: 3,
           warehouse: 0,
+          begdate: '01.01.2022',
+          enddate: '31.12.2022',
         }
   )
 
@@ -117,14 +121,15 @@ const Main: FC = () => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}`
+    const company = values === null ? companies[0].nr : values.company
 
     async function fetchPeriods() {
-      const response = await axios.get(REQUEST_URL + '/' + companies[0].nr)
+      const response = await axios.get(REQUEST_URL + '/' + company)
       setPeriods(response.data)
     }
 
     async function fetchWareHouses() {
-      const response = await axios.get(REQUEST_URL + '/' + companies[0].nr + '/ware')
+      const response = await axios.get(REQUEST_URL + '/' + company + '/ware')
       setWares(response.data)
     }
 
@@ -132,9 +137,12 @@ const Main: FC = () => {
       fetchPeriods()
       fetchWareHouses()
     }
-  }, [companies])
+  }, [companies, values])
 
   function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
     return JSON.parse(localStorage.getItem('defaultParams') || '')
   }
 
@@ -160,18 +168,39 @@ const Main: FC = () => {
         company: parseInt(e.target.value),
         period: periodList.filter((period) => period.active === 1)[0].nr,
         warehouse: wareList[wareList.length - 1].nr,
+        begdate: periodList.filter((period) => period.active === 1)[0].begdate,
+        enddate: periodList.filter((period) => period.active === 1)[0].enddate,
       })
     }
     fetchData()
   }
 
   async function changePeriod(e: React.ChangeEvent<HTMLSelectElement>) {
-    setValues({...values, period: parseInt(e.target.value)})
+    setValues({
+      ...values,
+      period: parseInt(e.target.value),
+      begdate: periods[parseInt(e.target.value) - 1].begdate,
+      enddate: periods[parseInt(e.target.value) - 1].enddate,
+    })
   }
 
   async function changeWare(e: React.ChangeEvent<HTMLSelectElement>) {
     setValues({...values, warehouse: parseInt(e.target.value)})
   }
+
+  useEffect(() => {
+    if (loadedValues === null && companies.length > 0 && periods.length > 0 && wares.length > 0) {
+      const defaultValues = {
+        company: companies[0].nr,
+        period: periods[periods.length - 1].nr,
+        warehouse: wares[0].nr,
+        begdate: periods[periods.length - 1].begdate,
+        enddate: periods[periods.length - 1].enddate,
+      }
+      localStorage.setItem('defaultParams', JSON.stringify(defaultValues))
+      setValues(loadValues)
+    }
+  }, [companies, periods, wares, loadedValues])
 
   const loadStepper = () => {
     stepper.current = StepperComponent.createInsance(stepperRef.current as HTMLDivElement)
@@ -948,7 +977,11 @@ const Main: FC = () => {
                   data-placeholder='Select option'
                   data-allow-clear='true'
                   data-hide-search='true'
-                  onChange={(e) => changeCompany(e)}
+                  value={values.company}
+                  onChange={(e) => {
+                    setValues({...values, company: parseInt(e.target.value)})
+                    changeCompany(e)
+                  }}
                 >
                   {companies.map((company) => (
                     <option key={company.nr} value={company.nr}>
@@ -1010,7 +1043,10 @@ const Main: FC = () => {
               <button
                 type='button'
                 className='btn btn-primary'
-                onClick={() => saveValues()}
+                onClick={() => {
+                  saveValues()
+                  window.location.reload()
+                }}
                 data-bs-dismiss='modal'
               >
                 {intl.formatMessage({id: 'MODAL_SAVE'})}
@@ -1019,7 +1055,6 @@ const Main: FC = () => {
           </div>
         </div>
       </div>
-      
     </>
   )
 }

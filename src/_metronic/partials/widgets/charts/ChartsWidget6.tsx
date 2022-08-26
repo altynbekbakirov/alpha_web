@@ -1,23 +1,100 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
-import {getCSSVariableValue} from '../../../assets/ts/_utils'
-import { useIntl } from 'react-intl'
+import {getCSSVariableValue, getCSS} from '../../../assets/ts/_utils'
+import {useIntl} from 'react-intl'
+import {ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
+import axios from 'axios'
 
 type Props = {
   className: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const ChartsWidget6: React.FC<Props> = ({className}) => {
-  const intl = useIntl();
+  const intl = useIntl()
   const chartRef = useRef<HTMLDivElement | null>(null)
+  const [safes, setSafes] = useState<ISafeResume[]>([])
+  const [active, setActive] = useState<number>(1)
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
+  const debit = intl.formatMessage({id: 'DASHBOARD_CASE_COLLECTION'})
+  const debitUsd = intl.formatMessage({id: 'DASHBOARD_CASE_COLLECTION_USD'})
+  const credit = intl.formatMessage({id: 'DASHBOARD_CASE_PAYMENT'})
+  const creditUsd = intl.formatMessage({id: 'DASHBOARD_CASE_PAYMENT_USD'})
+  const remains = intl.formatMessage({id: 'DASHBOARD_CASE_REMAINING'})
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/safes/100.001`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchMonthSales()
+      })
+
+    async function fetchMonthSales() {
+      const response = await axios.post<ISafeResume[]>(REQUEST_URL, {
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
+      })
+      setSafes(response.data)
+    }
+  }, [])
 
   useEffect(() => {
     if (!chartRef.current) {
       return
     }
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions())
+    const months = [
+      intl.formatMessage({id: 'JANUARY_FULL'}),
+      intl.formatMessage({id: 'FEBRUARY_FULL'}),
+      intl.formatMessage({id: 'MARCH_FULL'}),
+      intl.formatMessage({id: 'APRIL_FULL'}),
+      intl.formatMessage({id: 'MAY_FULL'}),
+      intl.formatMessage({id: 'JUNE_FULL'}),
+      intl.formatMessage({id: 'JULY_FULL'}),
+      intl.formatMessage({id: 'AUGUST_FULL'}),
+      intl.formatMessage({id: 'SEPTEMBER_FULL'}),
+      intl.formatMessage({id: 'OCTOBER_FULL'}),
+      intl.formatMessage({id: 'NOVEMBER_FULL'}),
+      intl.formatMessage({id: 'DECEMBER_FULL'}),
+    ]
+
+    const height = parseInt(getCSS(chartRef.current, 'height'))
+    const chart = new ApexCharts(
+      chartRef.current,
+      getChartOptions(height, debit, credit, remains, safes, months, active)
+    )
+
     if (chart) {
       chart.render()
     }
@@ -27,32 +104,42 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef])
+  }, [chartRef, safes, debit, credit, active, debitUsd, creditUsd, intl, remains])
 
   return (
     <div className={`card ${className}`}>
       {/* begin::Header */}
       <div className='card-header border-0 pt-5'>
         <h3 className='card-title align-items-start flex-column'>
-          <span className='card-label fw-bolder fs-3 mb-1'> {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS'})}</span>
+          <span className='card-label fw-bolder fs-3 mb-1'>
+            {' '}
+            {intl.formatMessage({id: 'DASHBOARD_CASE'})}
+          </span>
 
-          <span className='text-muted fw-bold fs-7'> {intl.formatMessage({id: 'DASHBOARD_CUSTOMERS_DESCRIPTION'})}</span>
+          <span className='text-muted fw-bold fs-7'>
+            {' '}
+            {intl.formatMessage({id: 'DASHBOARD_CASE_DEFINITION'})}
+          </span>
         </h3>
 
         {/* begin::Toolbar */}
         <div className='card-toolbar' data-kt-buttons='true'>
           <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary active px-4 me-1'
-            id='kt_charts_widget_6_sales_btn'
+            onClick={() => setActive(1)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              active === 1 ? 'active' : ''
+            }`}
           >
-            Sales
+            {intl.formatMessage({id: 'CURRENCY_COM'})}
           </a>
 
           <a
-            className='btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1'
-            id='kt_charts_widget_6_expenses_btn'
+            onClick={() => setActive(2)}
+            className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+              active === 2 ? 'active' : ''
+            }`}
           >
-            Expenses
+            {intl.formatMessage({id: 'CURRENCY_USD'})}
           </a>
         </div>
         {/* end::Toolbar */}
@@ -72,38 +159,76 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget6}
 
-function getChartOptions(): ApexOptions {
+function getChartOptions(
+  height: number,
+  debit: string,
+  credit: string,
+  remains: string,
+  safes: ISafeResume[],
+  months: string[],
+  active: number
+): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-500')
   const borderColor = getCSSVariableValue('--bs-gray-200')
-
   const baseColor = getCSSVariableValue('--bs-primary')
   const baseLightColor = getCSSVariableValue('--bs-light-primary')
   const secondaryColor = getCSSVariableValue('--bs-info')
+  const color2Light = getCSSVariableValue('--bs-light-success')
 
   return {
     series: [
       {
-        name: 'Net Profit',
+        name: debit,
         type: 'bar',
-        data: [40, 50, 65, 70, 50, 30],
+        data: safes
+          .map((value) =>
+            active === 1
+              ? Math.round(typeof value.debit === 'string' ? parseInt(value.debit) : value.debit)
+              : Math.round(
+                  typeof value.debitUsd === 'string' ? parseInt(value.debitUsd) : value.debitUsd
+                )
+          )
+          .slice(1),
       },
       {
-        name: 'Revenue',
+        name: credit,
         type: 'bar',
-        data: [20, 20, 25, 30, 30, 20],
+        data: safes
+          .map((value) =>
+            active === 1
+              ? Math.round(typeof value.credit === 'string' ? parseInt(value.credit) : value.credit)
+              : Math.round(
+                  typeof value.creditUsd === 'string' ? parseInt(value.creditUsd) : value.creditUsd
+                )
+          )
+          .slice(1),
       },
       {
-        name: 'Expenses',
+        name: remains,
         type: 'area',
-        data: [50, 80, 60, 90, 50, 70],
+        data: safes
+          .map((value) =>
+            active === 1
+              ? Math.round(
+                  (typeof value.debit === 'string' ? parseInt(value.debit) : value.debit) -
+                    (typeof value.credit === 'string' ? parseInt(value.credit) : value.credit)
+                )
+              : Math.round(
+                  (typeof value.debitUsd === 'string' ? parseInt(value.debitUsd) : value.debitUsd) -
+                    (typeof value.creditUsd === 'string'
+                      ? parseInt(value.creditUsd)
+                      : value.creditUsd)
+                )
+          )
+          .slice(1),
       },
     ],
     chart: {
       fontFamily: 'inherit',
       stacked: true,
-      height: 350,
+      height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     plotOptions: {
@@ -114,7 +239,7 @@ function getChartOptions(): ApexOptions {
       },
     },
     legend: {
-      show: false,
+      show: true,
     },
     dataLabels: {
       enabled: false,
@@ -126,7 +251,7 @@ function getChartOptions(): ApexOptions {
       colors: ['transparent'],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: months.map((value) => value),
       axisBorder: {
         show: false,
       },
@@ -141,7 +266,44 @@ function getChartOptions(): ApexOptions {
       },
     },
     yaxis: {
-      max: 120,
+      max:
+        active === 1
+          ? Math.max(
+              ...safes
+                .map((value) =>
+                  Math.ceil(typeof value.debit === 'string' ? parseInt(value.debit) : value.debit)
+                )
+                .slice(1)
+            ) +
+            Math.round(
+              Math.max(
+                ...safes
+                  .map((value) =>
+                    Math.ceil(typeof value.debit === 'string' ? parseInt(value.debit) : value.debit)
+                  )
+                  .slice(1)
+              ) / 10
+            )
+          : Math.max(
+              ...safes
+                .map((value) =>
+                  Math.ceil(
+                    typeof value.debitUsd === 'string' ? parseInt(value.debitUsd) : value.debitUsd
+                  )
+                )
+                .slice(1)
+            ) +
+            Math.round(
+              Math.max(
+                ...safes
+                  .map((value) =>
+                    Math.ceil(
+                      typeof value.debitUsd === 'string' ? parseInt(value.debitUsd) : value.debitUsd
+                    )
+                  )
+                  .slice(1)
+              ) / 10
+            ),
       labels: {
         style: {
           colors: labelColor,
@@ -179,11 +341,21 @@ function getChartOptions(): ApexOptions {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' thousands'
+          return active === 1
+            ? val.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 0,
+              })
+            : val.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
         },
       },
     },
-    colors: [baseColor, secondaryColor, baseLightColor],
+    colors: [baseColor, secondaryColor, color2Light],
     grid: {
       borderColor: borderColor,
       strokeDashArray: 4,
