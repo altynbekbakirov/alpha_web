@@ -1,6 +1,8 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
+import axios from 'axios'
+import React, {useEffect, useState} from 'react'
+import {useIntl} from 'react-intl'
+import {ISaleTable} from '../../../../app/modules/apps/reports/sale/models/sale_model'
 import {KTSVG} from '../../../helpers'
 
 type Props = {
@@ -8,7 +10,57 @@ type Props = {
   color: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const MixedWidget1: React.FC<Props> = ({className, color}) => {
+  const intl = useIntl()
+  const [months, setMonths] = useState<ISaleTable[]>([])
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/sales/table`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchMonthSales()
+      })
+
+    async function fetchMonthSales() {
+      const response = await axios.post<ISaleTable[]>(REQUEST_URL, {
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
+      })
+      setMonths(response.data)
+    }
+  }, [])
+
   return (
     <div className={`card ${className}`}>
       {/* begin::Body */}
@@ -17,27 +69,27 @@ const MixedWidget1: React.FC<Props> = ({className, color}) => {
         <div className={`px-9 pt-7 card-rounded h-275px w-100 bg-${color}`}>
           {/* begin::Heading */}
           <div className='d-flex flex-stack'>
-            <h3 className='m-0 text-white fw-bolder fs-3'>Sales Summary</h3>
-            <div className='ms-1'>
-              {/* begin::Menu */}
-              <button
-                type='button'
-                className={`btn btn-sm btn-icon btn-color-white btn-active-white btn-active-color-${color} border-0 me-n3`}
-                data-kt-menu-trigger='click'
-                data-kt-menu-placement='bottom-end'
-                data-kt-menu-flip='top-end'
-              >
-                <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
-              </button>
-              <Dropdown1 />
-              {/* end::Menu */}
-            </div>
+            <h3 className='m-0 text-white fw-bolder fs-3'>
+              {intl.formatMessage({id: 'DASHBOARD_SALES'})}
+            </h3>
           </div>
           {/* end::Heading */}
           {/* begin::Balance */}
           <div className='d-flex text-center flex-column text-white pt-8'>
-            <span className='fw-bold fs-7'>You Balance</span>
-            <span className='fw-bolder fs-2x pt-1'>$37,562.00</span>
+            <span className='fw-bold fs-7'>
+              {intl.formatMessage({id: 'DASHBOARD_SALES_TOTAL'})}
+            </span>
+            <span className='fw-bolder fs-2x pt-1'>
+              {months
+                .reduce(
+                  (a, v) => (a = a + (typeof v.net === 'string' ? parseInt(v.net) : v.net)),
+                  0
+                )
+                .toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })}
+            </span>
           </div>
           {/* end::Balance */}
         </div>
@@ -61,14 +113,25 @@ const MixedWidget1: React.FC<Props> = ({className, color}) => {
               {/* begin::Title */}
               <div className='mb-1 pe-3 flex-grow-1'>
                 <a href='#' className='fs-5 text-gray-800 text-hover-primary fw-bolder'>
-                  Sales
+                  {intl.formatMessage({id: 'PRODUCT_TOTAL'})} 
                 </a>
-                <div className='text-gray-400 fw-bold fs-7'>100 Regions</div>
+                <div className='text-gray-400 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_SALES_DEFINITION'})} </div>
               </div>
               {/* end::Title */}
               {/* begin::Label */}
               <div className='d-flex align-items-center'>
-                <div className='fw-bolder fs-5 text-gray-800 pe-1'>$2,5b</div>
+                <div className='fw-bolder fs-5 text-gray-800 pe-1'>
+                  {months
+                    .reduce(
+                      (a, v) =>
+                        (a = a + (typeof v.total === 'string' ? parseInt(v.total) : v.total)),
+                      0
+                    )
+                    .toLocaleString(undefined, {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                </div>
                 <KTSVG
                   path='/media/icons/duotune/arrows/arr066.svg'
                   className='svg-icon-5 svg-icon-success ms-1'
@@ -93,14 +156,27 @@ const MixedWidget1: React.FC<Props> = ({className, color}) => {
               {/* begin::Title */}
               <div className='mb-1 pe-3 flex-grow-1'>
                 <a href='#' className='fs-5 text-gray-800 text-hover-primary fw-bolder'>
-                  Revenue
+                  {intl.formatMessage({id: 'PRODUCT_DISCOUNTS'})}
                 </a>
-                <div className='text-gray-400 fw-bold fs-7'>Quarter 2/3</div>
+                <div className='text-gray-400 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_DISCOUNTS_DEFINITION'})}</div>
               </div>
               {/* end::Title */}
               {/* begin::Label */}
               <div className='d-flex align-items-center'>
-                <div className='fw-bolder fs-5 text-gray-800 pe-1'>$1,7b</div>
+                <div className='fw-bolder fs-5 text-gray-800 pe-1'>
+                  {months
+                    .reduce(
+                      (a, v) =>
+                        (a =
+                          a +
+                          (typeof v.discounts === 'string' ? parseInt(v.discounts) : v.discounts)),
+                      0
+                    )
+                    .toLocaleString(undefined, {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                </div>
                 <KTSVG
                   path='/media/icons/duotune/general/gen024.svg'
                   className='svg-icon-5 svg-icon-danger ms-1'
@@ -125,14 +201,26 @@ const MixedWidget1: React.FC<Props> = ({className, color}) => {
               {/* begin::Title */}
               <div className='mb-1 pe-3 flex-grow-1'>
                 <a href='#' className='fs-5 text-gray-800 text-hover-primary fw-bolder'>
-                  Growth
+                  {intl.formatMessage({id: 'PRODUCT_EXPENSES'})}
                 </a>
-                <div className='text-gray-400 fw-bold fs-7'>80% Rate</div>
+                <div className='text-gray-400 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_EXPENSES_DEFINITION'})}</div>
               </div>
               {/* end::Title */}
               {/* begin::Label */}
               <div className='d-flex align-items-center'>
-                <div className='fw-bolder fs-5 text-gray-800 pe-1'>$8,8m</div>
+                <div className='fw-bolder fs-5 text-gray-800 pe-1'>
+                  {months
+                    .reduce(
+                      (a, v) =>
+                        (a =
+                          a + (typeof v.expenses === 'string' ? parseInt(v.expenses) : v.expenses)),
+                      0
+                    )
+                    .toLocaleString(undefined, {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                </div>
                 <KTSVG
                   path='/media/icons/duotune/arrows/arr066.svg'
                   className='svg-icon-5 svg-icon-success ms-1'
@@ -157,14 +245,27 @@ const MixedWidget1: React.FC<Props> = ({className, color}) => {
               {/* begin::Title */}
               <div className='mb-1 pe-3 flex-grow-1'>
                 <a href='#' className='fs-5 text-gray-800 text-hover-primary fw-bolder'>
-                  Dispute
+                  {intl.formatMessage({id: 'PRODUCT_RETURNS'})}
                 </a>
-                <div className='text-gray-400 fw-bold fs-7'>3090 Refunds</div>
+                <div className='text-gray-400 fw-bold fs-7'>{intl.formatMessage({id: 'DASHBOARD_RETURN_DEFINITION'})}</div>
               </div>
               {/* end::Title */}
               {/* begin::Label */}
               <div className='d-flex align-items-center'>
-                <div className='fw-bolder fs-5 text-gray-800 pe-1'>$270m</div>
+                <div className='fw-bolder fs-5 text-gray-800 pe-1'>
+                  {months
+                    .reduce(
+                      (a, v) =>
+                        (a =
+                          a +
+                          (typeof v.ret_total === 'string' ? parseInt(v.ret_total) : v.ret_total)),
+                      0
+                    )
+                    .toLocaleString(undefined, {
+                      minimumFractionDigits: 0,
+                      maximumFractionDigits: 2,
+                    })}
+                </div>
                 <KTSVG
                   path='/media/icons/duotune/arrows/arr065.svg'
                   className='svg-icon-5 svg-icon-danger ms-1'

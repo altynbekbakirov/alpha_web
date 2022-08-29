@@ -2,8 +2,18 @@
 import React from 'react'
 import {useIntl} from 'react-intl'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {ChartsWidget1, ChartsWidget2, ChartsWidget4, ChartsWidget5, ChartsWidget6, TablesWidget7, TablesWidget8} from '../../../_metronic/partials/widgets'
-import { ChartsWidget9 } from '../../../_metronic/partials/widgets/charts/ChartsWidget9'
+import {
+  ChartsWidget1,
+  ChartsWidget2,
+  ChartsWidget4,
+  ChartsWidget6,
+  MixedWidget1,
+  MixedWidget10,
+  MixedWidget11,
+  TablesWidget7,
+  TablesWidget8,
+} from '../../../_metronic/partials/widgets'
+import {ChartsWidget9} from '../../../_metronic/partials/widgets/charts/ChartsWidget9'
 
 const DashboardPage: React.FC = () => (
   <>
@@ -21,11 +31,41 @@ const DashboardPage: React.FC = () => (
     {/* begin::Row */}
     <div className='row g-5 g-xl-8'>
       {/* begin::Col */}
-      <div className='col-xl-6'>
+      <div className='col-xl-8'>
         <ChartsWidget1 className='card-xl-stretch mb-xl-8' />
       </div>
+      <div className='col-xl-4'>
+        <MixedWidget1 className='card-xl-stretch mb-xl-8' color='info' />
+      </div>
+      {/* end::Col */}
+    </div>
+    {/* end::Row */}
+
+    {/* begin::Row */}
+    <div className='row g-5 g-xl-8'>
+      {/* begin::Col */}
+      <div className='col-xl-8'>
+        <ChartsWidget6 className='card-xl-stretch mb-5 mb-xl-8' />
+      </div>
+      <div className='col-xl-4'>
+        <MixedWidget10
+          className='card-xl-stretch mb-xl-8'
+          chartColor='warning'
+          chartHeight='200px'
+        />
+      </div>
+      {/* end::Col */}
+    </div>
+    {/* end::Row */}
+
+    {/* begin::Row */}
+    <div className='row g-5 g-xl-8'>
+      {/* begin::Col */}
       <div className='col-xl-6'>
         <ChartsWidget4 className='card-xl-stretch mb-5 mb-xl-8' />
+      </div>
+      <div className='col-xl-6'>
+        <MixedWidget11 className='card-xl-stretch mb-xl-8' chartColor='info' chartHeight='320px' />
       </div>
       {/* end::Col */}
     </div>
@@ -39,19 +79,6 @@ const DashboardPage: React.FC = () => (
       </div>
       <div className='col-xl-6'>
         <TablesWidget8 className='card-xl-stretch mb-5 mb-xl-8' />
-      </div>
-      {/* end::Col */}
-    </div>
-    {/* end::Row */}
-
-    {/* begin::Row */}
-    <div className='row g-5 g-xl-8'>
-      {/* begin::Col */}
-      <div className='col-xl-6'>
-        <ChartsWidget5 className='card-xl-stretch mb-xl-8' />
-      </div>
-      <div className='col-xl-6'>
-        <ChartsWidget6 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
       {/* end::Col */}
     </div>

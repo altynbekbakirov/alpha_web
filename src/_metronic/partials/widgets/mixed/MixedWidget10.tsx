@@ -1,7 +1,12 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React, {useEffect, useRef} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
-import {getCSSVariableValue} from '../../../assets/ts/_utils'
+import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
+import {ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
+import {useIntl} from 'react-intl'
+import axios from 'axios'
+import {KTSVG} from '../../../helpers'
+import {Dropdown1} from '../../content/dropdown/Dropdown1'
 
 type Props = {
   className: string
@@ -9,15 +14,86 @@ type Props = {
   chartHeight: string
 }
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) => {
+  const intl = useIntl()
   const chartRef = useRef<HTMLDivElement | null>(null)
+  const [safes, setSafes] = useState<ISafeResume[]>([])
+  const [active, setActive] = useState<number>(1)
+
+  const remains = intl.formatMessage({id: 'DASHBOARD_CASE_REMAINING'})
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/safes/100.001`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchMonthSales()
+      })
+
+    async function fetchMonthSales() {
+      const response = await axios.post<ISafeResume[]>(REQUEST_URL, {
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
+      })
+      setSafes(response.data)
+    }
+  }, [])
 
   useEffect(() => {
     if (!chartRef.current) {
       return
     }
 
-    const chart = new ApexCharts(chartRef.current, chartOptions(chartColor, chartHeight))
+    const months = [
+      intl.formatMessage({id: 'JANUARY_FULL'}),
+      intl.formatMessage({id: 'FEBRUARY_FULL'}),
+      intl.formatMessage({id: 'MARCH_FULL'}),
+      intl.formatMessage({id: 'APRIL_FULL'}),
+      intl.formatMessage({id: 'MAY_FULL'}),
+      intl.formatMessage({id: 'JUNE_FULL'}),
+      intl.formatMessage({id: 'JULY_FULL'}),
+      intl.formatMessage({id: 'AUGUST_FULL'}),
+      intl.formatMessage({id: 'SEPTEMBER_FULL'}),
+      intl.formatMessage({id: 'OCTOBER_FULL'}),
+      intl.formatMessage({id: 'NOVEMBER_FULL'}),
+      intl.formatMessage({id: 'DECEMBER_FULL'}),
+    ]
+
+    const height = parseInt(getCSS(chartRef.current, 'height'))
+    const chart = new ApexCharts(
+      chartRef.current,
+      chartOptions(chartColor, height, remains, safes, months, active)
+    )
     if (chart) {
       chart.render()
     }
@@ -28,7 +104,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chartRef])
+  }, [chartRef, remains, safes, active])
 
   return (
     <div className={`card ${className}`}>
@@ -39,19 +115,69 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
           <div className='d-flex flex-stack flex-wrap'>
             <div className='me-2'>
               <a href='#' className='text-dark text-hover-primary fw-bolder fs-3'>
-                Generate Reports
+                {intl.formatMessage({id: 'DASHBOARD_CASE'})}
               </a>
 
-              <div className='text-muted fs-7 fw-bold'>Finance and accounting reports</div>
+              <div className='text-muted fs-7 fw-bold'>{intl.formatMessage({id: 'DASHBOARD_CASE_DEFINITION_SUMMARY'})}</div>
             </div>
+            {/* begin::Toolbar */}
+            <div className='card-toolbar' data-kt-buttons='true'>
+              <a
+                onClick={() => setActive(1)}
+                className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+                  active === 1 ? 'active' : ''
+                }`}
+              >
+                {intl.formatMessage({id: 'CURRENCY_COM'})}
+              </a>
 
-            <div className={`fw-bolder fs-3 text-${chartColor}`}>$24,500</div>
+              <a
+                onClick={() => setActive(2)}
+                className={`btn btn-sm btn-color-muted btn-active btn-active-primary px-4 me-1 ${
+                  active === 2 ? 'active' : ''
+                }`}
+              >
+                {intl.formatMessage({id: 'CURRENCY_USD'})}
+              </a>
+              <button
+                type='button'
+                className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
+                data-kt-menu-trigger='click'
+                data-kt-menu-placement='bottom-end'
+                data-kt-menu-flip='top-end'
+              >
+                <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
+              </button>
+              <Dropdown1 />
+              <div className={`fw-bolder fs-3 text-${chartColor}`}>
+                {safes
+                  .map((value) =>
+                    active === 1
+                      ? value.total.toLocaleString(undefined, {
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })
+                      : value.totalUsd.toLocaleString(undefined, {
+                          style: 'currency',
+                          currency: 'USD',
+                          minimumFractionDigits: 0,
+                          maximumFractionDigits: 2,
+                        })
+                  )
+                  .slice(safes.length - 1)}
+              </div>
+            </div>
+            {/* end::Toolbar */}
           </div>
         </div>
         {/* end::Stats */}
 
         {/* begin::Chart */}
-        <div ref={chartRef} className='mixed-widget-7-chart card-rounded-bottom'></div>
+        <div
+          ref={chartRef}
+          className='mixed-widget-7-chart card-rounded-bottom'
+          style={{height: '350px'}}
+        ></div>
         {/* end::Chart */}
       </div>
       {/* end::Body */}
@@ -59,7 +185,14 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
   )
 }
 
-const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
+const chartOptions = (
+  chartColor: string,
+  height: number,
+  remains: string,
+  safes: ISafeResume[],
+  months: string[],
+  active: number
+): ApexOptions => {
   const labelColor = getCSSVariableValue('--bs-gray-800')
   const strokeColor = getCSSVariableValue('--bs-gray-300')
   const baseColor = getCSSVariableValue('--bs-' + chartColor)
@@ -68,14 +201,24 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
   return {
     series: [
       {
-        name: 'Net Profit',
-        data: [15, 25, 15, 40, 20, 50],
+        name: remains,
+        data: safes
+          .map((value) =>
+            active === 1
+              ? typeof value.total === 'string'
+                ? parseInt(value.total)
+                : value.total
+              : typeof value.totalUsd === 'string'
+              ? parseInt(value.totalUsd)
+              : value.totalUsd
+          )
+          .slice(1),
       },
     ],
     chart: {
       fontFamily: 'inherit',
       type: 'area',
-      height: chartHeight,
+      height: height,
       toolbar: {
         show: false,
       },
@@ -104,7 +247,7 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       colors: [baseColor],
     },
     xaxis: {
-      categories: ['Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul'],
+      categories: months.map((value) => value),
       axisBorder: {
         show: false,
       },
@@ -133,7 +276,6 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
     },
     yaxis: {
       min: 0,
-      max: 60,
       labels: {
         show: false,
         style: {
@@ -169,7 +311,17 @@ const chartOptions = (chartColor: string, chartHeight: string): ApexOptions => {
       },
       y: {
         formatter: function (val) {
-          return '$' + val + ' thousands'
+          return active === 1
+            ? val.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : val.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
         },
       },
     },
