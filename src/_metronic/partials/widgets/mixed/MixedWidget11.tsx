@@ -3,7 +3,7 @@ import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
 import {useIntl} from 'react-intl'
-import {ISaleClient} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {ISaleClientTop} from '../../../../app/modules/apps/reports/sale/models/sale_model'
 import axios from 'axios'
 
 type Props = {
@@ -23,7 +23,7 @@ interface ICompany {
 const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) => {
   const intl = useIntl()
   const chartRef = useRef<HTMLDivElement | null>(null)
-  const [sales, setSales] = useState<ISaleClient[]>([])
+  const [sales, setSales] = useState<ISaleClientTop[]>([])
   const total = intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'})
   const totalUsd = intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'})
   const [active, setActive] = useState<number>(1)
@@ -37,7 +37,7 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/client`
+    const REQUEST_URL = `${BASE_URL}/sales/client/top`
     let defaultParams: ICompany = {
       company: 1,
       period: 3,
@@ -56,7 +56,7 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
       })
 
     async function fetchMonthSales() {
-      const response = await axios.post<ISaleClient[]>(REQUEST_URL, {
+      const response = await axios.post<ISaleClientTop[]>(REQUEST_URL, {
         firmno: defaultParams.company,
         periodno: defaultParams.period,
         begdate: defaultParams.begdate,
@@ -91,7 +91,7 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chartRef, sales, total, totalUsd, active])
 
-  function compareTotal(a: ISaleClient, b: ISaleClient) {
+  function compareTotal(a: ISaleClientTop, b: ISaleClientTop) {
     if (a.itemTotal > b.itemTotal) {
       return -1
     }
@@ -101,7 +101,7 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
     return 0
   }
 
-  function compareTotalUsd(a: ISaleClient, b: ISaleClient) {
+  function compareTotalUsd(a: ISaleClientTop, b: ISaleClientTop) {
     if (a.itemTotalUsd > b.itemTotalUsd) {
       return -1
     }
@@ -166,7 +166,7 @@ const chartOptions = (
   chartColor: string,
   chartHeight: string,
   height: number,
-  sales: ISaleClient[],
+  sales: ISaleClientTop[],
   total: string,
   active: number
 ): ApexOptions => {
@@ -191,7 +191,7 @@ const chartOptions = (
       type: 'bar',
       height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     plotOptions: {

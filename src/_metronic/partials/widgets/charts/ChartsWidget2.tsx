@@ -327,7 +327,7 @@ function getChartOptions(
       type: 'bar',
       height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     plotOptions: {

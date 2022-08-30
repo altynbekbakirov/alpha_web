@@ -2,11 +2,11 @@
 import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
-import {ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
+import {ISafe, ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
 import {useIntl} from 'react-intl'
 import axios from 'axios'
 import {KTSVG} from '../../../helpers'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
+import { Dropdown4 } from '../../content/dropdown/Dropdown4'
 
 type Props = {
   className: string
@@ -27,6 +27,14 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
   const chartRef = useRef<HTMLDivElement | null>(null)
   const [safes, setSafes] = useState<ISafeResume[]>([])
   const [active, setActive] = useState<number>(1)
+  const [selected, setSelected] = useState<ISafe>({
+    code: '',
+    name: 'First',
+    balance: 1000,
+    balanceUsd: 2000,
+    definition: '',
+  })
+  const [cases, setCases] = useState<ISafe[]>([])
 
   const remains = intl.formatMessage({id: 'DASHBOARD_CASE_REMAINING'})
 
@@ -39,7 +47,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/safes/100.001`
+    const REQUEST_URL = `${BASE_URL}/safes`
     let defaultParams: ICompany = {
       company: 1,
       period: 3,
@@ -54,7 +62,43 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
         if (data !== null) {
           defaultParams = data
         }
-        fetchMonthSales()
+        fetchCases()
+      })
+
+    async function fetchCases() {
+      const response = await axios.post<ISafe[]>(REQUEST_URL, {
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
+      })
+      setCases(response.data)
+    }
+  }, [])
+
+  useEffect(() => {
+    setSelected(cases[0])
+  }, [cases])
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/safes/${selected?.code}`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        selected?.code && fetchMonthSales()
       })
 
     async function fetchMonthSales() {
@@ -67,7 +111,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
       })
       setSafes(response.data)
     }
-  }, [])
+  }, [selected])
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -115,7 +159,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
           <div className='d-flex flex-stack flex-wrap'>
             <div className='me-2'>
               <a href='#' className='text-dark text-hover-primary fw-bolder fs-3'>
-                {intl.formatMessage({id: 'DASHBOARD_CASE'})}
+                {intl.formatMessage({id: 'DASHBOARD_CASE'})} {selected?.name}
               </a>
 
               <div className='text-muted fs-7 fw-bold'>{intl.formatMessage({id: 'DASHBOARD_CASE_DEFINITION_SUMMARY'})}</div>
@@ -148,7 +192,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
               >
                 <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
               </button>
-              <Dropdown1 />
+              <Dropdown4 selected={selected} setSelected={setSelected} cases={cases} />
               <div className={`fw-bolder fs-3 text-${chartColor}`}>
                 {safes
                   .map((value) =>
@@ -220,7 +264,7 @@ const chartOptions = (
       type: 'area',
       height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
       zoom: {
         enabled: false,

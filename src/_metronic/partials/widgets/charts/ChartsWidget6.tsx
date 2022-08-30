@@ -3,10 +3,10 @@ import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {getCSSVariableValue, getCSS} from '../../../assets/ts/_utils'
 import {useIntl} from 'react-intl'
-import {ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
+import {ISafe, ISafeResume} from '../../../../app/modules/apps/reports/safes/models/safes_model'
 import axios from 'axios'
 import {KTSVG} from '../../../helpers'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
+import {Dropdown4} from '../../content/dropdown/Dropdown4'
 
 type Props = {
   className: string
@@ -25,6 +25,14 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const [safes, setSafes] = useState<ISafeResume[]>([])
   const [active, setActive] = useState<number>(1)
+  const [selected, setSelected] = useState<ISafe>({
+    code: '',
+    name: 'First',
+    balance: 1000,
+    balanceUsd: 2000,
+    definition: '',
+  })
+  const [cases, setCases] = useState<ISafe[]>([])
 
   async function loadValues() {
     if (localStorage.getItem('defaultParams') === null) {
@@ -41,7 +49,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/safes/100.001`
+    const REQUEST_URL = `${BASE_URL}/safes`
     let defaultParams: ICompany = {
       company: 1,
       period: 3,
@@ -56,7 +64,43 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
         if (data !== null) {
           defaultParams = data
         }
-        fetchMonthSales()
+        fetchCases()
+      })
+
+    async function fetchCases() {
+      const response = await axios.post<ISafe[]>(REQUEST_URL, {
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
+      })
+      setCases(response.data)
+    }
+  }, [])
+
+  useEffect(() => {
+    setSelected(cases[0])
+  }, [cases])
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/safes/${selected?.code}`
+    let defaultParams: ICompany = {
+      company: 1,
+      period: 3,
+      warehouse: 0,
+      begdate: '01.01.2022',
+      enddate: '31.12.2022',
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        selected?.code && fetchMonthSales()
       })
 
     async function fetchMonthSales() {
@@ -69,7 +113,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
       })
       setSafes(response.data)
     }
-  }, [])
+  }, [selected])
 
   useEffect(() => {
     if (!chartRef.current) {
@@ -115,7 +159,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
         <h3 className='card-title align-items-start flex-column'>
           <span className='card-label fw-bolder fs-3 mb-1'>
             {' '}
-            {intl.formatMessage({id: 'DASHBOARD_CASE'})}
+            {intl.formatMessage({id: 'DASHBOARD_CASE'})} {selected?.name}
           </span>
 
           <span className='text-muted fw-bold fs-7'>
@@ -152,7 +196,7 @@ const ChartsWidget6: React.FC<Props> = ({className}) => {
           >
             <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
           </button>
-          <Dropdown1 />
+          <Dropdown4 selected={selected} setSelected={setSelected} cases={cases} />
         </div>
         {/* end::Toolbar */}
       </div>

@@ -206,7 +206,7 @@ function getChartOptions(
       type: 'area',
       height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     plotOptions: {},

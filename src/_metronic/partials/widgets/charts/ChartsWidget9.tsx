@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
-import {KTSVG} from '../../../helpers'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
 import {useIntl} from 'react-intl'
 import axios from 'axios'
 import {ISaleManager} from '../../../../app/modules/apps/reports/sale/models/sale_model'
@@ -34,7 +32,6 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/manager`
-
     let defaultParams: ICompany = {
       company: 1,
       period: 3,
@@ -61,7 +58,7 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
         sourceindex: defaultParams.warehouse,
       })
       setValues(response.data)
-    }
+    }    
   }, [])
 
   useEffect(() => {
@@ -96,30 +93,13 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
           </span>
         </h3>
         {/* end::Title */}
-
-        {/* begin::Toolbar */}
-        <div className='card-toolbar'>
-          {/* begin::Menu */}
-          <button
-            type='button'
-            className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
-            data-kt-menu-trigger='click'
-            data-kt-menu-placement='bottom-end'
-            data-kt-menu-flip='top-end'
-          >
-            <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
-          </button>
-          <Dropdown1 />
-          {/* end::Menu */}
-        </div>
-        {/* end::Toolbar */}
       </div>
       {/* end::Header */}
 
       {/* begin::Body */}
       <div className='card-body'>
         {/* begin::Chart */}
-        <div ref={chartRef} id='kt_charts_widget_1_chart'  style={{height: '350px'}} />
+        <div ref={chartRef} id='kt_charts_widget_1_chart' style={{height: '350px'}} />
         {/* end::Chart */}
       </div>
       {/* end::Body */}
@@ -129,15 +109,20 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
 
 export {ChartsWidget9}
 
-function getChartOptions(values : ISaleManager[]): ApexOptions {
+function getChartOptions(values: ISaleManager[]): ApexOptions {
   return {
-    series: values.map(value => Math.round((typeof value.itemTotal  === 'string' ? parseInt(value.itemTotal) : value.itemTotal))),
+    series: values.map((value) =>
+      Math.round(typeof value.itemTotal === 'string' ? parseInt(value.itemTotal) : value.itemTotal)
+    ),
     chart: {
       width: 380,
       height: 360,
       type: 'pie',
+      toolbar: {
+        show: true,
+      },
     },
-    labels: values.map(value => value.clientName),
+    labels: values.map((value) => value.clientName),
     responsive: [
       {
         breakpoint: 480,

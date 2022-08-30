@@ -61,10 +61,10 @@ const DashboardPage: React.FC = () => (
     {/* begin::Row */}
     <div className='row g-5 g-xl-8'>
       {/* begin::Col */}
-      <div className='col-xl-6'>
+      <div className='col-xl-8'>
         <ChartsWidget4 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
-      <div className='col-xl-6'>
+      <div className='col-xl-4'>
         <MixedWidget11 className='card-xl-stretch mb-xl-8' chartColor='info' chartHeight='320px' />
       </div>
       {/* end::Col */}

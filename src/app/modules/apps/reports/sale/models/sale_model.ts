@@ -27,6 +27,17 @@ export interface ISaleClient {
   itemTotalUsdRet: number
 }
 
+export interface ISaleClientTop {
+  clientCode: string
+  clientName: string
+  itemAmount: number
+  itemTotal: number
+  itemTotalUsd: number
+  itemAmountRet: number
+  itemTotalRet: number
+  itemTotalUsdRet: number
+}
+
 export interface ISaleMonth {
   code: string
   name: number

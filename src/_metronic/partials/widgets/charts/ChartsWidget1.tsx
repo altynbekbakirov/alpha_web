@@ -1,8 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
-import {KTSVG} from '../../../helpers'
-import {Dropdown1} from '../../content/dropdown/Dropdown1'
 import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
 import {useIntl} from 'react-intl'
 import {ISaleTotal} from '../../../../app/modules/apps/reports/sale/models/sale_model'
@@ -171,18 +169,6 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
           >
             {intl.formatMessage({id: 'TOTAL_SUM_USD'})}
           </a>
-          {/* begin::Menu */}
-          <button
-            type='button'
-            className='btn btn-sm btn-icon btn-color-primary btn-active-light-primary'
-            data-kt-menu-trigger='click'
-            data-kt-menu-placement='bottom-end'
-            data-kt-menu-flip='top-end'
-          >
-            <KTSVG path='/media/icons/duotune/general/gen024.svg' className='svg-icon-2' />
-          </button>
-          <Dropdown1 />
-          {/* end::Menu */}
         </div>
         {/* end::Toolbar */}
       </div>
@@ -231,7 +217,7 @@ function getChartOptions(
       type: 'bar',
       height: height,
       toolbar: {
-        show: false,
+        show: true,
       },
     },
     plotOptions: {
@@ -242,7 +228,7 @@ function getChartOptions(
       },
     },
     legend: {
-      show: false,
+      show: true,
     },
     dataLabels: {
       enabled: true,
