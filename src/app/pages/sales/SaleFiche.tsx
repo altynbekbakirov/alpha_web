@@ -12,6 +12,14 @@ import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 import {HeaderFiche} from '../../modules/apps/reports/sale/components/HeaderFiche'
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const SaleFiche: React.FC = () => {
   const intl = useIntl()
   const [items, setItems] = useState<ISaleFiche[]>([])
@@ -19,18 +27,34 @@ const SaleFiche: React.FC = () => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [])
 
   return (
@@ -408,7 +432,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.render('Cell').props.column.Header === 'FICHE_NO') {
+                      if (cell.render('Cell').props.column.Header === 'PRODUCT_ROW') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>

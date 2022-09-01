@@ -3,8 +3,10 @@ import {Route, Link, Routes, Outlet} from 'react-router-dom'
 import {Error500} from './components/Error500'
 import {Error404} from './components/Error404'
 import {toAbsoluteUrl} from '../../../_metronic/helpers'
+import {useIntl} from 'react-intl'
 
 const ErrorsLayout = () => {
+  const intl = useIntl()
   return (
     <div className='d-flex flex-column flex-root'>
       <div
@@ -23,7 +25,7 @@ const ErrorsLayout = () => {
             <Outlet />
             <div className='text-center'>
               <Link to='/' className='btn btn-lg btn-primary fw-bolder'>
-                Go to homepage
+                {intl.formatMessage({id: 'ERROR_PAGE_404_GO_TO_HOMEPAGE'})}
               </Link>
             </div>
           </div>

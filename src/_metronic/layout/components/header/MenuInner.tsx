@@ -138,12 +138,12 @@ export function MenuInner() {
             to='/safes/summary'
             title={intl.formatMessage({id: 'MENU.FINANCE_CUSTOMER'})}
             hasBullet={true}
-          />         
+          />
           <MenuItem
-          to='/safes/fiche'
-          title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
-          hasBullet={true}
-        />
+            to='/safes/fiche'
+            title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
+            hasBullet={true}
+          />
         </MenuInnerWithSub>
 
         {/* CASE */}
@@ -183,10 +183,11 @@ export function MenuInner() {
       </MenuInnerWithSub>
 
       {/* USER MANAGEMENT */}
-      <MenuItem
+      {/* <MenuItem
         title={intl.formatMessage({id: 'MENU.USER_MANAGEMENT'})}
         to='/apps/user-management/users'
-      />
+      /> */}
+      <MenuItem title={intl.formatMessage({id: 'MENU.BUILDER.PAGE'})} to='/builder' />
     </>
   )
 }

@@ -1,6 +1,13 @@
 import React, {useState, useMemo, useEffect} from 'react'
 import {useIntl} from 'react-intl'
-import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
+import {
+  useTable,
+  useSortBy,
+  useGlobalFilter,
+  usePagination,
+  useExpanded,
+  useGroupBy,
+} from 'react-table'
 import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {Header} from '../../modules/apps/reports/purchases/components/Header'
@@ -12,25 +19,49 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const PurchaseClient: React.FC = () => {
   const intl = useIntl()
   const [items, setItems] = useState<IPurchaseClient[]>([])
 
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/purchases/client`
+    let defaultParams: ICompany
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [])
 
   return (
@@ -83,7 +114,9 @@ const ItemsContainer = ({items}: {items: any}) => {
       initialState: {pageSize: 50},
     },
     useGlobalFilter,
+    useGroupBy,
     useSortBy,
+    useExpanded,
     usePagination
   )
 
@@ -215,6 +248,25 @@ const ItemsContainer = ({items}: {items: any}) => {
                           : ''
                       }
                     >
+                      {
+                        //@ts-expect-error
+                        column.canGroupBy && column.id === 'clientCode' ? (
+                          <span
+                            style={{display: 'block', width: '250px'}}
+                            {
+                              //@ts-expect-error
+                              ...column.getGroupByToggleProps()
+                            }
+                          >
+                            {' '}
+                            {
+                              //@ts-expect-error
+                              column.isGrouped ? '+ ' : '- '
+                            }
+                          </span>
+                        ) : null
+                      }
+                      {`   `}
                       {intl.formatMessage({id: `${column.render('Header')}`})}
                     </th>
                   ))}
@@ -234,7 +286,26 @@ const ItemsContainer = ({items}: {items: any}) => {
                       if (cell.render('Cell').props.column.Header === 'PRODUCT_CODE') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
-                      return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
+                      return (
+                        <td {...cell.getCellProps()}>
+                          {cell.isGrouped ? (
+                            // If it's a grouped cell, add an expander and row count
+                            <>
+                              <span {...row.getToggleRowExpandedProps()}>
+                                {row.isExpanded ? '-' : '+'}
+                              </span>{' '}
+                              {cell.render('Cell')} ({row.subRows.length})
+                            </>
+                          ) : cell.isAggregated ? (
+                            // If the cell is aggregated, use the Aggregated
+                            // renderer for cell
+                            cell.render('Aggregated')
+                          ) : cell.isPlaceholder ? null : ( // For cells with repeated values, render null
+                            // Otherwise, just render the regular cell
+                            cell.render('Cell')
+                          )}
+                        </td>
+                      )
                     })}
                     <td role='cell' className='text-end min-w-100px'>
                       <div className='d-flex justify-content-end flex-shrink-0'>

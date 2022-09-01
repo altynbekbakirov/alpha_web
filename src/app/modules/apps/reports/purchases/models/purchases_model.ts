@@ -1,4 +1,5 @@
 export interface IPurchaseFiche {
+  id: number | string
   trCode: number | string
   ficheNo: string
   date: string

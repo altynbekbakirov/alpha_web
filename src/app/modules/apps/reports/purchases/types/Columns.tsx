@@ -10,6 +10,10 @@ import {
 
 export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
   {
+    Header: 'PRODUCT_ROW',
+    accessor: 'id',
+  },
+  {
     Header: 'TR_CODE',
     accessor: 'trCode',
     //@ts-expect-error
@@ -298,35 +302,33 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
   {
     Header: 'PRODUCT_GROUP',
     accessor: 'itemGroup',
-    Cell: ({value}) => {
-      switch (value.toUpperCase()) {
-        case 'ЗИМА':
-          return <div className='badge badge-info fw-bolder'>{value}</div>
-        case 'ЛЕТО':
-          return <div className='badge badge-warning fw-bolder'>{value}</div>
-        case 'ДЕТСКОЕ':
-          return <div className='badge badge-success fw-bolder'>{value}</div>
-        case 'ДЖИНСА':
-          return <div className='badge badge-danger fw-bolder'>{value}</div>
-        default:
-          return <div className='badge badge-light fw-bolder'>{value}</div>
-      }
-    },
+    // Cell: ({value}) => {
+    //   switch (value.toUpperCase()) {
+    //     case 'ЗИМА':
+    //       return <div className='badge badge-info fw-bolder'>{value}</div>
+    //     case 'ЛЕТО':
+    //       return <div className='badge badge-warning fw-bolder'>{value}</div>
+    //     case 'ДЕТСКОЕ':
+    //       return <div className='badge badge-success fw-bolder'>{value}</div>
+    //     case 'ДЖИНСА':
+    //       return <div className='badge badge-danger fw-bolder'>{value}</div>
+    //     default:
+    //       return <div className='badge badge-light fw-bolder'>{value}</div>
+    //   }
+    // },
   },
   {
     Header: 'PRODUCT_PURCHASE_COUNT',
     accessor: 'itemAmount',
     //@ts-expect-error
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
   },
   {
     Header: 'PRODUCT_PURCHASE_TOTAL',
@@ -334,14 +336,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
   },
   {
     Header: 'PRODUCT_PURCHASE_TOTAL_USD',
@@ -349,16 +349,14 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
   },
   {
     Header: 'PRODUCT_RETURN_COUNT',
@@ -366,15 +364,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
   },
   {
     Header: 'PRODUCT_RETURN_TOTAL',
@@ -382,15 +377,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
   },
   {
     Header: 'PRODUCT_RETURN_TOTAL_USD',
@@ -398,16 +390,14 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
-    },
+    aggregate: 'sum',
+    Aggregated: ({value}: any) =>
+      `${value.toLocaleString(undefined, {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })}`,
   },
 ]
 
@@ -446,9 +436,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -459,9 +449,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -472,9 +462,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
     },
   },
   {
@@ -485,9 +475,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -498,9 +488,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -511,9 +501,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -524,9 +514,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -537,9 +527,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -550,9 +540,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -563,9 +553,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -576,9 +566,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -589,9 +579,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -602,9 +592,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -615,9 +605,9 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
   {
@@ -628,11 +618,11 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
     },
   },
 ]

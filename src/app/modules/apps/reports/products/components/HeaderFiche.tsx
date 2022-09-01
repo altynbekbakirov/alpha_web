@@ -1,5 +1,5 @@
 import FicheContents from '../../../../../../_metronic/partials/modals/products/FicheContents'
-import {ProductsSearchComponent} from './Search'
+import { SearchComponent } from './Search'
 import {ToolBar} from './ToolBar'
 
 interface IProps {
@@ -16,7 +16,7 @@ const HeaderFiche: React.FC<IProps> = ({value, change, exportPDF, exportCSV, sho
   return (
     <>
       <div className='card-header border-0 pt-6'>
-        <ProductsSearchComponent value={value} change={change} />
+        <SearchComponent value={value} change={change} />
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}

@@ -164,12 +164,12 @@ export function AsideMenuMain() {
           title={intl.formatMessage({id: 'MENU.SAFE_EXTRACT'})}
           hasBullet={true}
         />
-        <AsideMenuItem to='/crafted/widgets/lists' title='Lists' hasBullet={true} />
+        {/* <AsideMenuItem to='/crafted/widgets/lists' title='Lists' hasBullet={true} />
         <AsideMenuItem to='/crafted/widgets/statistics' title='Statistics' hasBullet={true} />
         <AsideMenuItem to='/crafted/widgets/charts' title='Charts' hasBullet={true} />
         <AsideMenuItem to='/crafted/widgets/mixed' title='Mixed' hasBullet={true} />
         <AsideMenuItem to='/crafted/widgets/tables' title='Tables' hasBullet={true} />
-        <AsideMenuItem to='/crafted/widgets/feeds' title='Feeds' hasBullet={true} />
+        <AsideMenuItem to='/crafted/widgets/feeds' title='Feeds' hasBullet={true} /> */}
       </AsideMenuItemWithSub>
 
       {/* APPS */}
@@ -203,12 +203,12 @@ export function AsideMenuMain() {
 
       {/* USER MANAGEMENT */}
       <div className='menu-item'>
-        <AsideMenuItem
+        {/* <AsideMenuItem
           to='/apps/user-management/users'
           icon='/media/icons/duotune/communication/com006.svg'
           title={intl.formatMessage({id: 'MENU.USER_MANAGEMENT'})}
           fontIcon='bi-person'
-        />
+        /> */}
         <AsideMenuItem
           to='/builder'
           icon='/media/icons/duotune/general/gen019.svg'

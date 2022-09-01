@@ -1,6 +1,6 @@
 import MaterialPrices from '../../../../../../_metronic/partials/modals/products/MaterialPrices'
 import MaterialTransactions from '../../../../../../_metronic/partials/modals/products/MaterialTransactions'
-import {ProductsSearchComponent} from './Search'
+import {SearchComponent} from './Search'
 import {ToolBar} from './ToolBar'
 
 interface IProps {
@@ -19,7 +19,7 @@ const Header: React.FC<IProps> = ({value, change, exportPDF, exportCSV, show, se
   return (
     <>
       <div className='card-header border-0 pt-6'>
-        <ProductsSearchComponent value={value} change={change} />
+        <SearchComponent value={value} change={change} />
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}

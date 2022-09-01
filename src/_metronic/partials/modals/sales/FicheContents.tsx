@@ -4,7 +4,7 @@ import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../helpers'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import Footer from '../../../../app/modules/apps/reports/products/components/Footer'
-import { ProductsSearchComponent } from '../../../../app/modules/apps/reports/products/components/Search'
+import { SearchComponent } from '../../../../app/modules/apps/reports/products/components/Search'
 import { IFiche } from '../../../../app/modules/apps/reports/purchases/models/purchases_model'
 import { PURCHASES_FICHE } from '../../../../app/modules/apps/reports/purchases/types/Columns'
 
@@ -12,6 +12,14 @@ interface IProps {
   show: boolean
   setShow: () => void
   item: string
+}
+
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
 }
 
 const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
@@ -61,18 +69,34 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/${item}`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [item])
 
   //@ts-expect-error
@@ -103,7 +127,7 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
             </div>
           </div>
           <div className='modal-body'>
-            <ProductsSearchComponent value={globalFilter} change={setGlobalFilter} />
+            <SearchComponent value={globalFilter} change={setGlobalFilter} />
             <table
               id='productRemains'
               className='table table-hover table-striped table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'

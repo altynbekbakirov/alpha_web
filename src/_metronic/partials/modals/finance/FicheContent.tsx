@@ -4,7 +4,7 @@ import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../helpers'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import Footer from '../../../../app/modules/apps/reports/products/components/Footer'
-import { ProductsSearchComponent } from '../../../../app/modules/apps/reports/products/components/Search'
+import { SearchComponent } from '../../../../app/modules/apps/reports/products/components/Search'
 import { FINANCE_EXTRACT_COLUMNS } from '../../../../app/modules/apps/reports/finance/types/Columns'
 import { IFinanceExtract } from '../../../../app/modules/apps/reports/finance/models/finance_model'
 
@@ -103,7 +103,7 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
             </div>
           </div>
           <div className='modal-body'>
-            <ProductsSearchComponent value={globalFilter} change={setGlobalFilter} />
+            <SearchComponent value={globalFilter} change={setGlobalFilter} />
             <table
               id='productRemains'
               className='table table-hover table-striped table-rounded align-middle table-row-dashed fs-6 gy-5 gx-5 dataTable'

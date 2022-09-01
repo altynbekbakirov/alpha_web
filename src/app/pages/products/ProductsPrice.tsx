@@ -12,6 +12,14 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const ProductsPrice: React.FC = () => {
   const intl = useIntl()
   const [items, setItems] = useState<IProductPrice[]>([])
@@ -19,15 +27,34 @@ const ProductsPrice: React.FC = () => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/products/price`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [])
 
   return (
@@ -42,7 +69,7 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_PRICE_COLUMNS, [])
   const data = useMemo(() => items, [items])
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(false)
   const [showPrice, setShowPrice] = React.useState(false)
 
   function exportPDF() {
@@ -152,11 +179,11 @@ const ProductsContainer = ({items}: {items: any}) => {
   )
 
   function changeMaterialModalVisibility() {
-    setShow(!show);
+    setShow(!show)
   }
 
   function changePriceVisibility() {
-    setShowPrice(!showPrice);
+    setShowPrice(!showPrice)
   }
 
   //@ts-expect-error

@@ -6,7 +6,6 @@ import {KTSVG, toAbsoluteUrl} from '../../../helpers'
 import {useLayout} from '../../core'
 import {Header} from './Header'
 import {DefaultTitle} from './page-title/DefaultTitle'
-import {Topbar} from './Topbar'
 
 export function HeaderWrapper() {
   const {config, classes, attributes} = useLayout()
@@ -70,7 +69,7 @@ export function HeaderWrapper() {
           )}
 
           <div className='d-flex align-items-stretch flex-shrink-0'>
-            <Topbar />
+            {/* <Topbar /> */}
           </div>
         </div>
         {/* end::Wrapper */}

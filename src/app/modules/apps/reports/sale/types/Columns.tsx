@@ -13,6 +13,10 @@ import {
 
 export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
   {
+    Header: 'PRODUCT_ROW',
+    accessor: 'id',
+  },
+  {
     Header: 'TR_CODE',
     accessor: 'trCode',
     //@ts-expect-error
