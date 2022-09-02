@@ -163,6 +163,10 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
 
 export const PRODUCTS_FICHE_COLUMNS: ReadonlyArray<Column<IProductFiche>> = [
   {
+    Header: 'PRODUCT_ROW',
+    accessor: 'id',
+  },
+  {
     Header: 'FICHE_NO',
     accessor: 'ficheNo',
   },

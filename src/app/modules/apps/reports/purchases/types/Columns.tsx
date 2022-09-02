@@ -292,43 +292,17 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     accessor: 'clientName',
   },
   {
-    Header: 'PRODUCT_CODE',
-    accessor: 'itemCode',
-  },
-  {
-    Header: 'PRODUCT_NAME',
-    accessor: 'itemName',
-  },
-  {
-    Header: 'PRODUCT_GROUP',
-    accessor: 'itemGroup',
-    // Cell: ({value}) => {
-    //   switch (value.toUpperCase()) {
-    //     case 'ЗИМА':
-    //       return <div className='badge badge-info fw-bolder'>{value}</div>
-    //     case 'ЛЕТО':
-    //       return <div className='badge badge-warning fw-bolder'>{value}</div>
-    //     case 'ДЕТСКОЕ':
-    //       return <div className='badge badge-success fw-bolder'>{value}</div>
-    //     case 'ДЖИНСА':
-    //       return <div className='badge badge-danger fw-bolder'>{value}</div>
-    //     default:
-    //       return <div className='badge badge-light fw-bolder'>{value}</div>
-    //   }
-    // },
-  },
-  {
     Header: 'PRODUCT_PURCHASE_COUNT',
     accessor: 'itemAmount',
     //@ts-expect-error
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })}`,
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 2,
+      })
+    },
   },
   {
     Header: 'PRODUCT_PURCHASE_TOTAL',
@@ -336,12 +310,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })}`,
+      })
+    },
   },
   {
     Header: 'PRODUCT_PURCHASE_TOTAL_USD',
@@ -349,14 +323,14 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })}`,
+      })
+    },
   },
   {
     Header: 'PRODUCT_RETURN_COUNT',
@@ -364,12 +338,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })}`,
+      })
+    },
   },
   {
     Header: 'PRODUCT_RETURN_TOTAL',
@@ -377,12 +351,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })}`,
+      })
+    },
   },
   {
     Header: 'PRODUCT_RETURN_TOTAL_USD',
@@ -390,14 +364,14 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
-    aggregate: 'sum',
-    Aggregated: ({value}: any) =>
-      `${value.toLocaleString(undefined, {
+    Cell: ({value}) => {
+      return value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })}`,
+      })
+    },
   },
 ]
 

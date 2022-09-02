@@ -12,6 +12,14 @@ import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 import {Header1} from '../../modules/apps/reports/sale/components/Header1'
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const SaleMonth: React.FC = () => {
   const intl = useIntl()
   const [items, setItems] = useState<ISaleMonth[]>([])
@@ -19,17 +27,34 @@ const SaleMonth: React.FC = () => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/month`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
+      
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [])
 
   return (

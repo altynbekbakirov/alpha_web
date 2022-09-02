@@ -27,9 +27,6 @@ export interface IFiche {
 export interface IPurchaseClient {
   clientCode: string
   clientName: string
-  itemCode: string
-  itemName: string
-  itemGroup: string
   itemAmount: number
   itemTotal: number
   itemTotalUsd: number

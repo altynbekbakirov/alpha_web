@@ -13,25 +13,50 @@ import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
 const FinanceExtract: React.FC = () => {
   const intl = useIntl()
   const {id} = useParams()
   const [items, setItems] = useState<IFinanceExtract[]>([])
 
   useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = id ? `${BASE_URL}/accounts/extract/${id}` : `${BASE_URL}/accounts/extract`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
+
     async function fetchProducts() {
-      const BASE_URL = process.env.REACT_APP_BASE_URL
-      const REQUEST_URL = id ? `${BASE_URL}/accounts/extract/${id}` : `${BASE_URL}/accounts/extract`
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [id])
 
   return (
@@ -339,7 +364,7 @@ const ItemsContainer = ({items}: {items: any}) => {
         exportCSV={exportCSV}
         show={true}
         setShow={() => false}
-        item={""}
+        item={''}
       />
       <KTCardBody>
         <div className='table-responsive'>

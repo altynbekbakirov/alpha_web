@@ -437,7 +437,7 @@ const ProductsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.render('Cell').props.column.Header === 'FICHE_NO') {
+                      if (cell.render('Cell').props.column.Header === 'PRODUCT_ROW') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>

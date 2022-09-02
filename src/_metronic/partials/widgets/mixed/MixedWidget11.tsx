@@ -38,13 +38,7 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/client/top`
-    let defaultParams: ICompany = {
-      company: 1,
-      period: 3,
-      warehouse: 0,
-      begdate: '01.01.2022',
-      enddate: '31.12.2022',
-    }
+    let defaultParams: ICompany
 
     loadValues()
       .then((response) => response)
@@ -199,13 +193,20 @@ const chartOptions = (
         horizontal: false,
         columnWidth: '50%',
         borderRadius: 5,
+        dataLabels: {
+          orientation: 'vertical',
+          position: 'center', // bottom/center/top
+        },
       },
     },
     legend: {
-      show: false,
+      show: true,
     },
     dataLabels: {
       enabled: false,
+      style: {
+        fontSize: '10px',
+      },
     },
     stroke: {
       show: true,
@@ -223,7 +224,7 @@ const chartOptions = (
       labels: {
         style: {
           colors: labelColor,
-          fontSize: '12px',
+          fontSize: '10px',
         },
       },
     },

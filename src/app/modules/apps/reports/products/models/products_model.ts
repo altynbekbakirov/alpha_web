@@ -13,6 +13,7 @@ export interface IProductRemains {
 }
 
 export interface IProductFiche {
+  id: number
   ficheNo: string
   date: string
   trCode: number | string

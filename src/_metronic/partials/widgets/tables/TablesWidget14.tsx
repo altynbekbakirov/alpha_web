@@ -15,66 +15,8 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
   const chartRef2 = useRef<HTMLDivElement | null>(null)
 
   const intl = useIntl()
-  const [items, setItems] = useState<ISaleTable[]>([])
 
-  const net_title = intl.formatMessage({id: 'TOTAL_SUM'})
-  const net_usd_title = intl.formatMessage({id: 'TOTAL_SUM_USD'})
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/table`
-
-    async function fetchMonthSales() {
-      const response = await axios.post<ISaleTable[]>(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
-      })
-      setItems(response.data)
-    }
-    fetchMonthSales()
-  }, [])
-
-  useEffect(() => {
-    const net_usd = items.map((item) =>
-      Math.round(typeof item.net_usd === 'string' ? parseInt(item.net_usd) : item.net_usd)
-    )
-    const ret_total_usd = items.map((item) =>
-      Math.round(typeof item.net === 'string' ? parseInt(item.net) : item.net)
-    )
-    const months = items.map((item) => {
-      switch (item.date) { 
-        case '1':
-          return intl.formatMessage({id: 'JANUARY'})
-        case '2':
-          return intl.formatMessage({id: 'FEBRUARY'})
-        case '3':
-          return intl.formatMessage({id: 'MARCH'})
-        case '4':
-          return intl.formatMessage({id: 'APRIL'})
-        case '5':
-          return intl.formatMessage({id: 'MAY'})
-        case '6':
-          return intl.formatMessage({id: 'JUNE'})
-        case '7':
-          return intl.formatMessage({id: 'JULY'})
-        case '8':
-          return intl.formatMessage({id: 'AUGUST'})
-        case '9':
-          return intl.formatMessage({id: 'SEPTEMBER'})
-        case '10':
-          return intl.formatMessage({id: 'OCTOBER'})
-        case '11':
-          return intl.formatMessage({id: 'NOVEMBER'})
-        case '12':
-          return intl.formatMessage({id: 'DECEMBER'})
-        default:
-          return ''
-      }
-    })
-
+  useEffect(() => {  
     if (!chartRef.current) {
       return
     }
@@ -83,7 +25,7 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
 
     const chart = new ApexCharts(
       chartRef.current,
-      getChartOptions(height, net_usd, ret_total_usd, net_usd_title, net_title, months)
+      getChartOptions(height)
     )
     if (chart) {
       chart.render()
@@ -94,7 +36,7 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
         chart.destroy()
       }
     }
-  }, [chartRef, items, net_usd_title, net_title, intl])
+  }, [chartRef])
 
   useEffect(() => {
     if (!chartRef2.current) {
@@ -178,12 +120,7 @@ const TablesWidget14: React.FC<Props> = ({className}) => {
 export {TablesWidget14}
 
 function getChartOptions(
-  height: number,
-  net_usd: number[],
-  ret_total_usd: number[],
-  net_usd_title: string,
-  net_title: string,
-  months: string[]
+  height: number
 ): ApexOptions {
   const labelColor = getCSSVariableValue('--bs-gray-700')
   const borderColor = getCSSVariableValue('--bs-gray-300')
@@ -194,12 +131,12 @@ function getChartOptions(
   return {
     series: [
       {
-        name: net_usd_title,
-        data: net_usd,
+        name: 'net',
+        data: [5, 10, 15, 20, 25, 30],
       },
       {
-        name: net_title,
-        data: ret_total_usd,
+        name: 'revenue',
+        data: [5, 10, 15, 20, 25, 30],
       },
     ],
     chart: {
@@ -229,7 +166,7 @@ function getChartOptions(
       colors: ['transparent'],
     },
     xaxis: {
-      categories: months,
+      categories: ['jan', 'feb', 'mart', 'april', 'may', 'june'],
       axisBorder: {
         show: false,
       },

@@ -28,8 +28,8 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
   const chartRef = useRef<HTMLDivElement | null>(null)
   const intl = useIntl()
   const [active, setActive] = useState<number>(1)
-  const [months, setMonths] = useState<ISaleTable[] | ISaleDaily[]>([])
-  const [dailys, setDailys] = useState<ISaleTable[] | ISaleDaily[]>([])
+  const [months, setMonths] = useState<ISaleTable[]>([])
+  const [dailys, setDailys] = useState<ISaleDaily[]>([])
   const [sales, setSales] = useState<ISale>({
     date_: ['1', '2'],
     net: [250, 200],
@@ -49,13 +49,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/table`
-    let defaultParams: ICompany = {
-      company: 1,
-      period: 3,
-      warehouse: 0,
-      begdate: '01.01.2022',
-      enddate: '31.12.2022',
-    }
+    let defaultParams: ICompany
 
     loadValues()
       .then((response) => response)
@@ -82,29 +76,29 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
     setSales({
       date_: months.map((value) => {
         switch (value.date) {
-          case '1':
+          case 1:
             return intl.formatMessage({id: 'JANUARY_FULL'})
-          case '2':
+          case 2:
             return intl.formatMessage({id: 'FEBRUARY_FULL'})
-          case '3':
+          case 3:
             return intl.formatMessage({id: 'MARCH_FULL'})
-          case '4':
+          case 4:
             return intl.formatMessage({id: 'APRIL_FULL'})
-          case '5':
+          case 5:
             return intl.formatMessage({id: 'MAY_FULL'})
-          case '6':
+          case 6:
             return intl.formatMessage({id: 'JUNE_FULL'})
-          case '7':
+          case 7:
             return intl.formatMessage({id: 'JULY_FULL'})
-          case '8':
+          case 8:
             return intl.formatMessage({id: 'AUGUST_FULL'})
-          case '9':
+          case 9:
             return intl.formatMessage({id: 'SEPTEMBER_FULL'})
-          case '10':
+          case 10:
             return intl.formatMessage({id: 'OCTOBER_FULL'})
-          case '11':
+          case 11:
             return intl.formatMessage({id: 'NOVEMBER_FULL'})
-          case '12':
+          case 12:
             return intl.formatMessage({id: 'DECEMBER_FULL'})
           default:
             return ''
@@ -123,13 +117,7 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/daily`
 
-    let defaultParams: ICompany = {
-      company: 1,
-      period: 3,
-      warehouse: 0,
-      begdate: '01.01.2022',
-      enddate: '31.12.2022',
-    }
+    let defaultParams: ICompany
 
     loadValues()
       .then((response) => response)
@@ -181,29 +169,29 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
       setSales({
         date_: months.map((value) => {
           switch (value.date) {
-            case '1':
+            case 1:
               return intl.formatMessage({id: 'JANUARY'})
-            case '2':
+            case 2:
               return intl.formatMessage({id: 'FEBRUARY'})
-            case '3':
+            case 3:
               return intl.formatMessage({id: 'MARCH'})
-            case '4':
+            case 4:
               return intl.formatMessage({id: 'APRIL'})
-            case '5':
+            case 5:
               return intl.formatMessage({id: 'MAY'})
-            case '6':
+            case 6:
               return intl.formatMessage({id: 'JUNE'})
-            case '7':
+            case 7:
               return intl.formatMessage({id: 'JULY'})
-            case '8':
+            case 8:
               return intl.formatMessage({id: 'AUGUST'})
-            case '9':
+            case 9:
               return intl.formatMessage({id: 'SEPTEMBER'})
-            case '10':
+            case 10:
               return intl.formatMessage({id: 'OCTOBER'})
-            case '11':
+            case 11:
               return intl.formatMessage({id: 'NOVEMBER'})
-            case '12':
+            case 12:
               return intl.formatMessage({id: 'DECEMBER'})
             default:
               return ''

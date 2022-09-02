@@ -103,40 +103,40 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const data = items.map((item: ISaleTable) => {
       switch (item.date) {
-        case '1':
+        case 1:
           item.date = intl.formatMessage({id: 'JANUARY_FULL'})
           break
-        case '2':
+        case 2:
           item.date = intl.formatMessage({id: 'FEBRUARY_FULL'})
           break
-        case '3':
+        case 3:
           item.date = intl.formatMessage({id: 'MARCH_FULL'})
           break
-        case '4':
+        case 4:
           item.date = intl.formatMessage({id: 'APRIL_FULL'})
           break
-        case '5':
+        case 5:
           item.date = intl.formatMessage({id: 'MAY_FULL'})
           break
-        case '6':
+        case 6:
           item.date = intl.formatMessage({id: 'JUNE_FULL'})
           break
-        case '7':
+        case 7:
           item.date = intl.formatMessage({id: 'JULY_FULL'})
           break
-        case '8':
+        case 8:
           item.date = intl.formatMessage({id: 'AUGUST_FULL'})
           break
-        case '9':
+        case 9:
           item.date = intl.formatMessage({id: 'SEPTEMBER_FULL'})
           break
-        case '10':
+        case 10:
           item.date = intl.formatMessage({id: 'OCTOBER_FULL'})
           break
-        case '11':
+        case 11:
           item.date = intl.formatMessage({id: 'NOVEMBER_FULL'})
           break
-        case '12':
+        case 12:
           item.date = intl.formatMessage({id: 'DECEMBER_FULL'})
           break
       }

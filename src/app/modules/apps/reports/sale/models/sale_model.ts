@@ -17,9 +17,6 @@ export interface ISaleFiche {
 export interface ISaleClient {
   clientCode: string
   clientName: string
-  itemCode: string
-  itemName: string
-  itemGroup: string
   itemAmount: number
   itemTotal: number
   itemTotalUsd: number
@@ -84,7 +81,7 @@ export interface ISaleManager {
 }
 
 export interface ISaleTable {
-  date: string
+  date: number | string
   total: number | string
   expenses: number | string
   discounts: number | string

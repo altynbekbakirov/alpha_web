@@ -38,13 +38,7 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales/total`
-    let defaultParams: ICompany = {
-      company: 1,
-      period: 3,
-      warehouse: 0,
-      begdate: '01.01.2022',
-      enddate: '31.12.2022',
-    }
+    let defaultParams: ICompany
 
     loadValues()
       .then((response) => response)

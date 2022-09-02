@@ -3,7 +3,6 @@ import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {Header} from '../../modules/apps/reports/products/components/Header'
 import {PRODUCTS_PRICE_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
 import {IProductPrice} from '../../modules/apps/reports/products/models/products_model'
 import Footer from '../../modules/apps/reports/products/components/Footer'
@@ -11,6 +10,7 @@ import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import { HeaderPrice } from '../../modules/apps/reports/products/components/HeaderPrice'
 
 interface ICompany {
   company: number
@@ -69,8 +69,6 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_PRICE_COLUMNS, [])
   const data = useMemo(() => items, [items])
-  const [show, setShow] = useState(false)
-  const [showPrice, setShowPrice] = React.useState(false)
 
   function exportPDF() {
     const doc = new jsPDF('l', 'mm', 'a4')
@@ -178,29 +176,16 @@ const ProductsContainer = ({items}: {items: any}) => {
     usePagination
   )
 
-  function changeMaterialModalVisibility() {
-    setShow(!show)
-  }
-
-  function changePriceVisibility() {
-    setShowPrice(!showPrice)
-  }
-
   //@ts-expect-error
   const {globalFilter, pageIndex, pageSize} = state
 
   return (
     <KTCard>
-      <Header
+      <HeaderPrice
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
         exportCSV={exportCSV}
-        show={show}
-        setShow={changeMaterialModalVisibility}
-        item={'some'}
-        showPrice={showPrice}
-        setShowPrice={changePriceVisibility}
       />
       <KTCardBody>
         <div className='table-responsive'>

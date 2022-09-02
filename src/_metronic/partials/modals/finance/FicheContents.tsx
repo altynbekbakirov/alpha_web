@@ -4,14 +4,22 @@ import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../helpers'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import Footer from '../../../../app/modules/apps/reports/products/components/Footer'
-import { SearchComponent } from '../../../../app/modules/apps/reports/products/components/Search'
-import { FINANCE_FICHE } from '../../../../app/modules/apps/reports/finance/types/Columns'
-import { IFiche } from '../../../../app/modules/apps/reports/finance/models/finance_model'
+import {SearchComponent} from '../../../../app/modules/apps/reports/products/components/Search'
+import {FINANCE_FICHE} from '../../../../app/modules/apps/reports/finance/types/Columns'
+import {IFiche} from '../../../../app/modules/apps/reports/finance/models/finance_model'
 
 interface IProps {
   show: boolean
   setShow: () => void
   item: string
+}
+
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
 }
 
 const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
@@ -61,18 +69,34 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/accounts/fiche/${item}`
+    let defaultParams: ICompany
+
+    async function loadValues() {
+      if (localStorage.getItem('defaultParams') === null) {
+        return null
+      }
+      return JSON.parse(localStorage.getItem('defaultParams') || '')
+    }
+
+    loadValues()
+      .then((response) => response)
+      .then(function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        fetchProducts()
+      })
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
+        firmno: defaultParams.company,
+        periodno: defaultParams.period,
+        begdate: defaultParams.begdate,
+        enddate: defaultParams.enddate,
+        sourceindex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
-    fetchProducts()
   }, [item])
 
   //@ts-expect-error
@@ -87,9 +111,7 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
       <div className='modal-dialog modal-fullscreen'>
         <div className='modal-content shadow-none'>
           <div className='modal-header'>
-            <h5 className='modal-title'>
-              {intl.formatMessage({id: 'CLIENT_FICHE'})}
-            </h5>
+            <h5 className='modal-title'>{intl.formatMessage({id: 'CLIENT_FICHE'})}</h5>
             <div
               className='btn btn-icon btn-sm btn-active-light-primary ms-2'
               data-bs-dismiss='modal'

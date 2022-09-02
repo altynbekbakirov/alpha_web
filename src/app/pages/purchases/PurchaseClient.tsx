@@ -129,9 +129,6 @@ const ItemsContainer = ({items}: {items: any}) => {
       [
         intl.formatMessage({id: 'CLIENT_CODE'}),
         intl.formatMessage({id: 'CLIENT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_CODE'}),
-        intl.formatMessage({id: 'PRODUCT_NAME'}),
-        intl.formatMessage({id: 'PRODUCT_GROUP'}),
         intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
         intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL_USD'}),
@@ -168,9 +165,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     let str = `${intl.formatMessage({id: 'CLIENT_CODE'})};${intl.formatMessage({
       id: 'CLIENT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_CODE'})};${intl.formatMessage({
-      id: 'PRODUCT_NAME',
-    })};${intl.formatMessage({id: 'PRODUCT_GROUP'})};${intl.formatMessage({
+    })};${intl.formatMessage({
       id: 'PRODUCT_PURCHASE_COUNT',
     })};${intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'})};${intl.formatMessage({
       id: 'PRODUCT_PURCHASE_TOTAL_USD',
