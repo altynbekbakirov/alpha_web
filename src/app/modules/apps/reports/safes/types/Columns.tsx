@@ -11,7 +11,7 @@ export const SAFES_COLUMNS: ReadonlyArray<Column<ISafe>> = [
     Header: 'SAFE_NAME',
     accessor: 'name',
     Cell: ({value}) => {
-      return <div className='badge badge-light fw-bolder'>{value}</div>
+      return <div className='badge badge-success fw-bolder'>{value}</div>
     },
   },
   {
@@ -25,11 +25,12 @@ export const SAFES_COLUMNS: ReadonlyArray<Column<ISafe>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -39,13 +40,14 @@ export const SAFES_COLUMNS: ReadonlyArray<Column<ISafe>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -148,15 +150,17 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
   },
   {
     Header: 'CLIENT_DEBIT',
-    accessor: 'debit', //@ts-expect-error
+    accessor: 'debit',
+    //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -166,11 +170,12 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -180,11 +185,12 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -194,13 +200,14 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -210,13 +217,14 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -226,13 +234,14 @@ export const SAFES_RESUME_COLUMNS: ReadonlyArray<Column<ISafeResume>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -256,6 +265,9 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
   {
     Header: 'SAFE_DEFINITION',
     accessor: 'definition',
+    Cell: ({value}) => {
+      return <div className='badge badge-light fw-bolder'>{value}</div>
+    },
   },
   {
     Header: 'TR_CODE',
@@ -405,13 +417,13 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
           )
         case 71:
           return (
-            <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_OPENNING_DEBT',
             })}`}</div>
           )
         case 72:
           return (
-            <div className='badge badge-light fw-bolder'>{`${intl.formatMessage({
+            <div className='badge badge-info fw-bolder'>{`${intl.formatMessage({
               id: 'OPERATION_TYPE_OPENNING_CREDIT',
             })}`}</div>
           )
@@ -473,12 +485,12 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -488,14 +500,14 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -505,12 +517,12 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -520,14 +532,14 @@ export const SAFES_EXTRACT_COLUMNS: ReadonlyArray<Column<ISafeExtract>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? ''
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
 ]

@@ -10,7 +10,6 @@ import {
 } from 'react-table'
 import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
-import {Header} from '../../modules/apps/reports/purchases/components/Header'
 import {PURCHASES_CLIENT_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns'
 import {IPurchaseClient} from '../../modules/apps/reports/purchases/models/purchases_model'
 import Footer from '../../modules/apps/reports/purchases/components/Footer'
@@ -18,6 +17,7 @@ import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import { Header2 } from '../../modules/apps/reports/purchases/components/Header2'
 
 interface ICompany {
   company: number
@@ -77,7 +77,6 @@ const ItemsContainer = ({items}: {items: any}) => {
   const columns = useMemo(() => PURCHASES_CLIENT_COLUMNS, [])
   const data = useMemo(() => items, [items])
   const [show, setShow] = React.useState(false)
-  const [showPrice, setShowPrice] = React.useState(false)
   const [item, setItem] = useState('')
 
   const {
@@ -202,7 +201,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <Header2
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -210,8 +209,6 @@ const ItemsContainer = ({items}: {items: any}) => {
         show={show}
         setShow={() => setShow(!show)}
         item={item}
-        showPrice={showPrice}
-        setShowPrice={() => setShowPrice(!showPrice)}
       />
       <KTCardBody>
         <div className='table-responsive'>
@@ -278,7 +275,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.render('Cell').props.column.Header === 'PRODUCT_CODE') {
+                      if (cell.render('Cell').props.column.Header === 'CLIENT_CODE') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
                       return (
@@ -312,25 +309,10 @@ const ItemsContainer = ({items}: {items: any}) => {
                             setShow(!show)
                             setItem(currentCode)
                           }}
-                          title={`${intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}`}
+                          title={`${intl.formatMessage({id: 'CLIENT_EXTRACT'})}`}
                         >
                           <KTSVG
                             path='/media/icons/duotune/general/gen019.svg'
-                            className='svg-icon-3'
-                          />
-                        </a>
-                        <a
-                          href='/'
-                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm'
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setShowPrice(!showPrice)
-                            setItem(currentCode)
-                          }}
-                          title={`${intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}`}
-                        >
-                          <KTSVG
-                            path='/media/icons/duotune/finance/fin010.svg'
                             className='svg-icon-3'
                           />
                         </a>

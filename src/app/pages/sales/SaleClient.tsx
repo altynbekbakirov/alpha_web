@@ -7,10 +7,10 @@ import {SALE_CLIENT_COLUMNS} from '../../modules/apps/reports/sale/types/Columns
 import Footer from '../../modules/apps/reports/sale/components/Footer'
 import {ISaleClient} from '../../modules/apps/reports/sale/models/sale_model'
 import axios from 'axios'
-import {Header1} from '../../modules/apps/reports/sale/components/Header1'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
+import { Header2 } from '../../modules/apps/reports/sale/components/Header2'
 
 interface ICompany {
   company: number
@@ -70,7 +70,6 @@ const ItemsContainer = ({items}: {items: any}) => {
   const columns = useMemo(() => SALE_CLIENT_COLUMNS, [])
   const data = useMemo(() => items, [items])
   const [show, setShow] = React.useState(false)
-  const [showPrice, setShowPrice] = React.useState(false)
   const [item, setItem] = useState('')
 
   const {
@@ -194,7 +193,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header1
+      <Header2
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -202,8 +201,6 @@ const ItemsContainer = ({items}: {items: any}) => {
         show={show}
         setShow={() => setShow(!show)}
         item={item}
-        showPrice={showPrice}
-        setShowPrice={() => setShowPrice(!showPrice)}
       />
       <KTCardBody>
         <div className='table-responsive'>
@@ -251,7 +248,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                 return (
                   <tr {...row.getRowProps()}>
                     {row.cells.map((cell: any) => {
-                      if (cell.render('Cell').props.column.Header === 'PRODUCT_CODE') {
+                      if (cell.render('Cell').props.column.Header === 'CLIENT_CODE') {
                         currentCode = cell.render('Cell').props.cell.value
                       }
                       return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>
@@ -266,25 +263,10 @@ const ItemsContainer = ({items}: {items: any}) => {
                             setShow(!show)
                             setItem(currentCode)
                           }}
-                          title={`${intl.formatMessage({id: 'ACTIONS_MATERIAL_TRANSACTIONS'})}`}
+                          title={`${intl.formatMessage({id: 'CLIENT_EXTRACT'})}`}
                         >
                           <KTSVG
                             path='/media/icons/duotune/general/gen019.svg'
-                            className='svg-icon-3'
-                          />
-                        </a>
-                        <a
-                          href='/'
-                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm'
-                          onClick={(e) => {
-                            e.preventDefault()
-                            setShowPrice(!showPrice)
-                            setItem(currentCode)
-                          }}
-                          title={`${intl.formatMessage({id: 'ACTIONS_VIEW_PRICES'})}`}
-                        >
-                          <KTSVG
-                            path='/media/icons/duotune/finance/fin010.svg'
                             className='svg-icon-3'
                           />
                         </a>

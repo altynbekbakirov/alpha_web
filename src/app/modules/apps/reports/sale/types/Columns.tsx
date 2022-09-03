@@ -5,6 +5,7 @@ import {
   ISaleDaily,
   ISaleDetail,
   ISaleFiche,
+  ISaleFiches,
   ISaleManager,
   ISaleMonth,
   ISaleTable,
@@ -132,6 +133,8 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
               id: 'OPERATION_TYPE_COUNT_DEFICIT',
             })}`}</div>
           )
+        default:
+          return 0
       }
     },
   },
@@ -161,11 +164,12 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -174,6 +178,14 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_EXPENSES',
@@ -182,10 +194,12 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -195,11 +209,12 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -210,12 +225,238 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+]
+
+export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
+  {
+    Header: 'PRODUCT_ROW',
+    accessor: 'id',
+  },
+  {
+    Header: 'TR_CODE',
+    accessor: 'trCode',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      const intl = useIntl()
+      switch (value) {
+        case 1:
+          return (
+            <div className='badge badge-primary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE',
+            })}`}</div>
+          )
+        case 2:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_RETURN',
+            })}`}</div>
+          )
+        case 3:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE_RETURN',
+            })}`}</div>
+          )
+        case 4:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RETURN_RECEIPT',
+            })}`}</div>
+          )
+        case 5:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT_RECEIPT',
+            })}`}</div>
+          )
+        case 6:
+          return (
+            <div className='badge badge-danger fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_PURCHASE_RETURN',
+            })}`}</div>
+          )
+        case 7:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_RETAIL_SALE',
+            })}`}</div>
+          )
+        case 8:
+          return (
+            <div className='badge badge-success fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_WHOLESALE',
+            })}`}</div>
+          )
+        case 9:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNMENT',
+            })}`}</div>
+          )
+        case 10:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_CONSIGNEMT_RETURN',
+            })}`}</div>
+          )
+        case 11:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_SCRAPT',
+            })}`}</div>
+          )
+        case 12:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_USAGE',
+            })}`}</div>
+          )
+        case 13:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_INPUT_PRODUCTION',
+            })}`}</div>
+          )
+        case 14:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_OPENNING',
+            })}`}</div>
+          )
+        case 25:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_WAREHOUSE',
+            })}`}</div>
+          )
+        case 26:
+          return (
+            <div className='badge badge-secondary fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_PRODUCER',
+            })}`}</div>
+          )
+        case 50:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_EXCESS',
+            })}`}</div>
+          )
+        case 51:
+          return (
+            <div className='badge badge-warning fw-bolder'>{`${intl.formatMessage({
+              id: 'OPERATION_TYPE_COUNT_DEFICIT',
+            })}`}</div>
+          )
+        default:
+          return 0
+      }
+    },
+  },
+  {
+    Header: 'FICHE_NO',
+    accessor: 'ficheNo',
+  },
+  {
+    Header: 'DATE',
+    accessor: 'date',
+    Cell: ({value}) => {
+      return <div className='badge badge-light fw-bolder'>{value}</div>
+    },
+  },
+  {
+    Header: 'CLIENT_CODE',
+    accessor: 'clientCode',
+  },
+  {
+    Header: 'CLIENT_NAME',
+    accessor: 'clientName',
+  },
+  {
+    Header: 'PRODUCT_GROSS',
+    accessor: 'gross',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_DISCOUNTS',
+    accessor: 'discounts',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_EXPENSES',
+    accessor: 'expenses',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_NET',
+    accessor: 'net',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_NET_USD',
+    accessor: 'netUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -236,11 +477,12 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -250,11 +492,12 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -264,12 +507,14 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -279,11 +524,12 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -293,11 +539,12 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -307,269 +554,271 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
 
 export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
   {
-    Header: 'PRODUCTS',
-    columns: [
-      {
-        Header: 'PRODUCT_CODE',
-        accessor: 'code',
-      },
-      {
-        Header: 'PRODUCT_NAME',
-        accessor: 'name',
-      },
-      {
-        Header: 'PRODUCT_GROUP',
-        accessor: 'groupCode',
-        Cell: ({value}) => {
-          switch (value.toUpperCase()) {
-            case 'ЗИМА':
-              return <div className='badge badge-info fw-bolder'>{value}</div>
-            case 'ЛЕТО':
-              return <div className='badge badge-warning fw-bolder'>{value}</div>
-            case 'ДЕТСКОЕ':
-              return <div className='badge badge-success fw-bolder'>{value}</div>
-            case 'ДЖИНСА':
-              return <div className='badge badge-danger fw-bolder'>{value}</div>
-            default:
-              return <div className='badge badge-light fw-bolder'>{value}</div>
-          }
-        },
-      },
-    ],
+    Header: 'PRODUCT_CODE',
+    accessor: 'code',
   },
   {
-    Header: 'MONTH',
-    columns: [
-      {
-        Header: 'JANUARY',
-        accessor: 'jan',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'FEBRUARY',
-        accessor: 'feb',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'MARCH',
-        accessor: 'mar',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'APRIL',
-        accessor: 'apr',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'MAY',
-        accessor: 'may',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'JUNE',
-        accessor: 'jun',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'JULY',
-        accessor: 'jul',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'AUGUST',
-        accessor: 'aug',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'SEPTEMBER',
-        accessor: 'sep',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'OCTOBER',
-        accessor: 'oct',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'NOVEMBER',
-        accessor: 'nov',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'DECEMBER',
-        accessor: 'dec',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-    ],
+    Header: 'PRODUCT_NAME',
+    accessor: 'name',
   },
   {
-    Header: 'TOTAL_NUMBER',
-    columns: [
-      {
-        Header: 'TOTAL_COUNT',
-        accessor: 'totalCount',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 0,
-          })
-        },
-      },
-      {
-        Header: 'TOTAL_SUM',
-        accessor: 'totalSum',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
+    Header: 'PRODUCT_GROUP',
+    accessor: 'groupCode',
+    Cell: ({value}) => {
+      switch (value.toUpperCase()) {
+        case 'ЗИМА':
+          return <div className='badge badge-info fw-bolder'>{value}</div>
+        case 'ЛЕТО':
+          return <div className='badge badge-warning fw-bolder'>{value}</div>
+        case 'ДЕТСКОЕ':
+          return <div className='badge badge-success fw-bolder'>{value}</div>
+        case 'ДЖИНСА':
+          return <div className='badge badge-danger fw-bolder'>{value}</div>
+        default:
+          return <div className='badge badge-light fw-bolder'>{value}</div>
+      }
+    },
+  },
+  {
+    Header: 'JANUARY',
+    accessor: 'jan',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
-        },
-      },
-      {
-        Header: 'TOTAL_SUM_USD',
-        accessor: 'totalUsd',
-        //@ts-expect-error
-        disableGlobalFilter: true,
-        sortType: compareNumericString,
-        Cell: ({value}) => {
-          value < 0 ? (value = -value) : (value = +value)
-          return value.toLocaleString(undefined, {
+        : 0
+    },
+  },
+  {
+    Header: 'FEBRUARY',
+    accessor: 'feb',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'MARCH',
+    accessor: 'mar',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'APRIL',
+    accessor: 'apr',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'MAY',
+    accessor: 'may',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'JUNE',
+    accessor: 'jun',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'JULY',
+    accessor: 'jul',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'AUGUST',
+    accessor: 'aug',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'SEPTEMBER',
+    accessor: 'sep',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'OCTOBER',
+    accessor: 'oct',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'NOVEMBER',
+    accessor: 'nov',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'DECEMBER',
+    accessor: 'dec',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'TOTAL_COUNT',
+    accessor: 'totalCount',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'TOTAL_SUM',
+    accessor: 'totalSum',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'TOTAL_SUM_USD',
+    accessor: 'totalUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
-        },
-      },
-    ],
+        : 0
+    },
   },
 ]
 
@@ -593,10 +842,10 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -606,10 +855,10 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -619,12 +868,12 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -634,11 +883,10 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -648,10 +896,10 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -661,12 +909,12 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -676,8 +924,8 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     Header: 'CLIENT_CODE',
     accessor: 'clientCode',
     Cell: ({value}) => {
-      const intl = useIntl();
-      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS',}) : value
+      const intl = useIntl()
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS'}) : value
       return value
     },
   },
@@ -685,8 +933,8 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
     Cell: ({value}) => {
-      const intl = useIntl();
-      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS',}) : value
+      const intl = useIntl()
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS'}) : value
       return value
     },
   },
@@ -697,10 +945,10 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -710,10 +958,10 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -723,12 +971,12 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -738,11 +986,10 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -752,11 +999,10 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -766,13 +1012,12 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -858,6 +1103,8 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
               id: 'DECEMBER_FULL',
             })}`}</div>
           )
+          default :
+          return 0
       }
     },
   },
@@ -868,10 +1115,10 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -881,11 +1128,10 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -895,11 +1141,10 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -909,11 +1154,10 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -923,13 +1167,12 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -939,11 +1182,10 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -953,13 +1195,12 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -976,10 +1217,10 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -989,13 +1230,12 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1005,11 +1245,10 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1019,13 +1258,12 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -1050,11 +1288,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -1064,11 +1301,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1078,11 +1314,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1092,10 +1327,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -1105,11 +1340,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1119,11 +1353,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1133,11 +1366,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -1147,11 +1379,10 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
 ]

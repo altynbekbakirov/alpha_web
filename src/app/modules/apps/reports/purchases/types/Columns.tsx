@@ -129,6 +129,8 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
               id: 'OPERATION_TYPE_COUNT_DEFICIT',
             })}`}</div>
           )
+          default: 
+          return '';
       }
     },
   },
@@ -158,10 +160,12 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -171,12 +175,12 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? (value = '')
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -186,12 +190,12 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? (value = '')
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -201,12 +205,12 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? (value = '')
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
   {
@@ -216,14 +220,14 @@ export const PURCHASES_FICHE_COLUMNS: ReadonlyArray<Column<IPurchaseFiche>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value === 0
-        ? (value = '')
-        : value.toLocaleString(undefined, {
+      return value
+        ? value.toLocaleString(undefined, {
             style: 'currency',
             currency: 'USD',
             minimumFractionDigits: 0,
             maximumFractionDigits: 2,
           })
+        : 0
     },
   },
 ]
@@ -247,6 +251,14 @@ export const PURCHASES_FICHE: ReadonlyArray<Column<IFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_UNIT',
@@ -258,6 +270,14 @@ export const PURCHASES_FICHE: ReadonlyArray<Column<IFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_TOTAL',
@@ -265,6 +285,14 @@ export const PURCHASES_FICHE: ReadonlyArray<Column<IFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_PRICE_USD',
@@ -272,6 +300,16 @@ export const PURCHASES_FICHE: ReadonlyArray<Column<IFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_TOTAL_USD',
@@ -279,6 +317,16 @@ export const PURCHASES_FICHE: ReadonlyArray<Column<IFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
 ]
 
@@ -298,10 +346,10 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -311,10 +359,10 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -324,12 +372,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -339,10 +387,10 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -352,10 +400,10 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -365,12 +413,12 @@ export const PURCHASES_CLIENT_COLUMNS: ReadonlyArray<Column<IPurchaseClient>> = 
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -409,10 +457,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -422,10 +470,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -435,10 +483,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 0,
-      })
+      }) : 0
     },
   },
   {
@@ -448,10 +496,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -461,10 +509,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -474,10 +522,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -487,10 +535,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -500,10 +548,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -513,10 +561,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -526,10 +574,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -539,10 +587,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -552,10 +600,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -565,10 +613,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -578,10 +626,10 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
   {
@@ -591,12 +639,12 @@ export const PURCHASES_MONTH_COLUMNS: ReadonlyArray<Column<IPurchaseMonth>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
         maximumFractionDigits: 2,
-      })
+      }) : 0
     },
   },
 ]
@@ -621,10 +669,10 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -634,10 +682,10 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -647,12 +695,12 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -663,10 +711,10 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     sortType: compareNumericString,
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -676,10 +724,10 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
   {
@@ -689,12 +737,12 @@ export const PURCHASES_TOTAL_COLUMNS: ReadonlyArray<Column<IPurchaseTotal>> = [
     disableGlobalFilter: true,
     sortType: compareNumericString,
     Cell: ({value}) => {
-      return value.toLocaleString(undefined, {
+      return value ? value.toLocaleString(undefined, {
         style: 'currency',
         currency: 'USD',
         minimumFractionDigits: 0,
-        maximumFractionDigits: 0,
-      })
+        maximumFractionDigits: 2,
+      }) : 0
     },
   },
 ]

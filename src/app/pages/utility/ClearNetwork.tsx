@@ -1,6 +1,8 @@
 import React, {FC} from 'react'
 import {useIntl} from 'react-intl'
+import { KTCard, KTCardBody } from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
+import { NetworkClearCard } from '../../../_metronic/partials/cards/NetworkClearCard'
 
 const ClearNetwork: FC = () => {
   const intl = useIntl()
@@ -14,7 +16,13 @@ const ClearNetwork: FC = () => {
 }
 
 const ProductsContainer: FC = () => {
-  return <div>Clea rNetwork page</div>
+  return (
+    <KTCard>
+      <KTCardBody>
+        <NetworkClearCard />
+      </KTCardBody>
+    </KTCard>
+  )
 }
 
 export default ClearNetwork

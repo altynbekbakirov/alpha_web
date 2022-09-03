@@ -14,6 +14,20 @@ export interface ISaleFiche {
   netUsd: number
 }
 
+export interface ISaleFiches {
+  id: number | string
+  trCode: number | string
+  ficheNo: string
+  date: string
+  clientCode: string | null
+  clientName: string | null
+  gross: number | string
+  discounts: number | string
+  expenses: number | string
+  net: number | string
+  netUsd: number | string
+}
+
 export interface ISaleClient {
   clientCode: string
   clientName: string
