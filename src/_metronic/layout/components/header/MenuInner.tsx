@@ -144,6 +144,11 @@ export function MenuInner() {
             title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
             hasBullet={true}
           />
+          <MenuItem
+            to='/finance/aging'
+            title={intl.formatMessage({id: 'MENU.FINANCE_AGING'})}
+            hasBullet={true}
+          />
         </MenuInnerWithSub>
 
         {/* CASE */}

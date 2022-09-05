@@ -1,7 +1,6 @@
 import {Dropdown} from 'react-bootstrap'
 import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
-import {FilterButton} from './FilterButton'
 
 interface IProps {
   exportPDF: () => void
@@ -13,7 +12,7 @@ const ToolBar: React.FC<IProps> = ({exportCSV, exportPDF}) => {
 
   return (
     <div className='d-flex justify-content-end' data-kt-user-table-toolbar='base'>
-      <FilterButton />
+      {/* <FilterButton /> */}
       <Dropdown>
         <Dropdown.Toggle
           className='btn btn-light-primary font-weight-bolder dropdown-toggle'

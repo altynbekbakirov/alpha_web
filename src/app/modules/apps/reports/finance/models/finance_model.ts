@@ -11,6 +11,21 @@ export interface IFinanceCustomer {
   balanceUsd: number
 }
 
+export interface IFinanceAging {
+  code: string
+  name: string
+  phone: string | null
+  balance: number
+  payment1: number
+  payment2: number
+  payment3: number
+  payment4: number
+  payment5: number
+  payment: number
+  lastFinTrans: string
+  lastMatTrans: string
+}
+
 export interface IFinanceExtract {
   code: string
   name: string

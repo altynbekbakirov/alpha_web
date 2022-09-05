@@ -25,6 +25,7 @@ import ClearNetwork from '../pages/utility/ClearNetwork'
 import FinanceFiche from '../pages/finances/FinanceFiche'
 import Safes from '../pages/safe/Safes'
 import SafesExtract from '../pages/safe/SafesExtract'
+import FinanceAging from '../pages/finances/FinanceAging'
 
 const PrivateRoutes = () => {
   const BuilderPageWrapper = lazy(() => import('../pages/layout-builder/BuilderPageWrapper'))
@@ -74,6 +75,7 @@ const PrivateRoutes = () => {
         <Route path='finance/extract' element={<FinanceExtract />} />
         <Route path='finance/extract/:id' element={<FinanceExtract />} />
         <Route path='finance/fiche' element={<FinanceFiche />} />
+        <Route path='finance/aging' element={<FinanceAging />} />
 
         {/* Safe Deposit */}
         <Route path='safes' element={<Navigate to='/safes/summary' />} />

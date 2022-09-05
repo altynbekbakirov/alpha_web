@@ -145,6 +145,11 @@ export function AsideMenuMain() {
           title={intl.formatMessage({id: 'MENU.FINANCE_FICHE'})}
           hasBullet={true}
         />
+        <AsideMenuItem
+          to='/finance/aging'
+          title={intl.formatMessage({id: 'MENU.FINANCE_AGING'})}
+          hasBullet={true}
+        />
       </AsideMenuItemWithSub>
 
       {/* CASE */}

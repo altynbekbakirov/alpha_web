@@ -1,7 +1,6 @@
 import { Dropdown } from 'react-bootstrap'
 import {useIntl} from 'react-intl'
 import { KTSVG } from '../../../../../../_metronic/helpers'
-import { FilterButton } from './FilterButton'
 
 interface IProps {
   exportPDF: () => void
@@ -12,7 +11,7 @@ const ToolBar: React.FC<IProps> = ({exportCSV, exportPDF}) => {
   const intl = useIntl()
   return (
     <div className='d-flex justify-content-end' data-kt-user-table-toolbar='base'>
-      <FilterButton />
+      {/* <FilterButton /> */}
 
       {/* begin::Export */}
       <Dropdown>

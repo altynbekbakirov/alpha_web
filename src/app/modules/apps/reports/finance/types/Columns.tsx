@@ -2,6 +2,7 @@ import {useIntl} from 'react-intl'
 import {Column} from 'react-table'
 import {
   IFiche,
+  IFinanceAging,
   IFinanceCustomer,
   IFinanceDebit,
   IFinanceExtract,
@@ -34,10 +35,12 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     Cell: ({value}) => {
       return (
         <div className={`badge badge-light fw-bolder`}>
-          {value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
     },
@@ -51,10 +54,12 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     Cell: ({value}) => {
       return (
         <div className={`badge badge-light fw-bolder`}>
-          {value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
     },
@@ -72,10 +77,12 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
             value > 0 ? 'badge-danger' : value < 0 ? 'badge-info' : 'badge-secondary'
           } fw-bolder`}
         >
-          {value.toLocaleString(undefined, {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
     },
@@ -89,13 +96,14 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     Cell: ({value}) => {
       return (
         <div className={`badge badge-light fw-bolder`}>
-          {' '}
-          {value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
     },
@@ -109,13 +117,14 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
     Cell: ({value}) => {
       return (
         <div className={`badge badge-light fw-bolder`}>
-          {' '}
-          {value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
     },
@@ -134,14 +143,167 @@ export const FINANCE_CUSTOMER_COLUMNS: ReadonlyArray<Column<IFinanceCustomer>> =
           } fw-bolder`}
         >
           {' '}
-          {value.toLocaleString(undefined, {
-            style: 'currency',
-            currency: 'USD',
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          })}
+          {value
+            ? value.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
         </div>
       )
+    },
+  },
+]
+
+export const FINANCE_AGING_COLUMNS: ReadonlyArray<Column<IFinanceAging>> = [
+  {
+    Header: 'CLIENT_CODE',
+    accessor: 'code',
+  },
+  {
+    Header: 'CLIENT_NAME',
+    accessor: 'name',
+  },
+  {
+    Header: 'CLIENT_PHONE',
+    accessor: 'phone',
+  },
+  {
+    Header: 'CLIENT_BALANCE',
+    accessor: 'balance',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div
+          className={`badge ${
+            value > 0 ? 'badge-danger' : value < 0 ? 'badge-info' : 'badge-secondary'
+          } fw-bolder`}
+        >
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_COLL1',
+    accessor: 'payment1',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-secondary fw-bolder`}>
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_COLL2',
+    accessor: 'payment2',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-secondary fw-bolder`}>
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_COLL4',
+    accessor: 'payment4',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-secondary fw-bolder`}>
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_COLL5',
+    accessor: 'payment5',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-secondary fw-bolder`}>
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_COLLECCTION_ALL',
+    accessor: 'payment',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return (
+        <div className={`badge badge-success fw-bolder`}>
+          {value
+            ? value.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </div>
+      )
+    },
+  },
+  {
+    Header: 'CLIENT_LAST_FINANCE_TRANSACTION',
+    accessor: 'lastFinTrans',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      return <div className={`badge badge-light fw-bolder`}>{value ? value : ''}</div>
+    },
+  },
+  {
+    Header: 'CLIENT_LAST_MATERIAL_TRANSACTION',
+    accessor: 'lastMatTrans',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Cell: ({value}) => {
+      return <div className={`badge badge-light fw-bolder`}>{value ? value : ''}</div>
     },
   },
 ]
