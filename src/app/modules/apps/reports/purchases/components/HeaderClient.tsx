@@ -1,6 +1,6 @@
-import FichesList from '../../../../../../_metronic/partials/modals/sales/FichesList'
+import FichesList from '../../../../../../_metronic/partials/modals/purchases/FichesList'
 import {SearchComponent} from './Search'
-import {ToolBar} from './ToolBar'
+import { ToolBarClient } from './ToolBarClient'
 
 interface IProps {
   value: string
@@ -12,7 +12,7 @@ interface IProps {
   item: string
 }
 
-const Header2: React.FC<IProps> = ({
+const HeaderClient: React.FC<IProps> = ({
   value,
   change,
   exportPDF,
@@ -28,7 +28,7 @@ const Header2: React.FC<IProps> = ({
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}
-          <ToolBar exportPDF={exportPDF} exportCSV={exportCSV} />
+          <ToolBarClient exportPDF={exportPDF} exportCSV={exportCSV} />
           {/* end::Group actions */}
         </div>
         {/* end::Card toolbar */}
@@ -38,4 +38,4 @@ const Header2: React.FC<IProps> = ({
   )
 }
 
-export {Header2}
+export {HeaderClient}

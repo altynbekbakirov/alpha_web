@@ -51,11 +51,12 @@ const MixedWidget11: React.FC<Props> = ({className, chartColor, chartHeight}) =>
 
     async function fetchMonthSales() {
       const response = await axios.post<ISaleClientTop[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: ''
       })
       setSales(response.data)
     }

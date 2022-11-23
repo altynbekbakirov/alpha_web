@@ -62,11 +62,12 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
     async function fetchMonthSales() {
       const response = await axios.post<ISaleTable[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: ''
       })
       setMonths(response.data)
     }
@@ -130,11 +131,12 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
 
     async function fetchDaily() {
       const response = await axios.post<ISaleDaily[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: ''
       })
       setDailys(response.data)
     }

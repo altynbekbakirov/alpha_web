@@ -1,6 +1,6 @@
 import FicheContents from '../../../../../../_metronic/partials/modals/sales/FicheContents'
 import { SearchComponent } from '../../products/components/Search'
-import { ToolBar } from './ToolBar'
+import { ToolBarFiche } from './ToolBarFiche'
 
 interface IProps {
   value: string
@@ -20,7 +20,7 @@ const HeaderFiche: React.FC<IProps> = ({value, change, exportPDF, exportCSV, sho
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}
-          <ToolBar exportPDF={exportPDF} exportCSV={exportCSV} />
+          <ToolBarFiche exportPDF={exportPDF} exportCSV={exportCSV} />
           {/* end::Group actions */}
         </div>
         {/* end::Card toolbar */}

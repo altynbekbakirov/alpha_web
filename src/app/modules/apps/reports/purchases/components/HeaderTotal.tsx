@@ -1,6 +1,7 @@
-import FichesList from '../../../../../../_metronic/partials/modals/purchases/FichesList'
+import MaterialPrices from '../../../../../../_metronic/partials/modals/products/MaterialPrices'
+import MaterialTransactions from '../../../../../../_metronic/partials/modals/products/MaterialTransactions'
 import {SearchComponent} from './Search'
-import {ToolBar} from './ToolBar'
+import { ToolBarTotal } from './ToolBarTotal'
 
 interface IProps {
   value: string
@@ -10,9 +11,11 @@ interface IProps {
   show: boolean
   setShow: () => void
   item: string
+  showPrice: boolean
+  setShowPrice: () => void
 }
 
-const Header2: React.FC<IProps> = ({
+const HeaderTotal: React.FC<IProps> = ({
   value,
   change,
   exportPDF,
@@ -20,6 +23,8 @@ const Header2: React.FC<IProps> = ({
   show,
   setShow,
   item,
+  showPrice,
+  setShowPrice,
 }) => {
   return (
     <>
@@ -28,14 +33,15 @@ const Header2: React.FC<IProps> = ({
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}
-          <ToolBar exportPDF={exportPDF} exportCSV={exportCSV} />
+          <ToolBarTotal exportPDF={exportPDF} exportCSV={exportCSV} />
           {/* end::Group actions */}
         </div>
         {/* end::Card toolbar */}
       </div>
-      <FichesList show={show} setShow={setShow} item={item} />
+      <MaterialTransactions show={show} setShow={setShow} item={item} />
+      <MaterialPrices showPrice={showPrice} setShowPrice={setShowPrice} item={item} />
     </>
   )
 }
 
-export {Header2}
+export {HeaderTotal}

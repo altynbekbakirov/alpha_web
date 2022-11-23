@@ -73,11 +73,12 @@ const ChartsWidget4: React.FC<Props> = ({className}) => {
 
     async function fetchBalances() {
       const response = await axios.post<IFinanceDebit[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: ""
       })
       setAccounts(response.data)
     }

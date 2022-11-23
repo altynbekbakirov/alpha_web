@@ -31,13 +31,7 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
     const REQUEST_URL = `${BASE_URL}/sales`
-    let defaultParams: ICompany = {
-      company: 1,
-      period: 3,
-      warehouse: 0,
-      begdate: '01.01.2022',
-      enddate: '31.12.2022',
-    }
+    let defaultParams: ICompany
 
     loadValues()
       .then((response) => response)
@@ -50,11 +44,13 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
 
     async function fetchMonthSales() {
       const response = await axios.post<ISaleFiche[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: '',
+        operationType: '2, 3, 7, 8',
       })
       setFiches(response.data)
     }

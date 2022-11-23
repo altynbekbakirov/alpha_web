@@ -1,41 +1,25 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
-import axios from 'axios'
 import {ISaleTable} from '../../modules/apps/reports/sale/models/sale_model'
 import {SALE_TABLE_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-import {Header} from '../../modules/apps/reports/sale/components/Header'
+import {HeaderTable} from '../../modules/apps/reports/sale/components/HeaderTable'
+import {FilterContext} from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const SaleTable: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<ISaleTable[]>([])
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/table`
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: 1,
-        periodno: 3,
-        begdate: '01.01.2022',
-        enddate: '31.12.2022',
-        sourceindex: 0,
-      })
-      setItems(response.data)
-    }
-    fetchProducts()
-  }, [])
+  const {saleTableItems} = useContext(FilterContext)
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SALE_TABLE'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={saleTableItems} />
     </>
   )
 }
@@ -49,6 +33,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -141,38 +126,13 @@ const ItemsContainer = ({items}: {items: any}) => {
           break
       }
 
-      item.total = item.total.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.discounts = item.discounts.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.expenses = item.expenses.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.net = item.net.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.net_usd = item.net_usd.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.ret_total = item.ret_total.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.ret_total_usd = item.ret_total_usd.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      item.total = Math.round(item.total)
+      item.discounts = Math.round(item.discounts)
+      item.expenses = Math.round(item.expenses)
+      item.net = Math.round(item.net)
+      item.net_usd = Math.round(item.net_usd)
+      item.ret_total = Math.round(item.ret_total)
+      item.ret_total_usd = Math.round(item.ret_total_usd)
       return Object.values(item)
     })
 
@@ -272,7 +232,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <HeaderTable
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -329,6 +289,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

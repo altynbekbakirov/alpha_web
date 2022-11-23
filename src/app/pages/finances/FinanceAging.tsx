@@ -1,68 +1,27 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
-import axios from 'axios'
 import {
   IFinanceAging,
 } from '../../modules/apps/reports/finance/models/finance_model'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {FINANCE_AGING_COLUMNS} from '../../modules/apps/reports/finance/types/Columns'
-import {Header} from '../../modules/apps/reports/finance/components/Header'
 import Footer from '../../modules/apps/reports/finance/components/Footer'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import { HeaderAging } from '../../modules/apps/reports/finance/components/HeaderAging'
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const FinanceAging: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IFinanceAging[]>([])
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/accounts/aging`
-    let defaultParams: ICompany
-
-    async function loadValues() {
-      if (localStorage.getItem('defaultParams') === null) {
-        return null
-      }
-      return JSON.parse(localStorage.getItem('defaultParams') || '')
-    }
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {financeAgingItems} = useContext(FilterContext)
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.FINANCE_AGING'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={financeAgingItems} />
     </>
   )
 }
@@ -78,6 +37,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -208,7 +168,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <HeaderAging
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -307,6 +267,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

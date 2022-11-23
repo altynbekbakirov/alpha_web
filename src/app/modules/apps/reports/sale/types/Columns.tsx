@@ -156,6 +156,17 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_GROSS',
@@ -163,6 +174,19 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.gross + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -178,6 +202,19 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.discounts + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -193,6 +230,19 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.expenses + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -207,6 +257,19 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     accessor: 'net',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value
@@ -223,6 +286,21 @@ export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.netUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       value < 0 ? (value = -value) : (value = +value)
       return value
@@ -381,6 +459,17 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_GROSS',
@@ -388,6 +477,19 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.gross + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -403,6 +505,19 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.discounts + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -418,6 +533,19 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.expenses + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -432,6 +560,19 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
     accessor: 'net',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value
@@ -448,6 +589,21 @@ export const SALES_FICHES_COLUMNS: ReadonlyArray<Column<ISaleFiches>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.netUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -469,6 +625,17 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_SALE_COUNT',
@@ -476,6 +643,19 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -491,6 +671,19 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -506,6 +699,21 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -523,6 +731,19 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmountRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -538,6 +759,19 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -553,6 +787,21 @@ export const SALE_CLIENT_COLUMNS: ReadonlyArray<Column<ISaleClient>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsdRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -578,6 +827,17 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
   {
     Header: 'PRODUCT_GROUP',
     accessor: 'groupCode',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       switch (value.toUpperCase()) {
         case 'ЗИМА':
@@ -599,6 +859,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.jan + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -614,6 +887,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.feb + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -629,6 +915,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.mar + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -644,6 +943,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.apr + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -659,6 +971,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.may + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -674,6 +999,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.jun + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -689,6 +1027,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.jul + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -704,6 +1055,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.aug + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -719,6 +1083,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.sep + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -734,6 +1111,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.oct + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -749,6 +1139,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.nov + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -764,6 +1167,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.dec + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -779,6 +1195,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.totalCount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -794,6 +1223,19 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.totalSum + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -809,6 +1251,21 @@ export const SALE_MONTH_COLUMNS: ReadonlyArray<Column<ISaleMonth>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.totalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -834,6 +1291,17 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
   {
     Header: 'PRODUCT_GROUP',
     accessor: 'group',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_PURCHASE_COUNT',
@@ -841,11 +1309,26 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.purchaseCount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -854,11 +1337,26 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.purchaseTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -867,13 +1365,30 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.purchaseTotalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -882,11 +1397,26 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleCount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -895,11 +1425,26 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -908,13 +1453,30 @@ export const SALE_TOTAL_COLUMNS: ReadonlyArray<Column<ISaleTotal>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleTotalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -932,6 +1494,17 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       const intl = useIntl()
       value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS'}) : value
@@ -944,11 +1517,26 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -957,11 +1545,26 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -970,13 +1573,30 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -985,11 +1605,26 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmountRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -998,11 +1633,26 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1011,13 +1661,30 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsdRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -1028,6 +1695,17 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     accessor: 'date',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       const intl = useIntl()
       switch (value) {
@@ -1103,7 +1781,7 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
               id: 'DECEMBER_FULL',
             })}`}</div>
           )
-          default :
+        default:
           return 0
       }
     },
@@ -1114,11 +1792,26 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.total + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1127,11 +1820,26 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.expenses + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1140,11 +1848,26 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.discounts + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1153,11 +1876,26 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1166,13 +1904,30 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net_usd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1181,11 +1936,26 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.ret_total + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1194,13 +1964,30 @@ export const SALE_TABLE_COLUMNS: ReadonlyArray<Column<ISaleTable>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.ret_total_usd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -1209,6 +1996,17 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
   {
     Header: 'DATE',
     accessor: 'date',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_SALE_TOTAL',
@@ -1216,11 +2014,26 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1229,13 +2042,30 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.net_usd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1244,11 +2074,26 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.ret_total + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1257,13 +2102,30 @@ export const SALE_DAILY_COLUMNS: ReadonlyArray<Column<ISaleDaily>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.ret_total_usd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]
@@ -1280,6 +2142,17 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
   {
     Header: 'PRODUCT_GROUP',
     accessor: 'itemGroup',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_RETURN_COUNT',
@@ -1287,11 +2160,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.retCount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1300,11 +2188,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.retTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1313,11 +2216,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.retCost + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1326,11 +2244,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleCount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1339,11 +2272,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1352,11 +2300,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.saleCost + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1365,11 +2328,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.profitTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
   {
@@ -1378,11 +2356,26 @@ export const SALE_DETAIL_COLUMNS: ReadonlyArray<Column<ISaleDetail>> = [
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.profitPercent + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
-      return value ? value.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      }) : 0
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
     },
   },
 ]

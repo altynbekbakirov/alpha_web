@@ -10,7 +10,7 @@ import {SALE_MONTH_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-import {Header1} from '../../modules/apps/reports/sale/components/Header1'
+import { Header } from '../../modules/apps/reports/sale/components/Header'
 
 interface ICompany {
   company: number
@@ -47,11 +47,11 @@ const SaleMonth: React.FC = () => {
       
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
@@ -77,6 +77,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -140,6 +141,9 @@ const ItemsContainer = ({items}: {items: any}) => {
     ]
 
     const data = items.map((item: ISaleMonth) => {
+      item.totalCount = Math.round(item.totalCount)
+      item.totalSum = Math.round(item.totalSum)
+      item.totalUsd = Math.round(item.totalUsd)
       return Object.values(item)
     })
 
@@ -205,7 +209,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header1
+      <Header
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -305,6 +309,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

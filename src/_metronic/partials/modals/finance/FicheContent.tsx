@@ -32,6 +32,7 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -89,11 +90,11 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
@@ -178,6 +179,15 @@ const FicheContents: React.FC<IProps> = ({show, setShow, item}) => {
                   )
                 })}
               </tbody>
+              <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
             </table>
             <Footer
               previous={previousPage}

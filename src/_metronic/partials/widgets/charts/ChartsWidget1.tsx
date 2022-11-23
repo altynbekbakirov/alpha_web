@@ -16,6 +16,7 @@ interface ICompany {
   warehouse: number
   begdate: string
   enddate: string
+  filtername: string
 }
 
 const ChartsWidget1: React.FC<Props> = ({className}) => {
@@ -51,11 +52,12 @@ const ChartsWidget1: React.FC<Props> = ({className}) => {
 
     async function fetchMonthSales() {
       const response = await axios.post<ISaleTotal[]>(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: ""
       })
       setValues(response.data)
     }

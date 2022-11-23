@@ -47,11 +47,11 @@ const Safes: FC = () => {
 
     async function fetchProducts() {
       const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
       })
       setItems(response.data)
     }
@@ -79,6 +79,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -305,6 +306,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

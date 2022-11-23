@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
@@ -6,61 +6,20 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {SALE_FICHE_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
 import {ISaleFiche} from '../../modules/apps/reports/sale/models/sale_model'
-import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
 import {HeaderFiche} from '../../modules/apps/reports/sale/components/HeaderFiche'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const SaleFiche: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<ISaleFiche[]>([])
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales`
-    let defaultParams: ICompany
-
-    async function loadValues() {
-      if (localStorage.getItem('defaultParams') === null) {
-        return null
-      }
-      return JSON.parse(localStorage.getItem('defaultParams') || '')
-    }
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {saleFicheItems} = useContext(FilterContext)  
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SALE_FICHE'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={saleFicheItems} />
     </>
   )
 }
@@ -76,6 +35,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -117,6 +77,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     const head = [
       [
+        intl.formatMessage({id: 'OPERATION_ID'}),
         intl.formatMessage({id: 'TR_CODE'}),
         intl.formatMessage({id: 'FICHE_NO'}),
         intl.formatMessage({id: 'DATE'}),
@@ -223,6 +184,11 @@ const ItemsContainer = ({items}: {items: any}) => {
           })}`
           break
       }
+      item.gross = Math.round(item.gross)
+      item.discounts = Math.round(item.discounts)
+      item.expenses = Math.round(item.expenses)
+      item.net = Math.round(item.net)
+      item.netUsd = Math.round(item.netUsd)
       return Object.values(item)
     })
 
@@ -243,7 +209,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     // a.download = 'Example_Table_To_Excel.xls'
     // a.click()
 
-    let str = `${intl.formatMessage({id: 'TR_CODE'})};${intl.formatMessage({
+    let str = `${intl.formatMessage({id: 'OPERATION_ID'})};${intl.formatMessage({id: 'TR_CODE'})};${intl.formatMessage({
       id: 'FICHE_NO',
     })};${intl.formatMessage({id: 'DATE'})};${intl.formatMessage({
       id: 'CLIENT_CODE',
@@ -479,6 +445,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

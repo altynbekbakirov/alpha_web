@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {
   useTable,
@@ -8,66 +8,25 @@ import {
   useExpanded,
   useGroupBy,
 } from 'react-table'
-import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
+import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import {PURCHASES_CLIENT_COLUMNS} from '../../modules/apps/reports/purchases/types/Columns'
 import {IPurchaseClient} from '../../modules/apps/reports/purchases/models/purchases_model'
 import Footer from '../../modules/apps/reports/purchases/components/Footer'
-import axios from 'axios'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-import { Header2 } from '../../modules/apps/reports/purchases/components/Header2'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import {HeaderClient} from '../../modules/apps/reports/purchases/components/HeaderClient'
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const PurchaseClient: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IPurchaseClient[]>([])
-
-  async function loadValues() {
-    if (localStorage.getItem('defaultParams') === null) {
-      return null
-    }
-    return JSON.parse(localStorage.getItem('defaultParams') || '')
-  }
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/purchases/client`
-    let defaultParams: ICompany
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {purchaseClientItems} = useContext(FilterContext)
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.PURCHASE_CLIENT'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={purchaseClientItems} />
     </>
   )
 }
@@ -83,6 +42,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -201,7 +161,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header2
+      <HeaderClient
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -303,7 +263,7 @@ const ItemsContainer = ({items}: {items: any}) => {
                       <div className='d-flex justify-content-end flex-shrink-0'>
                         <a
                           href='/'
-                          className='btn btn-icon btn-bg-secondary btn-active-color-primary btn-sm me-1'
+                          className='btn btn-icon btn-secondary btn-sm border-0'
                           onClick={(e) => {
                             e.preventDefault()
                             setShow(!show)
@@ -311,10 +271,31 @@ const ItemsContainer = ({items}: {items: any}) => {
                           }}
                           title={`${intl.formatMessage({id: 'CLIENT_EXTRACT'})}`}
                         >
-                          <KTSVG
-                            path='/media/icons/duotune/general/gen019.svg'
-                            className='svg-icon-3'
-                          />
+                          <span className='svg-icon svg-icon-2 svg-icon-primary'>
+                          <svg
+                            width='24'
+                            height='24'
+                            viewBox='0 0 24 24'
+                            fill='none'
+                            xmlns='http://www.w3.org/2000/svg'
+                            className='mh-50px'
+                          >
+                            <rect
+                              opacity='0.5'
+                              x='18'
+                              y='13'
+                              width='13'
+                              height='2'
+                              rx='1'
+                              transform='rotate(-180 18 13)'
+                              fill='currentColor'
+                            ></rect>
+                            <path
+                              d='M15.4343 12.5657L11.25 16.75C10.8358 17.1642 10.8358 17.8358 11.25 18.25C11.6642 18.6642 12.3358 18.6642 12.75 18.25L18.2929 12.7071C18.6834 12.3166 18.6834 11.6834 18.2929 11.2929L12.75 5.75C12.3358 5.33579 11.6642 5.33579 11.25 5.75C10.8358 6.16421 10.8358 6.83579 11.25 7.25L15.4343 11.4343C15.7467 11.7467 15.7467 12.2533 15.4343 12.5657Z'
+                              fill='currentColor'
+                            ></path>
+                          </svg>
+                        </span>
                         </a>
                       </div>
                     </td>
@@ -322,6 +303,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

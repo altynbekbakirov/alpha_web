@@ -21,11 +21,11 @@ export interface ISaleFiches {
   date: string
   clientCode: string | null
   clientName: string | null
-  gross: number | string
-  discounts: number | string
-  expenses: number | string
-  net: number | string
-  netUsd: number | string
+  gross: number
+  discounts: number
+  expenses: number
+  net: number
+  netUsd: number
 }
 
 export interface ISaleClient {
@@ -66,9 +66,9 @@ export interface ISaleMonth {
   oct: number
   nov: number
   dec: number
-  totalCount: number | string
-  totalSum: number | string
-  totalUsd: number | string
+  totalCount: number
+  totalSum: number
+  totalUsd: number
 }
 
 export interface ISaleTotal {
@@ -87,30 +87,30 @@ export interface ISaleManager {
   clientCode: string
   clientName: string
   itemAmount: number
-  itemTotal: number | string
-  itemTotalUsd: number | string
+  itemTotal: number
+  itemTotalUsd: number
   itemAmountRet: number
-  itemTotalRet: number | string
-  itemTotalUsdRet: number | string
+  itemTotalRet: number
+  itemTotalUsdRet: number
 }
 
 export interface ISaleTable {
   date: number | string
-  total: number | string
-  expenses: number | string
-  discounts: number | string
-  net: number | string
-  net_usd: number | string
-  ret_total: number | string
-  ret_total_usd: number | string
+  total: number
+  expenses: number
+  discounts: number
+  net: number
+  net_usd: number
+  ret_total: number
+  ret_total_usd: number
 }
 
 export interface ISaleDaily {
   date: string
-  net: number | string
-  net_usd: number | string
-  ret_total: number | string
-  ret_total_usd: number | string
+  net: number
+  net_usd: number
+  ret_total: number
+  ret_total_usd: number
   trCode: number
 }
 

@@ -1,4 +1,4 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
@@ -6,56 +6,15 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {Header} from '../../modules/apps/reports/products/components/Header'
 import {PRODUCTS_REMAINS_COLUMNS} from '../../modules/apps/reports/products/types/Columns'
 import {IProductRemains} from '../../modules/apps/reports/products/models/products_model'
-import axios from 'axios'
 import Footer from '../../modules/apps/reports/products/components/Footer'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import {FilterContext} from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const ProductsRemains: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<IProductRemains[]>([])
-
-  async function loadValues() {
-    if (localStorage.getItem('defaultParams') === null) {
-      return null
-    }
-    return JSON.parse(localStorage.getItem('defaultParams') || '')
-  }
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/products`
-    let defaultParams: ICompany
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {items} = useContext(FilterContext)
 
   return (
     <>
@@ -69,8 +28,8 @@ const ProductsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => PRODUCTS_REMAINS_COLUMNS, [])
   const data = useMemo(() => items, [items])
-  const [show, setShow] = React.useState(false)
-  const [showPrice, setShowPrice] = React.useState(false)
+  const [show, setShow] = useState(false)
+  const [showPrice, setShowPrice] = useState(false)
   const [item, setItem] = useState('')
 
   function exportPDF() {
@@ -86,8 +45,9 @@ const ProductsContainer = ({items}: {items: any}) => {
         intl.formatMessage({id: 'PRODUCT_PURCHASE_PRICE'}),
         intl.formatMessage({id: 'PRODUCT_SALE_PRICE'}),
         intl.formatMessage({id: 'PRODUCT_PURCHASE_COUNT'}),
+        intl.formatMessage({id: 'PRODUCT_PURCHASE_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_SALE_COUNT'}),
-        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL_USD'}),
+        intl.formatMessage({id: 'PRODUCT_SALE_TOTAL'}),
         intl.formatMessage({id: 'PRODUCT_ON_HAND'}),
         intl.formatMessage({id: 'PRODUCT_PURCHASE_SUM'}),
         intl.formatMessage({id: 'PRODUCT_SALE_SUM'}),
@@ -95,7 +55,10 @@ const ProductsContainer = ({items}: {items: any}) => {
     ]
 
     const data = items.map((item: IProductRemains) => {
+      item.item_purCurr = Math.round(item.item_purCurr)
+      item.item_purchase_sum = Math.round(item.item_purchase_sum)
       item.item_salCurr = Math.round(item.item_salCurr)
+      item.item_sale_sum = Math.round(item.item_sale_sum)
       return Object.values(item)
     })
 
@@ -122,8 +85,10 @@ const ProductsContainer = ({items}: {items: any}) => {
       id: 'PRODUCT_PURCHASE_PRICE',
     })};${intl.formatMessage({id: 'PRODUCT_SALE_PRICE'})};${intl.formatMessage({
       id: 'PRODUCT_PURCHASE_COUNT',
+    })};${intl.formatMessage({
+      id: 'PRODUCT_PURCHASE_TOTAL',
     })};${intl.formatMessage({id: 'PRODUCT_SALE_COUNT'})};${intl.formatMessage({
-      id: 'PRODUCT_SALE_TOTAL_USD',
+      id: 'PRODUCT_SALE_TOTAL',
     })};${intl.formatMessage({id: 'PRODUCT_ON_HAND'})};${intl.formatMessage({
       id: 'PRODUCT_PURCHASE_SUM',
     })};${intl.formatMessage({id: 'PRODUCT_SALE_SUM'})}\n`
@@ -131,21 +96,10 @@ const ProductsContainer = ({items}: {items: any}) => {
     //  Add \ tto prevent tables from displaying scientific notation or other formats
     for (let i = 0; i < items.length; i++) {
       for (let item in items[i]) {
-        items[i]['item_purchase_price'] = items[i]['item_purchase_price'].toLocaleString(
-          undefined,
-          {
-            minimumFractionDigits: 0,
-            maximumFractionDigits: 2,
-          }
-        )
-        items[i]['item_sale_price'] = items[i]['item_sale_price'].toLocaleString(undefined, {
-          minimumFractionDigits: 0,
-          maximumFractionDigits: 2,
-        })
-        items[i]['item_salCurr'] = Math.round(items[i]['item_salCurr'])
+        items[i]['item_purCurr'] = Math.round(items[i]['item_purCurr'])
         items[i]['item_purchase_sum'] = Math.round(items[i]['item_purchase_sum'])
+        items[i]['item_salCurr'] = Math.round(items[i]['item_salCurr'])
         items[i]['item_sale_sum'] = Math.round(items[i]['item_sale_sum'])
-
         str += `${items[i][item]};`
       }
       str += '\n'
@@ -164,6 +118,7 @@ const ProductsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -304,6 +259,15 @@ const ProductsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup, index) => (
+                <tr {...footerGroup.getFooterGroupProps()} key={index}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

@@ -1,66 +1,25 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useState, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody, KTSVG} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
-import axios from 'axios'
 import {ISaleDetail} from '../../modules/apps/reports/sale/models/sale_model'
 import {SALE_DETAIL_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-import {Header1} from '../../modules/apps/reports/sale/components/Header1'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
+import { HeaderDetail } from '../../modules/apps/reports/sale/components/HeaderDetail'
 
 const SaleDetail: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<ISaleDetail[]>([])
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/detail`
-    let defaultParams: ICompany
-
-    async function loadValues() {
-      if (localStorage.getItem('defaultParams') === null) {
-        return null
-      }
-      return JSON.parse(localStorage.getItem('defaultParams') || '')
-    }
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {saleDetailItems} = useContext(FilterContext)
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SALE_DETAIL'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={saleDetailItems} />
     </>
   )
 }
@@ -69,14 +28,15 @@ const ItemsContainer = ({items}: {items: any}) => {
   const intl = useIntl()
   const columns = useMemo(() => SALE_DETAIL_COLUMNS, [])
   const data = useMemo(() => items, [items])
-  const [show, setShow] = React.useState(false)
-  const [showPrice, setShowPrice] = React.useState(false)
+  const [show, setShow] = useState(false)
+  const [showPrice, setShowPrice] = useState(false)
   const [item, setItem] = useState('')
 
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -194,7 +154,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header1
+      <HeaderDetail
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -294,6 +254,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

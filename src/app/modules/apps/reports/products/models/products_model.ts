@@ -5,6 +5,7 @@ export interface IProductRemains {
   item_purchase_price: number
   item_sale_price: number
   item_purAmount: number
+  item_purCurr: number
   item_salAmount: number
   item_salCurr: number
   item_onHand: number

@@ -1,5 +1,5 @@
 import {SearchComponent} from './Search'
-import {ToolBar} from './ToolBar'
+import { ToolBarPrice } from './ToolBarPrice'
 
 interface IProps {
   value: string
@@ -16,7 +16,7 @@ const HeaderPrice: React.FC<IProps> = ({value, change, exportPDF, exportCSV}) =>
         {/* begin::Card toolbar */}
         <div className='card-toolbar'>
           {/* begin::Group actions */}
-          <ToolBar exportPDF={exportPDF} exportCSV={exportCSV} />
+          <ToolBarPrice exportPDF={exportPDF} exportCSV={exportCSV} />
           {/* end::Group actions */}
         </div>
         {/* end::Card toolbar */}

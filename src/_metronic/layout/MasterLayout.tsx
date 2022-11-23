@@ -11,6 +11,7 @@ import {PageDataProvider} from './core'
 import {useLocation} from 'react-router-dom'
 import {DrawerMessenger, ActivityDrawer, Main, InviteUsers, UpgradePlan} from '../partials'
 import {MenuComponent} from '../assets/ts/components'
+import {FilterContextProvider} from './components/toolbar/FilterContext'
 
 const MasterLayout = () => {
   const location = useLocation()
@@ -36,9 +37,11 @@ const MasterLayout = () => {
           <div id='kt_content' className='content d-flex flex-column flex-column-fluid'>
             <Toolbar />
             <div className='post d-flex flex-column-fluid' id='kt_post'>
-              <Content>
-                <Outlet />
-              </Content>
+              <FilterContextProvider>
+                <Content>
+                  <Outlet />
+                </Content>
+              </FilterContextProvider>
             </div>
           </div>
           <Footer />

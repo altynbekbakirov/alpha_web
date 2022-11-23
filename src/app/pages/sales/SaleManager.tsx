@@ -1,66 +1,25 @@
-import React, {useState, useMemo, useEffect} from 'react'
+import React, {useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import {useTable, useSortBy, useGlobalFilter, usePagination} from 'react-table'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
 import {PageTitle} from '../../../_metronic/layout/core'
 import Footer from '../../modules/apps/reports/sale/components/Footer'
 import {ISaleManager} from '../../modules/apps/reports/sale/models/sale_model'
-import axios from 'axios'
 import {SALE_MANAGER_COLUMNS} from '../../modules/apps/reports/sale/types/Columns'
-import {Header} from '../../modules/apps/reports/sale/components/Header'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
 import '../../../_metronic/assets/fonts/Roboto-Regular-normal'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import { HeaderManager } from '../../modules/apps/reports/sale/components/HeaderManager'
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const SaleManager: React.FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<ISaleManager[]>([])
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/manager`
-    let defaultParams: ICompany
-
-    async function loadValues() {
-      if (localStorage.getItem('defaultParams') === null) {
-        return null
-      }
-      return JSON.parse(localStorage.getItem('defaultParams') || '')
-    }
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [])
+  const {saleManagerItems} = useContext(FilterContext)  
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SALE_MANAGER'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={saleManagerItems} />
     </>
   )
 }
@@ -74,6 +33,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -127,26 +87,10 @@ const ItemsContainer = ({items}: {items: any}) => {
     ]
 
     const data = items.map((item: ISaleManager) => {
-      item.itemTotal = item.itemTotal.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.itemTotalUsd = item.itemTotalUsd.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.itemTotalRet = item.itemTotalRet.toLocaleString(undefined, {
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
-      item.itemTotalUsdRet = item.itemTotalUsdRet.toLocaleString(undefined, {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 0,
-        maximumFractionDigits: 2,
-      })
+      item.itemTotal = Math.round(item.itemTotal)
+      item.itemTotalUsd = Math.round(item.itemTotalUsd)
+      item.itemTotalRet = Math.round(item.itemTotalRet)
+      item.itemTotalUsdRet = Math.round(item.itemTotalUsdRet)
       return Object.values(item)
     })
 
@@ -205,7 +149,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <HeaderManager
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -262,6 +206,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer

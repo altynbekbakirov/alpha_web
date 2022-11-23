@@ -8,14 +8,15 @@ export interface ISafe {
 
 export interface ISafeExtract {
   date: string
+  safe_: string
   ficheNo: string
   title: string
   definition: string;
   trCode: number | string  
-  collection: number | string
-  collectionUsd: number | string
-  payment: number | string
-  paymentUsd: number | string
+  collection: number
+  collectionUsd: number
+  payment: number
+  paymentUsd: number
 }
 
 export interface ISafeResume {

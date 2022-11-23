@@ -22,7 +22,7 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     Header: 'PRODUCT_GROUP',
     accessor: 'item_group',
     Cell: ({value}) => {
-      switch (value) {
+      switch (value.toUpperCase()) {
         case 'ЗИМА':
           return <div className='badge badge-info fw-bolder'>{value}</div>
         case 'ЛЕТО':
@@ -59,6 +59,17 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -75,6 +86,19 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     accessor: 'item_purAmount',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_purAmount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value
@@ -86,10 +110,55 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     },
   },
   {
+    Header: 'PRODUCT_PURCHASE_TOTAL',
+    accessor: 'item_purCurr',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_purCurr + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    sortType: compareNumericString,
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
     Header: 'PRODUCT_SALE_COUNT',
     accessor: 'item_salAmount',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_salAmount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     sortType: compareNumericString,
     Cell: ({value}) => {
       return value
@@ -106,6 +175,21 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_salCurr + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -123,6 +207,19 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_onHand + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value ? (
         value > 0 ? (
@@ -158,6 +255,21 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_purchase_sum + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -175,6 +287,21 @@ export const PRODUCTS_REMAINS_COLUMNS: ReadonlyArray<Column<IProductRemains>> = 
     //@ts-expect-error
     disableGlobalFilter: true,
     sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.item_sale_sum + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -754,12 +881,44 @@ export const PRODUCTS_TRANSACTIONS_COLUMNS: ReadonlyArray<Column<IProductTransac
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
   },
   {
     Header: 'PRODUCT_COUNT',
     accessor: 'count',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.count + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
   },
   {
     Header: 'PRODUCT_PRICE',
@@ -796,6 +955,19 @@ export const PRODUCTS_TRANSACTIONS_COLUMNS: ReadonlyArray<Column<IProductTransac
     accessor: 'total',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.total + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {
@@ -810,6 +982,21 @@ export const PRODUCTS_TRANSACTIONS_COLUMNS: ReadonlyArray<Column<IProductTransac
     accessor: 'totalUsd',
     //@ts-expect-error
     disableGlobalFilter: true,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.totalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
     Cell: ({value}) => {
       return value
         ? value.toLocaleString(undefined, {

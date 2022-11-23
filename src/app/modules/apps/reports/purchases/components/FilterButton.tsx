@@ -1,9 +1,9 @@
-import { useIntl } from 'react-intl'
+import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 
-const FilterButton = () => {
-  const intl = useIntl();
-  
+export const FilterButton = () => {
+  const intl = useIntl()  
+
   return (
     <>
       {/* begin::Filter Button */}
@@ -99,5 +99,3 @@ const FilterButton = () => {
     </>
   )
 }
-
-export {FilterButton}

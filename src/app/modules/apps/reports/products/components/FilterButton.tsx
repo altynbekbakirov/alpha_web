@@ -1,13 +1,140 @@
-import {useState} from 'react'
+import {useContext, useEffect, useState} from 'react'
 import {useIntl} from 'react-intl'
 import {KTSVG} from '../../../../../../_metronic/helpers'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
+import {FilterContext} from '../../../../../../_metronic/layout/components/toolbar/FilterContext'
+import axios from 'axios'
+import moment from 'moment'
 
-const FilterButton = () => {
+interface ICompany {
+  company: number
+  period: number
+  warehouse: number
+  begdate: string
+  enddate: string
+}
+
+export const FilterButton = () => {
   const intl = useIntl()
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
+  const [filterProduct, setFilterProduct] = useState('')
+  const [date1, setDate1] = useState<Date>()
+  const [date2, setDate2] = useState<Date>()
+
+  const {
+    startDate,
+    setStartDate,
+    endDate,
+    setEndDate,
+    setItems,
+  } = useContext(FilterContext)
+
+  async function loadValues() {
+    if (localStorage.getItem('defaultParams') === null) {
+      return null
+    }
+    return JSON.parse(localStorage.getItem('defaultParams') || '')
+  }
+
+  useEffect(() => {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/products`
+    let defaultParams: ICompany
+
+    loadValues()
+      .then((response) => response)
+      .then(async function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        await fetchProducts()
+      })
+
+    async function fetchProducts() {
+      const response = await axios.post(REQUEST_URL, {
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: defaultParams.begdate,
+        endDate: defaultParams.enddate,
+        sourceIndex: defaultParams.warehouse,
+        filterName: '',
+      })
+      setItems(response.data)
+    }
+  }, [setItems])
+
+  useEffect(() => {
+    let defaultParams: ICompany
+
+    loadValues()
+      .then((response) => response)
+      .then(async function (data) {
+        if (data !== null) {
+          defaultParams = data
+          var dateStart = defaultParams.begdate.split('.')
+          var newDateStart = dateStart[1] + '/' + dateStart[0] + '/' + dateStart[2]
+          var dateBeg = new Date(newDateStart)
+          setStartDate(new Date(dateBeg))
+          setDate1(new Date(dateBeg))
+
+          var dateFinish = defaultParams.enddate.split('.')
+          var newDateFinish = dateFinish[1] + '/' + dateFinish[0] + '/' + dateFinish[2]
+          var dateEnd = new Date(newDateFinish)
+          setEndDate(new Date(dateEnd))
+          setDate2(new Date(dateEnd))
+        }
+      })
+  }, [setStartDate, setEndDate])
+
+  async function applyFilter() {
+    const BASE_URL = process.env.REACT_APP_BASE_URL
+    const REQUEST_URL = `${BASE_URL}/products`
+    let defaultParams: ICompany
+
+    loadValues()
+      .then((response) => response)
+      .then(async function (data) {
+        if (data !== null) {
+          defaultParams = data
+        }
+        await fetchProducts()
+      })
+
+    async function fetchProducts() {
+      const response = await axios.post(REQUEST_URL, {
+        firmNo: defaultParams.company,
+        periodNo: defaultParams.period,
+        begDate: moment(startDate).format('DD.MM.yyyy'),
+        endDate: moment(endDate).format('DD.MM.yyyy'),
+        sourceIndex: defaultParams.warehouse,
+        filterName: filterProduct ?? '',
+      })
+      setItems(response.data)
+    }
+  }
+
+  async function resetFilter() {
+    let defaultParams: ICompany
+
+    setFilterProduct('')
+
+    loadValues()
+      .then((response) => response)
+      .then(async function (data) {
+        if (data !== null) {
+          defaultParams = data
+          var dateStart = defaultParams.begdate.split('.')
+          var newDateStart = dateStart[1] + '/' + dateStart[0] + '/' + dateStart[2]
+          var dateBeg = new Date(newDateStart)
+          setStartDate(new Date(dateBeg))
+
+          var dateFinish = defaultParams.enddate.split('.')
+          var newDateFinish = dateFinish[1] + '/' + dateFinish[0] + '/' + dateFinish[2]
+          var dateEnd = new Date(newDateFinish)
+          setEndDate(new Date(dateEnd))
+        }
+      })
+  }
 
   return (
     <>
@@ -40,42 +167,77 @@ const FilterButton = () => {
         <div className='px-7 py-5' data-kt-user-table-filter='form'>
           {/* begin::Input group */}
           <div className='mb-10'>
-            <label className='form-label fs-6 fw-bold'>{intl.formatMessage({id: 'BEGDATE'})}:</label>
-            {/* begin::Daterangepicker */}
-            <DatePicker
-              shouldCloseOnSelect={false}
-              selected={startDate}
-              onChange={(date: Date) => setStartDate(date)}
+            <label className='form-label'>{intl.formatMessage({id: 'PRODUCT_NAME'})}:</label>
+            <input
+              type='text'
+              value={filterProduct}
+              onChange={(e: any) => setFilterProduct(e.target.value)}
+              className='form-control form-control-solid'
             />
-            {/* end::Daterangepicker */}
           </div>
           {/* end::Input group */}
 
           {/* begin::Input group */}
           <div className='mb-10'>
-            <label className='form-label fs-6 fw-bold'>{intl.formatMessage({id: 'ENDDATE'})}:</label>
-            <DatePicker
-              shouldCloseOnSelect={false}
-              selected={endDate}
-              onChange={(date: Date) => setEndDate(date)}
-              startDate={startDate}
-              minDate={startDate}
-            />
+            <label className='form-label fs-6 fw-bold'>
+              {intl.formatMessage({id: 'DATE_RANGE'})}:
+            </label>
+
+            <div className='mb-10' style={{display: 'flex'}}>
+              <div>
+                <DatePicker
+                  dateFormat='dd.MM.yyyy'
+                  shouldCloseOnSelect={false}
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  startDate={startDate}
+                  minDate={date1}
+                  maxDate={date2}
+                  className='form-control form-control-solid'
+                />
+              </div>
+
+              <div
+                style={{
+                  width: '30px',
+                  display: 'flex',
+                  margin: '0px auto',
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <b>-</b>
+              </div>
+
+              <div>
+                <DatePicker
+                  dateFormat='dd.MM.yyyy'
+                  shouldCloseOnSelect={false}
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  startDate={endDate}
+                  minDate={date1}
+                  maxDate={date2}
+                  className='form-control form-control-solid'
+                />
+              </div>
+            </div>
           </div>
           {/* end::Input group */}
 
           {/* begin::Actions */}
-          <div className='d-flex justify-content-end'>
-            {/* <button
-              type='button'
-              className='btn btn-light btn-active-light-primary fw-bold me-2 px-6'
-              data-kt-menu-dismiss='true'
-              data-kt-user-table-filter='reset'
-            >
-              Reset
-            </button> */}
+          <div className='d-flex justify-content-end' style={{clear: 'both'}}>
             <button
               type='button'
+              onClick={resetFilter}
+              className='btn btn-light btn-active-light-primary fw-bold me-2 px-6'
+              data-kt-user-table-filter='reset'
+            >
+              {intl.formatMessage({id: 'MODAL_RESET'})}
+            </button>
+            <button
+              type='button'
+              onClick={applyFilter}
               className='btn btn-primary fw-bold px-6'
               data-kt-menu-dismiss='true'
               data-kt-user-table-filter='filter'
@@ -91,5 +253,3 @@ const FilterButton = () => {
     </>
   )
 }
-
-export {FilterButton}

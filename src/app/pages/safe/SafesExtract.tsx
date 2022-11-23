@@ -1,5 +1,4 @@
-import axios from 'axios'
-import React, {FC, useEffect, useState, useMemo} from 'react'
+import React, {FC, useMemo, useContext} from 'react'
 import {useIntl} from 'react-intl'
 import jsPDF from 'jspdf'
 import autoTable from 'jspdf-autotable'
@@ -8,60 +7,18 @@ import {PageTitle} from '../../../_metronic/layout/core'
 import {ISafeExtract} from '../../modules/apps/reports/safes/models/safes_model'
 import {SAFES_EXTRACT_COLUMNS} from '../../modules/apps/reports/safes/types/Columns'
 import {KTCard, KTCardBody} from '../../../_metronic/helpers'
-import {Header} from '../../modules/apps/reports/safes/components/Header'
 import Footer from '../../modules/apps/reports/safes/components/Footer'
-import {useParams} from 'react-router-dom'
-
-interface ICompany {
-  company: number
-  period: number
-  warehouse: number
-  begdate: string
-  enddate: string
-}
+import { HeaderExtract } from '../../modules/apps/reports/safes/components/HeaderExtract'
+import { FilterContext } from '../../../_metronic/layout/components/toolbar/FilterContext'
 
 const SafesExtract: FC = () => {
   const intl = useIntl()
-  const [items, setItems] = useState<ISafeExtract[]>([])
-  const {code} = useParams()
-
-  useEffect(() => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/safes/extract${code ? '/' + code : ''}`
-    let defaultParams: ICompany
-
-    async function loadValues() {
-      if (localStorage.getItem('defaultParams') === null) {
-        return null
-      }
-      return JSON.parse(localStorage.getItem('defaultParams') || '')
-    }
-
-    loadValues()
-      .then((response) => response)
-      .then(function (data) {
-        if (data !== null) {
-          defaultParams = data
-        }
-        fetchProducts()
-      })
-
-    async function fetchProducts() {
-      const response = await axios.post(REQUEST_URL, {
-        firmno: defaultParams.company,
-        periodno: defaultParams.period,
-        begdate: defaultParams.begdate,
-        enddate: defaultParams.enddate,
-        sourceindex: defaultParams.warehouse,
-      })
-      setItems(response.data)
-    }
-  }, [code])
+  const {safeExtractItems} = useContext(FilterContext)    
 
   return (
     <>
       <PageTitle breadcrumbs={[]}>{intl.formatMessage({id: 'MENU.SAFE_EXTRACT'})}</PageTitle>
-      <ItemsContainer items={items} />
+      <ItemsContainer items={safeExtractItems} />
     </>
   )
 }
@@ -75,6 +32,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
+    footerGroups,
     //@ts-expect-error
     page,
     //@ts-expect-error
@@ -117,6 +75,7 @@ const ItemsContainer = ({items}: {items: any}) => {
     const head = [
       [
         intl.formatMessage({id: 'DATE'}),
+        intl.formatMessage({id: 'SAFE'}),
         intl.formatMessage({id: 'FICHE_NO'}),
         intl.formatMessage({id: 'CLIENT_NAME'}),
         intl.formatMessage({id: 'SAFE_DEFINITION'}),
@@ -129,6 +88,11 @@ const ItemsContainer = ({items}: {items: any}) => {
     ]
 
     const data = items.map((item: ISafeExtract) => {
+      item.collection = Math.round(item.collection);
+      item.collectionUsd = Math.round(item.collectionUsd);
+      item.payment = Math.round(item.payment);
+      item.paymentUsd = Math.round(item.paymentUsd);
+
       switch (item.trCode) {
         case 1:
           item.trCode = intl.formatMessage({
@@ -318,6 +282,8 @@ const ItemsContainer = ({items}: {items: any}) => {
 
     let str = `${intl.formatMessage({
       id: 'DATE',
+    })};${intl.formatMessage({
+      id: 'SAFE',
     })};${intl.formatMessage({id: 'FICHE_NO'})};${intl.formatMessage({
       id: 'CLIENT_NAME',
     })};${intl.formatMessage({id: 'SAFE_DEFINITION'})};${intl.formatMessage({
@@ -494,6 +460,10 @@ const ItemsContainer = ({items}: {items: any}) => {
         }
 
         items[i]['ficheNo'] = items[i]['ficheNo'] + '\t'
+        items[i]['collection'] = Math.round(items[i]['collection']);
+        items[i]['collectionUsd'] = Math.round(items[i]['collectionUsd']);
+        items[i]['payment'] = Math.round(items[i]['payment']);
+        items[i]['paymentUsd'] = Math.round(items[i]['paymentUsd']);
 
         str += `${items[i][item]};`
       }
@@ -514,7 +484,7 @@ const ItemsContainer = ({items}: {items: any}) => {
 
   return (
     <KTCard>
-      <Header
+      <HeaderExtract
         value={globalFilter}
         change={setGlobalFilter}
         exportPDF={exportPDF}
@@ -568,6 +538,15 @@ const ItemsContainer = ({items}: {items: any}) => {
                 )
               })}
             </tbody>
+            <tfoot>
+              {footerGroups.map((footerGroup) => (
+                <tr {...footerGroup.getFooterGroupProps()}>
+                  {footerGroup.headers.map((column) => (
+                    <td {...column.getFooterProps}>{column.render('Footer')}</td>
+                  ))}
+                </tr>
+              ))}
+            </tfoot>
           </table>
         </div>
         <Footer
