@@ -5,6 +5,7 @@ import {getCSS, getCSSVariableValue} from '../../../assets/ts/_utils'
 import {useIntl} from 'react-intl'
 import {ISaleDaily, ISaleTable} from '../../../../app/modules/apps/reports/sale/models/sale_model'
 import axios from 'axios'
+import moment from 'moment'
 
 type Props = {
   className: string
@@ -210,16 +211,17 @@ const ChartsWidget2: React.FC<Props> = ({className}) => {
       setSales({
         date_: dailys
           .map((value) => {
-            var weekday = new Array(7)
-            weekday[0] = intl.formatMessage({id: 'Sunday'})
-            weekday[1] = intl.formatMessage({id: 'Monday'})
-            weekday[2] = intl.formatMessage({id: 'Tuesday'})
-            weekday[3] = intl.formatMessage({id: 'Wednesday'})
-            weekday[4] = intl.formatMessage({id: 'Thursday'})
-            weekday[5] = intl.formatMessage({id: 'Friday'})
-            weekday[6] = intl.formatMessage({id: 'Saturday'})
-            let d = new Date(value.date)
-            return weekday[d.getDay()]
+            // var weekday = new Array(7)
+            // weekday[0] = intl.formatMessage({id: 'Sunday'})
+            // weekday[1] = intl.formatMessage({id: 'Monday'})
+            // weekday[2] = intl.formatMessage({id: 'Tuesday'})
+            // weekday[3] = intl.formatMessage({id: 'Wednesday'})
+            // weekday[4] = intl.formatMessage({id: 'Thursday'})
+            // weekday[5] = intl.formatMessage({id: 'Friday'})
+            // weekday[6] = intl.formatMessage({id: 'Saturday'})
+            // let d = new Date(value.date)
+            // return weekday[d.getDay()]
+            return moment(value.date).format('DD.MM.yyyy')
           })
           .slice(0, 7)
           .reverse(),

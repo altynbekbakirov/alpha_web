@@ -94,6 +94,17 @@ export interface ISaleManager {
   itemTotalUsdRet: number
 }
 
+export interface ISaleWare {
+  wareCode: string
+  wareName: string
+  itemAmount: number
+  itemTotal: number
+  itemTotalUsd: number
+  itemAmountRet: number
+  itemTotalRet: number
+  itemTotalUsdRet: number
+}
+
 export interface ISaleTable {
   date: number | string
   total: number

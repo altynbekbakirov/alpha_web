@@ -10,6 +10,7 @@ import {
   ISaleMonth,
   ISaleTable,
   ISaleTotal,
+  ISaleWare,
 } from '../models/sale_model'
 
 export const SALE_FICHE_COLUMNS: ReadonlyArray<Column<ISaleFiche>> = [
@@ -1494,6 +1495,214 @@ export const SALE_MANAGER_COLUMNS: ReadonlyArray<Column<ISaleManager>> = [
   {
     Header: 'CLIENT_NAME',
     accessor: 'clientName',
+    Footer: () => {
+      const intl = useIntl()
+      return (
+        <strong>
+          {`${intl.formatMessage({
+            id: 'TOTAL',
+          })}`}
+          :{' '}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      const intl = useIntl()
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS'}) : value
+      return value
+    },
+  },
+  {
+    Header: 'PRODUCT_SALE_COUNT',
+    accessor: 'itemAmount',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmount + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_SALE_TOTAL',
+    accessor: 'itemTotal',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotal + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_SALE_TOTAL_USD',
+    accessor: 'itemTotalUsd',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsd + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_RETURN_COUNT',
+    accessor: 'itemAmountRet',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemAmountRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_RETURN_TOTAL',
+    accessor: 'itemTotalRet',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+  {
+    Header: 'PRODUCT_RETURN_TOTAL_USD',
+    accessor: 'itemTotalUsdRet',
+    //@ts-expect-error
+    disableGlobalFilter: true,
+    sortType: compareNumericString,
+    Footer: (info) => {
+      const total = info.rows.reduce((sum, row) => row.values.itemTotalUsdRet + sum, 0)
+      return (
+        <strong>
+          {total
+            ? total.toLocaleString(undefined, {
+                style: 'currency',
+                currency: 'USD',
+                minimumFractionDigits: 0,
+                maximumFractionDigits: 2,
+              })
+            : 0}
+        </strong>
+      )
+    },
+    Cell: ({value}) => {
+      return value
+        ? value.toLocaleString(undefined, {
+            style: 'currency',
+            currency: 'USD',
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 2,
+          })
+        : 0
+    },
+  },
+]
+
+export const SALE_WARE_COLUMNS: ReadonlyArray<Column<ISaleWare>> = [
+  {
+    Header: 'WAREHOUSE_CODE',
+    accessor: 'wareCode',
+    Cell: ({value}) => {
+      const intl = useIntl()
+      value = value === 'others' ? intl.formatMessage({id: 'CLIENT_OTHERS'}) : value
+      return value
+    },
+  },
+  {
+    Header: 'WAREHOUSE_NAME',
+    accessor: 'wareName',
     Footer: () => {
       const intl = useIntl()
       return (

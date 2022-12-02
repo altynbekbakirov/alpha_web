@@ -3,7 +3,8 @@ import React, {useEffect, useRef, useState} from 'react'
 import ApexCharts, {ApexOptions} from 'apexcharts'
 import {useIntl} from 'react-intl'
 import axios from 'axios'
-import {ISaleManager} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {ISaleWare} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {getCSS} from '../../../assets/ts/_utils'
 
 type Props = {
   className: string
@@ -17,9 +18,9 @@ interface ICompany {
   enddate: string
 }
 
-const ChartsWidget9: React.FC<Props> = ({className}) => {
+const ChartsWidget10: React.FC<Props> = ({className}) => {
   const intl = useIntl()
-  const [values, setValues] = useState<ISaleManager[]>([])
+  const [values, setValues] = useState<ISaleWare[]>([])
   const chartRef = useRef<HTMLDivElement | null>(null)
 
   async function loadValues() {
@@ -31,7 +32,7 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
 
   useEffect(() => {
     const BASE_URL = process.env.REACT_APP_BASE_URL
-    const REQUEST_URL = `${BASE_URL}/sales/manager`
+    const REQUEST_URL = `${BASE_URL}/sales/ware`
     let defaultParams: ICompany = {
       company: 1,
       period: 3,
@@ -50,16 +51,16 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
       })
 
     async function fetchMonthSales() {
-      const response = await axios.post<ISaleManager[]>(REQUEST_URL, {
+      const response = await axios.post<ISaleWare[]>(REQUEST_URL, {
         firmNo: defaultParams.company,
         periodNo: defaultParams.period,
         begDate: defaultParams.begdate,
         endDate: defaultParams.enddate,
         sourceIndex: defaultParams.warehouse,
-        filterName: ''
+        filterName: '',
       })
       setValues(response.data)
-    }    
+    }
   }, [])
 
   useEffect(() => {
@@ -67,7 +68,9 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
       return
     }
 
-    const chart = new ApexCharts(chartRef.current, getChartOptions(values))
+    const height = parseInt(getCSS(chartRef.current, 'height'))
+
+    const chart = new ApexCharts(chartRef.current, getChartOptions(height, values))
     if (chart) {
       chart.render()
     }
@@ -90,7 +93,7 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
           </span>
 
           <span className='text-muted fw-bold fs-7'>
-            {intl.formatMessage({id: 'DASHBOARD_SALES_MANAGER_DESCRIPTION'})}
+            {intl.formatMessage({id: 'DASHBOARD_SALES_WAREHOUSE_DESCRIPTION'})}
           </span>
         </h3>
         {/* end::Title */}
@@ -108,15 +111,16 @@ const ChartsWidget9: React.FC<Props> = ({className}) => {
   )
 }
 
-export {ChartsWidget9}
+export {ChartsWidget10}
 
-function getChartOptions(values: ISaleManager[]): ApexOptions {
+function getChartOptions(height: number, values: ISaleWare[]): ApexOptions {
   return {
     series: values.map((value) =>
       Math.round(typeof value.itemTotal === 'string' ? parseInt(value.itemTotal) : value.itemTotal)
     ),
     chart: {
-      type: 'pie',
+      fontFamily: 'inherit',
+      type: 'pie',      
       toolbar: {
         show: true,
       },
@@ -148,7 +152,7 @@ function getChartOptions(values: ISaleManager[]): ApexOptions {
         },
       },
     },
-    labels: values.map((value) => value.clientName),
+    labels: values.map((value) => value.wareName),
     responsive: [
       {
         breakpoint: 300,

@@ -26,6 +26,7 @@ import FinanceFiche from '../pages/finances/FinanceFiche'
 import Safes from '../pages/safe/Safes'
 import SafesExtract from '../pages/safe/SafesExtract'
 import FinanceAging from '../pages/finances/FinanceAging'
+import SaleWare from '../pages/sales/SaleWare'
 
 const PrivateRoutes = () => {
   const BuilderPageWrapper = lazy(() => import('../pages/layout-builder/BuilderPageWrapper'))
@@ -63,6 +64,7 @@ const PrivateRoutes = () => {
         <Route path='sale/fiche' element={<SaleFiche />} />
         <Route path='sale/client' element={<SaleClient />} />
         <Route path='sale/manager' element={<SaleManager />} />
+        <Route path='sale/ware' element={<SaleWare />} />
         <Route path='sale/month' element={<SaleMonth />} />
         <Route path='sale/daily' element={<SaleDaily />} />
         <Route path='sale/total' element={<SaleTotal />} />

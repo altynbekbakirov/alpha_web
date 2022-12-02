@@ -130,7 +130,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
     const height = parseInt(getCSS(chartRef.current, 'height'))
     const chart = new ApexCharts(
       chartRef.current,
-      chartOptions(chartColor, height, remains, safes, months, active)
+      chartOptions(chartColor, chartHeight, height, remains, safes, months, active)
     )
     if (chart) {
       chart.render()
@@ -225,6 +225,7 @@ const MixedWidget10: React.FC<Props> = ({className, chartColor, chartHeight}) =>
 
 const chartOptions = (
   chartColor: string,
+  chartHeight: string,
   height: number,
   remains: string,
   safes: ISafeResume[],
@@ -256,7 +257,7 @@ const chartOptions = (
     chart: {
       fontFamily: 'inherit',
       type: 'area',
-      height: height,
+      height: chartHeight,
       toolbar: {
         show: true,
       },

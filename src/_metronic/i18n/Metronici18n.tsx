@@ -3,7 +3,7 @@ import React, {FC, createContext, useContext} from 'react'
 const I18N_CONFIG_KEY = process.env.REACT_APP_I18N_CONFIG_KEY || 'i18nConfig'
 
 type Props = {
-  selectedLang: 'ru' | 'en'
+  selectedLang: 'ru' | 'tr'
 }
 const initialState: Props = {
   selectedLang: 'ru',

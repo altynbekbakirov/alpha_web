@@ -13,7 +13,7 @@ import {
   TablesWidget7,
   TablesWidget8,
 } from '../../../_metronic/partials/widgets'
-import {ChartsWidget9} from '../../../_metronic/partials/widgets/charts/ChartsWidget9'
+import { ChartsWidget10 } from '../../../_metronic/partials/widgets/charts/ChartsWidget10'
 
 const DashboardPage: React.FC = () => (
   <>
@@ -23,7 +23,7 @@ const DashboardPage: React.FC = () => (
         <ChartsWidget2 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
       <div className='col-xl-4'>
-        <ChartsWidget9 className='card-xl-stretch mb-5 mb-xl-8' />
+        <ChartsWidget10 className='card-xl-stretch mb-5 mb-xl-8' />
       </div>
     </div>
     {/* end::Row */}
@@ -51,7 +51,7 @@ const DashboardPage: React.FC = () => (
         <MixedWidget10
           className='card-xl-stretch mb-xl-8'
           chartColor='warning'
-          chartHeight='200px'
+          chartHeight='320px'
         />
       </div>
       {/* end::Col */}

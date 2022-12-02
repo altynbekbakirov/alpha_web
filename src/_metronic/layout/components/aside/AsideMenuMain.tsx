@@ -102,6 +102,11 @@ export function AsideMenuMain() {
           hasBullet={true}
         />
         <AsideMenuItem
+          to='/sale/ware'
+          title={intl.formatMessage({id: 'MENU.SALE_WARE'})}
+          hasBullet={true}
+        />
+        <AsideMenuItem
           to='/sale/month'
           title={intl.formatMessage({id: 'MENU.SALE_MONTH'})}
           hasBullet={true}

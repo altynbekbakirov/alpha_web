@@ -5,12 +5,12 @@ import '@formatjs/intl-relativetimeformat/polyfill'
 import '@formatjs/intl-relativetimeformat/locale-data/ru'
 import '@formatjs/intl-relativetimeformat/locale-data/en'
 
-import deMessages from './messages/ru.json'
-import enMessages from './messages/en.json'
+import ruMessages from './messages/ru.json'
+import trMessages from './messages/tr.json'
 
 const allMessages = {
-  ru: deMessages,
-  en: enMessages,
+  ru: ruMessages,
+  tr: trMessages,
 }
 
 const I18nProvider: FC = ({children}) => {

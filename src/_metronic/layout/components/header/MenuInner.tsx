@@ -99,6 +99,11 @@ export function MenuInner() {
             hasBullet={true}
           />
           <MenuItem
+            to='/sale/ware'
+            title={intl.formatMessage({id: 'MENU.SALE_WARE'})}
+            hasBullet={true}
+          />
+          <MenuItem
             to='/sale/month'
             title={intl.formatMessage({id: 'MENU.SALE_MONTH'})}
             hasBullet={true}

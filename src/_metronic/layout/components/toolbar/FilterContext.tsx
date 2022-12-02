@@ -3,7 +3,7 @@ import { IFinanceAging, IFinanceCustomer } from '../../../../app/modules/apps/re
 import {IProductRemains} from '../../../../app/modules/apps/reports/products/models/products_model'
 import {IPurchaseClient, IPurchaseFiche, IPurchaseTotal} from '../../../../app/modules/apps/reports/purchases/models/purchases_model'
 import { ISafeExtract } from '../../../../app/modules/apps/reports/safes/models/safes_model'
-import {ISaleClient, ISaleDaily, ISaleDetail, ISaleFiche, ISaleManager, ISaleTable, ISaleTotal} from '../../../../app/modules/apps/reports/sale/models/sale_model'
+import {ISaleClient, ISaleDaily, ISaleDetail, ISaleFiche, ISaleManager, ISaleTable, ISaleTotal, ISaleWare} from '../../../../app/modules/apps/reports/sale/models/sale_model'
 
 export interface FilterContextModel {
   filterProductName1?: string
@@ -28,6 +28,8 @@ export interface FilterContextModel {
   setSaleClientItems: (items: ISaleClient[]) => void
   saleManagerItems?: ISaleManager[]
   setSaleManagerItems: (items: ISaleManager[]) => void
+  saleWareItems?: ISaleWare[]
+  setSaleWareItems: (items: ISaleWare[]) => void
   saleDailyItems?: ISaleDaily[]
   setSaleDailyItems: (items: ISaleDaily[]) => void
   saleTableItems?: ISaleTable[]
@@ -56,6 +58,7 @@ const FilterContext = createContext<FilterContextModel>({
   setSaleFicheItems: () => {},
   setSaleClientItems: () => {},
   setSaleManagerItems: () => {},
+  setSaleWareItems: () => {},
   setSaleDailyItems: () => {},
   setSaleTableItems: () => {},
   setSaleTotalItems: () => {},
@@ -84,6 +87,7 @@ const FilterContextProvider: React.FC = ({children}) => {
   const [financeCustomerItems, setFinanceCustomerItems] = useState<IFinanceCustomer[]>([])
   const [financeAgingItems, setFinanceAgingItems] = useState<IFinanceAging[]>([])
   const [safeExtractItems, setSafeExtractItems] = useState<ISafeExtract[]>([])
+  const [saleWareItems, setSaleWareItems] = useState<ISaleWare[]>([])
 
   const value: FilterContextModel = {
     filterProductName1,
@@ -121,7 +125,9 @@ const FilterContextProvider: React.FC = ({children}) => {
     financeAgingItems,
     setFinanceAgingItems,
     safeExtractItems,
-    setSafeExtractItems
+    setSafeExtractItems,
+    saleWareItems,
+    setSaleWareItems
   }
   return <FilterContext.Provider value={value}>{children}</FilterContext.Provider>
 }

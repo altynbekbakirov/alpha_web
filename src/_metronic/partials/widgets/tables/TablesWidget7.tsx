@@ -118,28 +118,28 @@ const TablesWidget7: React.FC<Props> = ({className}) => {
                       <tr key={index}>
                         <td>
                           <div className='symbol symbol-50px me-2'>
-                            {fiche.clientCode?.startsWith('100') ? (
+                            {fiche.clientCode?.startsWith('120') ? (
                               <span className='symbol-label bg-light-success'>
                                 <KTSVG
                                   path='/media/icons/duotune/coding/cod003.svg'
                                   className='svg-icon-2x svg-icon-danger'
                                 />
                               </span>
-                            ) : fiche.clientCode?.startsWith('200') ? (
+                            ) : fiche.clientCode?.startsWith('255') ? (
                               <span className='symbol-label bg-light-info'>
                                 <KTSVG
                                   path='/media/icons/duotune/coding/cod001.svg'
                                   className='svg-icon-2x svg-icon-info'
                                 />
                               </span>
-                            ) : fiche.clientCode?.startsWith('300') ? (
+                            ) : fiche.clientCode?.startsWith('320') ? (
                               <span className='symbol-label bg-light-primary'>
                                 <KTSVG
                                   path='/media/icons/duotune/coding/cod007.svg'
                                   className='svg-icon-2x svg-icon-primary'
                                 />
                               </span>
-                            ) : fiche.clientCode?.startsWith('600') ? (
+                            ) : fiche.clientCode?.startsWith('335') ? (
                               <span className='symbol-label bg-light-danger'>
                                 <KTSVG
                                   path='/media/icons/duotune/coding/cod006.svg'

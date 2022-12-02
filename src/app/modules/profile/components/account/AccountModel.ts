@@ -12,10 +12,10 @@ export interface IAccount {
 }
 
 export const defaultAccount: IAccount = {
-  username: 'max_stone',
-  email: 'nick.watson@loop.com',
-  language: 'en',
-  timeZone: 'Alaska',
+  username: 'altynbek_bakirov',
+  email: 'altynbek.bakirov@gmail.com',
+  language: 'ru',
+  timeZone: 'Bishkek',
   communications: {
     email: false,
     sms: true,

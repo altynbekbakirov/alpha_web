@@ -457,7 +457,7 @@ export const PRODUCTS_FICHE_COLUMNS: ReadonlyArray<Column<IProductFiche>> = [
     },
   },
   {
-    Header: 'TOTAL',
+    Header: 'TOTAL_SUM_USD',
     accessor: 'net',
     //@ts-expect-error
     disableGlobalFilter: true,
@@ -626,7 +626,14 @@ export const PRODUCTS_PRICE_COLUMNS: ReadonlyArray<Column<IProductPrice>> = [
     Cell: ({value}) => {
       return value ? (
         value > 0 ? (
-          <div className='badge badge-success fw-bolder'>{value}</div>
+          <div className='badge badge-success fw-bolder'>
+            {value
+              ? value.toLocaleString(undefined, {
+                  minimumFractionDigits: 0,
+                  maximumFractionDigits: 2,
+                })
+              : 0}
+          </div>
         ) : value === 0 ? (
           <div className='badge badge-warning fw-bolder'>{value}</div>
         ) : (
